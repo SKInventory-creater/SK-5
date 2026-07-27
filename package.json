@@ -9,6 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "typescript": "^5.8.3",
     "vite": "^7.1.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.2",
+    "@capacitor/cli": "^7.4.2",
+    "@capacitor/core": "^7.4.2"
   }
 }
