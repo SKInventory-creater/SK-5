@@ -1,3 +1,4 @@
 import "./styles/app.css";
+import SplashPage from "./pages/SplashPage.js";
 
-console.log("SK Inventory 5 Production Started");
+document.querySelector("#app").innerHTML = SplashPage();
