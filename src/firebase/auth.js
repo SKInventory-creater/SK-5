@@ -1,6 +1,7 @@
 import {
   getAuth,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 
 import { app } from "./config.js";
@@ -11,3 +12,10 @@ export function authState(callback) {
   return onAuthStateChanged(auth, callback);
 }
 
+export function login(email, password) {
+  return signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+}
