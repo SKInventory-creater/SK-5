@@ -1,0 +1,9 @@
+import { login } from "../firebase/auth.js";
+
+export async function loginUser(email, password) {
+  if (!email || !password) {
+    throw new Error("Email နှင့် Password ထည့်ပါ");
+  }
+
+  return await login(email, password);
+}
