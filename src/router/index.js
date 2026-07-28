@@ -14,3 +14,5 @@ export function navigate(name) {
 
   document.querySelector("#app").innerHTML = page();
 }
+
+document.dispatchEvent(new Event("pagechange"));

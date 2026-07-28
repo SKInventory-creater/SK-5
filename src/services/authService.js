@@ -1,4 +1,7 @@
-import { login } from "../firebase/auth.js";
+import {
+  login,
+  logout
+} from "../firebase/auth.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -6,4 +9,8 @@ export async function loginUser(email, password) {
   }
 
   return await login(email, password);
+}
+
+export async function logoutUser() {
+  return await logout();
 }

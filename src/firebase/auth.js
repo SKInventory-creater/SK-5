@@ -1,7 +1,8 @@
 import {
   getAuth,
   onAuthStateChanged,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut
 } from "firebase/auth";
 
 import { app } from "./config.js";
@@ -18,4 +19,8 @@ export function login(email, password) {
     email,
     password
   );
+}
+
+export function logout() {
+  return signOut(auth);
 }

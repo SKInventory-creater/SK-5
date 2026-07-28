@@ -4,6 +4,11 @@ export default function DashboardPage() {
       <h1>Dashboard</h1>
 
       <p>Login အောင်မြင်ပါသည်။</p>
+
+      <button id="logoutBtn">
+        Logout
+      </button>
+
     </main>
   `;
 }
