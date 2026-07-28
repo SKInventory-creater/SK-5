@@ -2,6 +2,7 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut
 } from "firebase/auth";
 
@@ -15,6 +16,14 @@ export function authState(callback) {
 
 export function login(email, password) {
   return signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+}
+
+export function register(email, password) {
+  return createUserWithEmailAndPassword(
     auth,
     email,
     password

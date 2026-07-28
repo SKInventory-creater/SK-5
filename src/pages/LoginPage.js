@@ -19,6 +19,28 @@ export default function LoginPage() {
           placeholder="Password"
         />
 
+        <input
+	  id="shopName"
+	  type="text"
+	  placeholder="Shop Name"
+        />
+
+        <input
+ 	  id="ownerName"
+ 	  type="text"
+ 	  placeholder="Owner Name"
+        />
+
+        <input
+ 	  id="phone"
+ 	  type="tel"
+ 	  placeholder="Phone"
+        />
+
+        <button id="registerBtn">
+          Create Shop
+        </button>
+
         <button id="loginBtn">
           Login
         </button>
