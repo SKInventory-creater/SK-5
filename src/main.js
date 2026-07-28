@@ -2,6 +2,7 @@ import "./styles/app.css";
 
 import SplashPage from "./pages/SplashPage.js";
 import LoginPage from "./pages/LoginPage.js";
+import DashboardPage from "./pages/DashboardPage.js";
 
 import {
   registerRoute,
@@ -9,9 +10,11 @@ import {
 } from "./router/index.js";
 
 import { loginUser } from "./services/authService.js";
+import { authState } from "./firebase/auth.js";
 
 registerRoute("splash", SplashPage);
 registerRoute("login", LoginPage);
+registerRoute("dashboard", DashboardPage);
 
 navigate("login");
 
@@ -24,9 +27,17 @@ if (loginBtn) {
 
     try {
       await loginUser(email, password);
-      alert("Login Success");
+      navigate("dashboard");
     } catch (err) {
       alert(err.message);
     }
   };
 }
+
+authState((user) => {
+  if (user) {
+    console.log("Logged in:", user.email);
+  } else {
+    console.log("Not logged in");
+  }
+});
