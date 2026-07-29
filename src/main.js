@@ -30,6 +30,12 @@ function showLogin() {
 
     } catch (err) {
       alert(err.message);
+
+      if (err.code) {
+      alert(err.code);
+    }
+
+      console.error(err);
     }
   };
 
