@@ -1,7 +1,7 @@
 export default function BundleCard(bundle) {
   return `
     <div
-      class="bundle-card"
+      class="bundle-card open-bundle-btn"
       data-id="${bundle.id}"
     >
 
@@ -29,7 +29,7 @@ export default function BundleCard(bundle) {
       </div>
 
       <div class="bundle-actions">
-        <button class="open-bundle-btn" data-id="${bundle.id}">
+        <button>
           ›
         </button>
       </div>
