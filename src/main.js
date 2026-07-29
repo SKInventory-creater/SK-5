@@ -115,7 +115,7 @@ function showItems(bundle) {
 
 function showAddItem(bundle) {
   document.querySelector("#app").innerHTML =
-    AddItemPage();
+    AddItemPage(bundle);
 
   document.getElementById("saveItemBtn").onclick = () => {
     alert("Save Item");
