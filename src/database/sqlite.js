@@ -1,14 +1,13 @@
-import { SQLiteConnection } from "@capacitor-community/sqlite";
+import { CapacitorSQLite } from "@capacitor-community/sqlite";
+import { SQLiteConnection } from "@capacitor-community/sqlite/dist/esm/definitions.js";
 
 let sqlite;
 let db;
 
 export async function getDatabase() {
-  if (db) {
-    return db;
-  }
+  if (db) return db;
 
-  sqlite = new SQLiteConnection();
+  sqlite = new SQLiteConnection(CapacitorSQLite);
 
   db = await sqlite.createConnection(
     "skinventory",
