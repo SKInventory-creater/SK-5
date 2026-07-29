@@ -1,19 +1,20 @@
 export default function BundleCard(bundle) {
   return `
-    <div class="bundle-card">
+    <div
+      class="bundle-card"
+      data-id="${bundle.id}"
+    >
 
       <div class="bundle-icon">
-        ${bundle.icon || "B"}
+        ${bundle.bundleCode}
       </div>
 
       <div class="bundle-info">
 
-        <h3>${bundle.name}</h3>
+        <h3>${bundle.bundleName}</h3>
 
         <p>
-          ရောင်းပြီး ${bundle.sold}
-          ·
-          မရောင်းရသေး ${bundle.unsold}
+          အထည် ${bundle.qty} ထည်
         </p>
 
         <div class="bundle-price">
@@ -23,18 +24,14 @@ export default function BundleCard(bundle) {
             <strong>${bundle.cost} ကျပ်</strong>
           </div>
 
-          <div>
-            <small>အမြတ်</small>
-            <strong class="profit">${bundle.profit}</strong>
-          </div>
-
         </div>
 
       </div>
 
       <div class="bundle-actions">
-        <button>›</button>
-        <button>🗑</button>
+        <button class="open-bundle-btn" data-id="${bundle.id}">
+          ›
+        </button>
       </div>
 
     </div>

@@ -9,3 +9,18 @@ CREATE TABLE IF NOT EXISTS bundles (
   createdAt INTEGER NOT NULL
 );
 `;
+
+export const CREATE_ITEMS_TABLE = `
+CREATE TABLE IF NOT EXISTS items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  bundleId INTEGER NOT NULL,
+  itemId TEXT NOT NULL,
+  photo TEXT,
+  cost REAL DEFAULT 0,
+  price REAL DEFAULT 0,
+  unsold INTEGER DEFAULT 1,
+  removed INTEGER DEFAULT 0,
+  note TEXT,
+  createdAt INTEGER
+);
+`;

@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage.js";
 import DashboardPage from "./pages/DashboardPage.js";
 import AddBundlePage from "./pages/AddBundlePage.js";
 import { addBundle } from "./services/bundleService.js";
+import ItemsPage from "./pages/ItemsPage.js";
+import { getBundles } from "./services/bundleService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -97,6 +99,22 @@ function showRegister() {
   };
 }
 
+function showItems(bundle) {
+  document.querySelector("#app").innerHTML = ItemsPage(bundle);
+
+  const backBtn = document.getElementById("backBtn");
+
+  backBtn.onclick = () => {
+    showDashboard();
+  };
+
+  const addItemBtn = document.getElementById("addItemBtn");
+
+  addItemBtn.onclick = () => {
+    alert("Add Item - Coming Next");
+  };
+}
+
 function showAddBundle() {
   document.querySelector("#app").innerHTML = AddBundlePage();
 
@@ -147,6 +165,22 @@ if (logoutBtn) {
     showAddBundle();
   };
 }
+
+  const bundleButtons = document.querySelectorAll(".open-bundle-btn");
+
+bundleButtons.forEach(button => {
+  button.onclick = async () => {
+    const bundles = await getBundles();
+
+    const bundle = bundles.find(
+      b => b.id == button.dataset.id
+    );
+
+    if (bundle) {
+      showItems(bundle);
+    }
+  };
+});
 
 document.querySelector("#app").innerHTML = SplashPage();
 
