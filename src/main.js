@@ -177,6 +177,7 @@ bundleButtons.forEach(button => {
     );
 
     if (bundle) {
+      alert(bundle.bundleName);
       showItems(bundle);
     }
   };
