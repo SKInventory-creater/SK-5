@@ -117,6 +117,10 @@ function showAddItem(bundle) {
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle);
 
+  document.getElementById("backBtn").onclick = () => {
+    showItems(bundle);
+  };
+
   document.getElementById("saveItemBtn").onclick = () => {
     alert("Save Item");
   };

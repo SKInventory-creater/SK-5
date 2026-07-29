@@ -1,3 +1,4 @@
+import { addItem } from "./itemService.js";
 import { initDatabase } from "../database/init.js";
 import { getCurrentUser } from "../firebase/auth.js";
 
@@ -23,14 +24,29 @@ export async function addBundle(bundle) {
     VALUES (?, ?, ?, ?, ?, ?)
   `;
 
-  await db.run(sql, [
-    user.uid,
-    bundle.bundleCode,
-    bundle.bundleName,
-    bundle.qty,
-    bundle.cost,
-    Date.now()
-  ]);
+const result = await db.run(sql, [
+  user.uid,
+  bundle.bundleCode,
+  bundle.bundleName,
+  bundle.qty,
+  bundle.cost,
+  Date.now()
+]);
+
+const bundleId = result.changes.lastId;
+
+for (let i = 1; i <= bundle.qty; i++) {
+  await addItem({
+    bundleId,
+    itemId:
+      bundle.bundleCode +
+      String(i).padStart(3, "0"),
+    photo: "",
+    cost: bundle.cost,
+    price: 0,
+    note: ""
+  });
+}
 }
 
 export async function getBundles() {
