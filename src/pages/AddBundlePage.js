@@ -1,92 +1,68 @@
 export default function AddBundlePage() {
   return `
-    <main class="add-bundle-page">
+    <div class="sheet">
 
-      <header class="page-header">
-        <h1>ဘေထုတ်အသစ်</h1>
-      </header>
+      <div class="sheet-header">
 
-      <section class="form-card">
+        <h2>ဘေထုတ်အသစ်</h2>
+
+        <button
+          id="cancelBundleBtn"
+          class="close-btn">
+          ✕
+        </button>
+
+      </div>
+
+      <div class="sheet-body">
 
         <div class="form-group">
           <label>ဘေထုတ်ကုဒ်</label>
           <input
             id="bundleCode"
-            type="text"
-            placeholder="ဥပမာ A"
-          />
+            class="input"
+            placeholder="ဥပမာ B001"
+          >
         </div>
 
         <div class="form-group">
           <label>ဘေထုတ်အမည်</label>
           <input
             id="bundleName"
-            type="text"
-            placeholder="ဥပမာ ဘေထုတ် A"
-          />
+            class="input"
+          >
         </div>
 
         <div class="form-group">
           <label>အထည်အရေအတွက်</label>
           <input
             id="bundleQty"
+            class="input"
             type="number"
-            placeholder="150"
-          />
+          >
         </div>
 
         <div class="form-group">
-          <label>အရင်း  (ကျပ်)</label>
+          <label>အရင်း</label>
           <input
             id="bundleCost"
+            class="input"
             type="number"
-            placeholder="1456000"
-          />
+          >
         </div>
 
-	<div class="bundle-summary">
+      </div>
 
-	  <h3>⚡ အလိုအလျောက်တွက်ချက်မှု</h3>
+      <div class="sheet-footer">
 
-	  <div class="summary-row">
-	    <span>စုစုပေါင်းအထည်</span>
-	    <strong id="summaryQty">0</strong>
-	  </div>
+        <button
+          id="saveBundleBtn"
+          class="btn-primary">
+          သိမ်းမည်
+        </button>
 
-	  <div class="summary-row">
-	    <span>စုစုပေါင်းအရင်း</span>
-	    <strong id="summaryCost">0 ကျပ်</strong>
-	  </div>
+      </div>
 
-	  <div class="summary-row total">
-	    <span>တစ်ထည်အရင်း</span>
-	    <strong id="summaryUnitCost">0 ကျပ်</strong>
-	  </div>
-
-	  <small>
-	    * အထည်တစ်ထည်၏ အရင်းကို အလိုအလျောက်တွက်ပေးသည်
-	  </small>
-
-	</div>
-
-        <div class="form-buttons">
-
-          <button
-            id="cancelBundleBtn"
-            class="btn-secondary">
-            ပယ်ဖျက်
-          </button>
-
-          <button
-            id="saveBundleBtn"
-            class="btn-primary">
-            သိမ်းမည်
-          </button>
-
-        </div>
-
-      </section>
-
-    </main>
+    </div>
   `;
 }
