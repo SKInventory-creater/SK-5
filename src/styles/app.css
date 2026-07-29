@@ -1,3 +1,27 @@
+:root{
+  --bg:#F8FAFC;
+  --card:#FFFFFF;
+
+  --primary:#EEF4FF;
+  --primary-text:#2563EB;
+
+  --success:#ECFDF5;
+  --success-text:#059669;
+
+  --warning:#FFF7ED;
+  --warning-text:#EA580C;
+
+  --danger:#FEF2F2;
+  --danger-text:#DC2626;
+
+  --border:#E5E7EB;
+
+  --text:#374151;
+  --subtext:#6B7280;
+
+  --radius:16px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,10 +35,16 @@ body,
   height: 100%;
 }
 
-body {
-  font-family: sans-serif;
-  background: #f5f5f5;
-  color: #222;
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .splash-page {
@@ -41,7 +71,7 @@ body {
 
 .dashboard-page{
   min-height:100vh;
-  background:#f5f7f8;
+  background:var(--bg);
   padding:20px;
   padding-bottom:90px;
 }
@@ -69,27 +99,28 @@ body {
   width:58px;
   height:58px;
   border:none;
-  border-radius:18px;
-  background:#0b8f78;
-  color:#fff;
-  font-size:34px;
+  border-radius:16px;
+  background:var(--primary);
+  color:var(--primary-text);
+  font-size:32px;
   cursor:pointer;
 }
 
 .profit-card{
-  background:#e9f8ef;
-  border-radius:18px;
+  background:var(--success);
+  border:1px solid var(--border);
+  border-radius:16px;
   padding:18px;
   margin-bottom:20px;
 }
 
 .profit-card span{
-  color:#388e3c;
+  color:var(--subtext);
 }
 
 .profit-card h2{
   margin-top:8px;
-  color:#1b5e20;
+  color:var(--success-text);
 }
 
 .fab{
@@ -100,8 +131,8 @@ body {
   height:60px;
   border:none;
   border-radius:50%;
-  background:#6c63ff;
-  color:#fff;
+  background:var(--primary);
+  color:var(--primary-text);
   font-size:28px;
   box-shadow:0 6px 16px rgba(0,0,0,.25);
 }
@@ -125,26 +156,27 @@ body {
 }
 
 .bottom-nav .active{
-  color:#0b8f78;
-  font-weight:bold;
+  color:var(--primary-text);
+  font-weight:600;
 }
 
 .bundle-card{
   display:flex;
   align-items:center;
-  background:#fff;
-  border-radius:20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
   padding:18px;
   margin-bottom:18px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
 
 .bundle-icon{
   width:72px;
   height:72px;
   border-radius:18px;
-  background:#1976d2;
-  color:#fff;
+  background:var(--primary);
+  color:var(--primary-text);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -182,7 +214,7 @@ body {
 }
 
 .profit{
-  color:#2e7d32;
+  color:var(--success-text);
 }
 
 .bundle-actions{
@@ -206,7 +238,7 @@ body {
 
 .add-bundle-page{
   min-height:100vh;
-  background:#f5f7f8;
+  background:var(--bg);
   padding:20px;
 }
 
@@ -220,10 +252,11 @@ body {
 }
 
 .form-card{
-  background:#fff;
-  border-radius:20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
   padding:20px;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
 
 .form-group{
@@ -239,8 +272,8 @@ body {
 
 .form-group input{
   padding:14px;
-  border:1px solid #ddd;
-  border-radius:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
   font-size:16px;
 }
 
@@ -261,12 +294,14 @@ body {
 }
 
 .btn-primary{
-  background:#0b8f78;
-  color:#fff;
+  background:var(--primary);
+  color:var(--primary-text);
 }
 
 .btn-secondary{
-  background:#e0e0e0;
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--text);
 }
 
 .bundle-summary{
