@@ -1,0 +1,11 @@
+export const CREATE_BUNDLES_TABLE = `
+CREATE TABLE IF NOT EXISTS bundles (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  shopId TEXT NOT NULL,
+  bundleCode TEXT NOT NULL,
+  bundleName TEXT NOT NULL,
+  qty INTEGER NOT NULL,
+  cost REAL NOT NULL,
+  createdAt INTEGER NOT NULL
+);
+`;

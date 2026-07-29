@@ -33,3 +33,7 @@ export function register(email, password) {
 export function logout() {
   return signOut(auth);
 }
+
+export function getCurrentUser() {
+  return auth.currentUser;
+}
