@@ -14,35 +14,24 @@ export default function ItemsPage(bundle) {
 
       <div class="bundle-header-info">
         <h2>${bundle.bundleName}</h2>
-
-        <p>
-          ${bundle.qty} ခု · ရင်းနှီး ${Number(bundle.cost).toLocaleString()} ကျပ်
-        </p>
+        <p>${bundle.qty} ထည်</p>
       </div>
-
-      <button
-        id="addItemBtn"
-        class="add-item-btn">
-
-        ＋ အထည်ထည့်
-
-      </button>
 
     </header>
 
     <section class="items-summary">
 
-      <div>
+      <div class="summary-item">
         <small>ရောင်းစျေး</small>
         <strong>0 ကျပ်</strong>
       </div>
 
-      <div>
+      <div class="summary-item">
         <small>အရင်း</small>
         <strong>${Number(bundle.cost).toLocaleString()} ကျပ်</strong>
       </div>
 
-      <div>
+      <div class="summary-item">
         <small>အမြတ်</small>
         <strong class="profit">0 ကျပ်</strong>
       </div>
@@ -50,26 +39,40 @@ export default function ItemsPage(bundle) {
     </section>
 
     <div class="search-box">
-
       <input
+        id="searchItem"
         type="text"
         placeholder="ကုတ်၊ အမည်ဖြင့် ရှာရန်">
-
     </div>
 
-    <section id="itemList" class="item-list">
+    <section
+      id="itemList"
+      class="item-list">
 
       <div class="empty-card">
+
+        <div class="empty-icon">
+          📦
+        </div>
 
         <h3>အထည်မရှိသေးပါ</h3>
 
         <p>
-          အထည်အသစ်ထည့်ပြီး စတင်အသုံးပြုနိုင်ပါသည်။
+          အောက်က ခလုတ်ကိုနှိပ်ပြီး
+          အထည်များ စတင်ထည့်နိုင်ပါသည်။
         </p>
 
       </div>
 
     </section>
+
+    <button
+      id="addItemBtn"
+      class="floating-add-item">
+
+      + အထည်ထည့်
+
+    </button>
 
   </main>
   `;
