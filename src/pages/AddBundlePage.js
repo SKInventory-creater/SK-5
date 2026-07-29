@@ -36,13 +36,38 @@ export default function AddBundlePage() {
         </div>
 
         <div class="form-group">
-          <label>ဝယ်ယူစျေး (ကျပ်)</label>
+          <label>အရင်း  (ကျပ်)</label>
           <input
             id="bundleCost"
             type="number"
             placeholder="1456000"
           />
         </div>
+
+	<div class="bundle-summary">
+
+	  <h3>⚡ အလိုအလျောက်တွက်ချက်မှု</h3>
+
+	  <div class="summary-row">
+	    <span>စုစုပေါင်းအထည်</span>
+	    <strong id="summaryQty">0</strong>
+	  </div>
+
+	  <div class="summary-row">
+	    <span>စုစုပေါင်းအရင်း</span>
+	    <strong id="summaryCost">0 ကျပ်</strong>
+	  </div>
+
+	  <div class="summary-row total">
+	    <span>တစ်ထည်အရင်း</span>
+	    <strong id="summaryUnitCost">0 ကျပ်</strong>
+	  </div>
+
+	  <small>
+	    * အထည်တစ်ထည်၏ အရင်းကို အလိုအလျောက်တွက်ပေးသည်
+	  </small>
+
+	</div>
 
         <div class="form-buttons">
 

@@ -268,3 +268,45 @@ body {
 .btn-secondary{
   background:#e0e0e0;
 }
+
+.bundle-summary{
+  margin-top:24px;
+  padding:18px;
+  border-radius:18px;
+  background:#e8f8f5;
+  border:1px solid #bfe7df;
+}
+
+.bundle-summary h3{
+  margin-bottom:18px;
+  color:#008a78;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  margin:12px 0;
+}
+
+.summary-row strong{
+  font-size:18px;
+  font-weight:700;
+}
+
+.summary-row.total{
+  margin-top:18px;
+  padding:14px;
+  border-radius:12px;
+  background:#d5f1ec;
+}
+
+.summary-row.total strong{
+  color:#008a78;
+  font-size:22px;
+}
+
+.bundle-summary small{
+  display:block;
+  margin-top:12px;
+  color:#666;
+}
