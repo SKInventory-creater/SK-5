@@ -152,6 +152,7 @@ async function showDashboard() {
   const logoutBtn = document.getElementById("logoutBtn");
 
 if (logoutBtn) {
+
   logoutBtn.onclick = async () => {
     await logoutUser();
     showLogin();
@@ -161,10 +162,8 @@ if (logoutBtn) {
   const addBundleBtn = document.getElementById("addBundleBtn");
 
     addBundleBtn.onclick = () => {
-    alert("Button OK");
     showAddBundle();
   };
-}
 
   const bundleButtons = document.querySelectorAll(".open-bundle-btn");
 
@@ -182,6 +181,8 @@ bundleButtons.forEach(button => {
     }
   };
 });
+
+}
 
 document.querySelector("#app").innerHTML = SplashPage();
 
