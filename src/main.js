@@ -148,8 +148,11 @@ async function showEditItem(bundle) {
     AddItemPage(bundle, item);
 
   document.getElementById("backBtn").onclick = () => {
-    alert("Edit Button Clicked");
     showItemDetail(bundle, item);
+  };
+
+  document.getElementById("editItemBtn").onclick = () => {
+    showEditItem(bundle, item);
   };
 
   document.getElementById("itemName").value =
@@ -164,7 +167,6 @@ async function showEditItem(bundle) {
   document.getElementById("saveItemBtn").onclick = async () => {
 
   try {
-
     await updateItem({
 
       id: item.id,
