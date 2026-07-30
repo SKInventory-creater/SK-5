@@ -124,6 +124,21 @@ async function showItems(bundle) {
 
 });
 
+  document.getElementById("searchItem").oninput = (e) => {
+
+  const keyword = e.target.value.toLowerCase().trim();
+
+  document.querySelectorAll(".item-card").forEach((card) => {
+
+    const text = card.textContent.toLowerCase();
+
+    card.style.display =
+      text.includes(keyword) ? "" : "none";
+
+  });
+
+};
+
 }
 
 async function showEditItem(bundle, item) {
