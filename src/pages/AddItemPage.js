@@ -1,4 +1,4 @@
-export default function AddItemPage(bundle) {
+export default function AddItemPage(bundle, item) {
   return `
   <main class="add-item-page">
 
@@ -50,10 +50,19 @@ export default function AddItemPage(bundle) {
         <label>အရင်း</label>
 
         <input
-          id="itemCost"
-          type="number"
-        >
+	  id="itemCost"
+	  type="number"
+	  value="${item.cost}"
+	>
       </div>
+
+	<div class="form-group">
+	  <label>မှတ်ချက်</label>
+
+	  <textarea
+	    id="itemNote"
+	    rows="3">${item.note || ""}</textarea>
+	</div>
 
       <div class="summary-card">
 
@@ -64,6 +73,14 @@ export default function AddItemPage(bundle) {
             ${bundle.cost.toLocaleString()} ကျပ်
           </strong>
         </div>
+
+	<div class="summary-row">
+	  <span>Status</span>
+
+	  <strong>
+	    ${item.unsold ? "မရောင်းရသေး" : "ရောင်းပြီး"}
+	  </strong>
+	</div>
 
       </div>
 

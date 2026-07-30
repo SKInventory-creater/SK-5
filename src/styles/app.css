@@ -684,3 +684,17 @@ body{
   color:#2563EB;
   font-size:18px;
 }
+
+.item-status{
+  margin-top:8px;
+}
+
+.status-badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#ECFDF5;
+  color:#059669;
+  font-size:13px;
+  font-weight:600;
+}

@@ -131,7 +131,7 @@ async function showAddItem(bundle) {
   }
 
   document.querySelector("#app").innerHTML =
-    AddItemPage(bundle);
+    AddItemPage(bundle,item);
 
   document.getElementById("backBtn").onclick = () => {
     showItems(bundle);
