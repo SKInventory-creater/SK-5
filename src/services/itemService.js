@@ -95,8 +95,6 @@ export async function updateItem(item) {
 
   await db.run(
     `
-    UPDATE items
-    SET
       UPDATE items
 	SET
 	  photo=?,
