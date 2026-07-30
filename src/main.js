@@ -120,7 +120,7 @@ async function showItems(bundle) {
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
   card.onclick = () => {
-    showItemDetail(bundle, items[index]);
+    showEditItem(bundle, items[index]);
   };
 
 });
@@ -178,7 +178,7 @@ async function showEditItem(bundle, item) {
     AddItemPage(bundle, item);
 
   document.getElementById("backBtn").onclick = () => {
-    showItemDetail(bundle, item);
+    showItems(bundle);
   };
 
   document.getElementById("itemName").value =
