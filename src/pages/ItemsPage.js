@@ -1,4 +1,25 @@
 export default function ItemsPage(bundle, items) {
+
+const totalCost = items.reduce(
+  (sum, item) => sum + Number(item.cost || 0),
+  0
+);
+
+const totalSales = items
+  .filter(item => item.unsold == 0 && item.removed == 0)
+  .reduce(
+    (sum, item) => sum + Number(item.price || 0),
+    0
+  );
+
+const soldCost = items
+  .filter(item => item.unsold == 0 && item.removed == 0)
+  .reduce(
+    (sum, item) => sum + Number(item.cost || 0),
+    0
+  );
+
+const totalProfit = totalSales - soldCost;
   return `
   <main class="items-page">
 
@@ -23,17 +44,17 @@ export default function ItemsPage(bundle, items) {
 
       <div class="summary-item">
         <small>ရောင်းစျေး</small>
-        <strong>0 ကျပ်</strong>
+        <strong>${totalSales.toLocaleString()} ကျပ်</strong>
       </div>
 
       <div class="summary-item">
         <small>အရင်း</small>
-        <strong>${Number(bundle.cost).toLocaleString()} ကျပ်</strong>
+        <strong>${totalCost.toLocaleString()} ကျပ်</strong>
       </div>
 
       <div class="summary-item">
         <small>အမြတ်</small>
-        <strong class="profit">0 ကျပ်</strong>
+        <strong class="profit">${totalProfit.toLocaleString()} ကျပ်</strong>
       </div>
 
     </section>
@@ -66,15 +87,16 @@ export default function ItemsPage(bundle, items) {
 	      ${item.note || "မှတ်ချက် မရှိ"}
 	    </p>
 
-	  <div class="item-status">
-
-	  ${
-	    item.removed
+	<div class="item-status">
+	${
+	  item.price == 0 && !item.note
+	    ? '<span class="status-empty">──────</span>'
+	    : item.removed
 	      ? '<span class="status-removed">🟠 ဖယ်ထား</span>'
 	      : item.unsold
-	      ? '<span class="status-unsold">🟢 မရောင်းရသေး</span>'
-	      : '<span class="status-sold">🔵 ရောင်းပြီး</span>'
-	  }
+	        ? '<span class="status-unsold">🟢 မရောင်းရသေး</span>'
+	        : '<span class="status-sold">🔵 ရောင်းပြီး</span>'
+	}
 
 	</div>
 
