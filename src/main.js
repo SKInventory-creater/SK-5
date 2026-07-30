@@ -142,17 +142,13 @@ function showItemDetail(bundle, item) {
 
 }
 
-async function showEditItem(bundle) {
+async function showEditItem(bundle, item) {
 
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle, item);
 
   document.getElementById("backBtn").onclick = () => {
     showItemDetail(bundle, item);
-  };
-
-  document.getElementById("editItemBtn").onclick = () => {
-    showEditItem(bundle, item);
   };
 
   document.getElementById("itemName").value =
