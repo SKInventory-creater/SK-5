@@ -148,6 +148,7 @@ async function showEditItem(bundle, item) {
     AddItemPage(bundle);
 
   document.getElementById("backBtn").onclick = () => {
+    alert("Edit Button Clicked");
     showItemDetail(bundle, item);
   };
 
@@ -204,7 +205,7 @@ async function showEditItem(bundle, item) {
 
 }
 
-async function showAddItem(bundle) {
+async function showAddItem(bundle, item) {
 
   const items = await getItems(bundle.id);
 
