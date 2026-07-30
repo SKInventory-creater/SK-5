@@ -97,19 +97,24 @@ export async function updateItem(item) {
     `
     UPDATE items
     SET
-      photo=?,
-      cost=?,
-      price=?,
-      note=?,
-      unsold=1
-    WHERE id=?
+      UPDATE items
+	SET
+	  photo=?,
+	  cost=?,
+	  price=?,
+	  note=?,
+	  unsold=?,
+	  removed=?
+	WHERE id=?
     `,
-    [
-      item.photo,
-      item.cost,
-      item.price,
-      item.note,
-      item.id
-    ]
+     [
+	  item.photo,
+	  item.cost,
+	  item.price,
+	  item.note,
+	  item.unsold,
+	  item.removed,
+	  item.id
+	]
   );
 }

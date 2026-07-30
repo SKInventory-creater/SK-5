@@ -66,6 +66,18 @@ export default function ItemsPage(bundle, items) {
 	      ${item.note || "မှတ်ချက် မရှိ"}
 	    </p>
 
+	  <div class="item-status">
+
+	  ${
+	    item.removed
+	      ? '<span class="status-removed">🟠 ဖယ်ထား</span>'
+	      : item.unsold
+	      ? '<span class="status-unsold">🟢 မရောင်းရသေး</span>'
+	      : '<span class="status-sold">🔵 ရောင်းပြီး</span>'
+	  }
+
+	</div>
+
 	    <div class="item-price-row">
 
 	      <span>
