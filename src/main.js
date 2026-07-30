@@ -136,6 +136,72 @@ function showItemDetail(bundle, item) {
     showItems(bundle);
   };
 
+  document.getElementById("editItemBtn").onclick = () => {
+    showEditItem(bundle, item);
+  };
+
+}
+
+async function showEditItem(bundle, item) {
+
+  document.querySelector("#app").innerHTML =
+    AddItemPage(bundle);
+
+  document.getElementById("backBtn").onclick = () => {
+    showItemDetail(bundle, item);
+  };
+
+  document.getElementById("itemName").value =
+    item.note || "";
+
+  document.getElementById("itemPrice").value =
+    item.price || "";
+
+  document.getElementById("itemCost").value =
+    item.cost || "";
+
+  document.getElementById("saveItemBtn").onclick = async () => {
+
+  try {
+
+    await updateItem({
+
+      id: item.id,
+      photo: item.photo,
+
+      cost: Number(
+        document.getElementById("itemCost").value
+      ),
+
+      price: Number(
+        document.getElementById("itemPrice").value
+      ),
+
+      note:
+        document.getElementById("itemName").value.trim(),
+
+      unsold: item.unsold,
+      removed: item.removed
+
+    });
+
+    alert("ပြင်ဆင်ပြီးပါပြီ");
+
+    await showItemDetail(bundle, {
+      ...item,
+      cost: Number(document.getElementById("itemCost").value),
+      price: Number(document.getElementById("itemPrice").value),
+      note: document.getElementById("itemName").value.trim()
+    });
+
+  } catch (err) {
+
+    alert(err.message);
+
+  }
+
+};
+
 }
 
 async function showAddItem(bundle) {
