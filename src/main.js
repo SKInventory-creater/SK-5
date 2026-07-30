@@ -216,12 +216,7 @@ async function showEditItem(bundle, item) {
 
     alert("ပြင်ဆင်ပြီးပါပြီ");
 
-    await showItemDetail(bundle, {
-      ...item,
-      cost: Number(document.getElementById("itemCost").value),
-      price: Number(document.getElementById("itemPrice").value),
-      note: document.getElementById("itemName").value.trim()
-    });
+    await showItems(bundle);
 
   } catch (err) {
 
