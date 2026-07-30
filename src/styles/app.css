@@ -737,3 +737,43 @@ body{
   font-size:13px;
   font-weight:600;
 }
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.stat-card small {
+  display: block;
+  color: #666;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 22px;
+  color: #222;
+}
+
+.reports-btn {
+  width: 100%;
+  margin: 12px 0 20px;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}

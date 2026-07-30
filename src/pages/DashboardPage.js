@@ -32,6 +32,27 @@ const totalProfit = await getTotalProfit();
         <h2>${totalProfit.toLocaleString()} ကျပ်</h2>
       </section>
 
+	<section class="dashboard-stats">
+
+	  <div class="stat-card">
+	    <small>ဘေထုတ်</small>
+	    <h3>${totalBundles}</h3>
+	  </div>
+
+	  <div class="stat-card">
+	    <small>အထည်</small>
+	    <h3>${totalItems.toLocaleString()}</h3>
+	  </div>
+
+	</section>
+
+	<button
+	  id="reportsBtn"
+	  class="reports-btn">
+
+	  📊 အစီရင်ခံစာ
+
+	</button>
       <section id="bundleList">
 
   ${bundles.map(bundle => BundleCard(bundle)).join("")}

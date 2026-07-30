@@ -10,6 +10,7 @@ import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
 import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
+import ReportsPage from "./pages/ReportsPage.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -335,6 +336,10 @@ if (logoutBtn) {
     showAddBundle();
   };
 
+  document.getElementById("reportsBtn").onclick = () => {
+    showReports();
+  };
+
   const bundleButtons = document.querySelectorAll(".open-bundle-btn");
 
 bundleButtons.forEach(button => {
@@ -351,6 +356,52 @@ bundleButtons.forEach(button => {
     }
   };
 });
+
+}
+
+async function showReports() {
+
+  const bundles = await getBundles();
+
+  const items = [];
+
+  for (const bundle of bundles) {
+    items.push(...await getItems(bundle.id));
+  }
+
+  const stats = {
+    totalCost: bundles.reduce(
+      (sum, b) => sum + Number(b.cost || 0),
+      0
+    ),
+
+    totalSales: items
+      .filter(i => !i.unsold && !i.removed)
+      .reduce(
+        (sum, i) => sum + Number(i.price || 0),
+        0
+      ),
+
+    totalProfit: items
+      .filter(i => !i.unsold && !i.removed)
+      .reduce(
+        (sum, i) => sum + (Number(i.price || 0) - Number(i.cost || 0)),
+        0
+      ),
+
+    soldCount: items.filter(i => !i.unsold && !i.removed).length,
+
+    unsoldCount: items.filter(i => i.unsold && !i.removed).length,
+
+    reservedCount: items.filter(i => i.removed).length
+  };
+
+  document.querySelector("#app").innerHTML =
+    ReportsPage(stats);
+
+  document.getElementById("backBtn").onclick = () => {
+    showDashboard();
+  };
 
 }
 
