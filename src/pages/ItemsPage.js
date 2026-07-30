@@ -110,12 +110,6 @@ const totalProfit = totalSales - soldCost;
 
 	    </div>
 
-	<div class="item-status">
-	  <span class="status-badge">
-	    ${item.unsold ? "မရောင်းရသေး" : "ရောင်းပြီး"}
-	  </span>
-	</div>
-
 	  </div>
 
 	</div>
