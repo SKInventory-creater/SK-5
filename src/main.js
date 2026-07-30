@@ -101,8 +101,7 @@ function showRegister() {
   };
 }
 
-function showItems(bundle) {
-  async function showItems(bundle) {
+async function showItems(bundle) {
 
   const items = await getItems(bundle.id);
 
@@ -116,7 +115,7 @@ function showItems(bundle) {
   document.getElementById("addItemBtn").onclick = () => {
     showAddItem(bundle);
   };
-}
+
 }
 
 function showAddItem(bundle) {
