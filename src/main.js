@@ -142,28 +142,30 @@ async function showAddItem(bundle) {
     try {
 
       await updateItem({
-        id: item.id,
-        photo: "",
-        cost: Number(
-          document.getElementById("itemCost").value || item.cost
-        ),
-        price: Number(
-          document.getElementById("itemPrice").value || 0
-        ),
-        note:
-          document.getElementById("itemName").value.trim() +
-          " " +
-          (document.getElementById("itemNote")?.value.trim() || "")
-      });
+	  id: item.id,
+	  photo: "",
+	  cost: Number(
+	    document.getElementById("itemCost").value || item.cost
+	  ),
+	  price: Number(
+	    document.getElementById("itemPrice").value || 0
+	  ),
+	  note:
+	    document.getElementById("itemName").value.trim() +
+	    " " +
+	    (document.getElementById("itemNote")?.value.trim() || ""),
+
 	  unsold:
-	  document.getElementById("itemStatus").value === "unsold"
-	     ? 1
-	     : 0,
+	    document.getElementById("itemStatus").value === "unsold"
+	      ? 1
+	      : 0,
 
 	  removed:
-	  document.getElementById("itemStatus").value === "removed"
-	     ? 1
-	     : 0
+	    document.getElementById("itemStatus").value === "removed"
+	      ? 1
+	      : 0
+	});
+
       alert(item.itemId + " သိမ်းပြီးပါပြီ");
 
       await showItems(bundle);
