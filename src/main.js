@@ -144,6 +144,14 @@ async function showEditItem(bundle, item) {
   document.getElementById("itemCost").value =
     item.cost || "";
 
+  if (item.removed) {
+    document.getElementById("itemStatus").value = "reserved";
+  } else if (item.unsold) {
+    document.getElementById("itemStatus").value = "unsold";
+  } else {
+    document.getElementById("itemStatus").value = "sold";
+  }
+
   document.getElementById("saveItemBtn").onclick = async () => {
 
   try {
@@ -163,8 +171,11 @@ async function showEditItem(bundle, item) {
       note:
         document.getElementById("itemName").value.trim(),
 
-      unsold: item.unsold,
-      removed: item.removed
+      unsold:
+	  document.getElementById("itemStatus").value !== "sold",
+
+      removed:
+	  document.getElementById("itemStatus").value === "reserved",
 
     });
 
@@ -220,12 +231,12 @@ async function showAddItem(bundle) {
 	    (document.getElementById("itemNote")?.value.trim() || ""),
 
 	  unsold:
-	    document.getElementById("itemStatus").value === "unsold"
+	    document.getElementById("itemStatus").value === "sold"
 	      ? 1
 	      : 0,
 
 	  removed:
-	    document.getElementById("itemStatus").value === "removed"
+	    document.getElementById("itemStatus").value === "reserved"
 	      ? 1
 	      : 0
 	});

@@ -57,28 +57,6 @@ export default function AddItemPage(bundle, item) {
       </div>
 
 	<div class="form-group">
-
-	  <label>Status</label>
-
-	  <select id="itemStatus">
-
-	    <option value="unsold">
-	      🟢 မရောင်းရသေး
-	    </option>
-
-	    <option value="sold">
-	      🔵 ရောင်းပြီး
-	    </option>
-
-	    <option value="removed">
-	      🟠 ဖယ်ထား
-	    </option>
-
-	  </select>
-
-	</div>
-
-	<div class="form-group">
 	  <label>မှတ်ချက်</label>
 
 	  <textarea
@@ -105,6 +83,18 @@ export default function AddItemPage(bundle, item) {
 	</div>
 
       </div>
+
+      <div class="form-group">
+
+  <label>Status</label>
+
+	  <select id="itemStatus">
+	    <option value="unsold">မရောင်းရသေး</option>
+	    <option value="reserved">ဖယ်ထား</option>
+	    <option value="sold">ရောင်းပြီး</option>
+	  </select>
+
+	</div>
 
       <button
         id="saveItemBtn"
