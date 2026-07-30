@@ -89,3 +89,27 @@ export async function getItems(bundleId) {
 
   return result.values ?? [];
 }
+
+export async function updateItem(item) {
+  const db = await initDatabase();
+
+  await db.run(
+    `
+    UPDATE items
+    SET
+      photo=?,
+      cost=?,
+      price=?,
+      note=?,
+      unsold=1
+    WHERE id=?
+    `,
+    [
+      item.photo,
+      item.cost,
+      item.price,
+      item.note,
+      item.id
+    ]
+  );
+}

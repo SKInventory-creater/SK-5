@@ -9,7 +9,7 @@ import { addBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems } from "./services/itemService.js";
+import { getItems, updateItem } from "./services/itemService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -118,7 +118,18 @@ async function showItems(bundle) {
 
 }
 
-function showAddItem(bundle) {
+async function showAddItem(bundle) {
+
+  const items = await getItems(bundle.id);
+
+  const item = items.find(i => Number(i.price) === 0);
+
+  if (!item) {
+    alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
+    showItems(bundle);
+    return;
+  }
+
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle);
 
@@ -126,9 +137,35 @@ function showAddItem(bundle) {
     showItems(bundle);
   };
 
-  document.getElementById("saveItemBtn").onclick = () => {
-    alert("Save Item");
+  document.getElementById("saveItemBtn").onclick = async () => {
+
+    try {
+
+      await updateItem({
+        id: item.id,
+        photo: "",
+        cost: Number(
+          document.getElementById("itemCost").value || item.cost
+        ),
+        price: Number(
+          document.getElementById("itemPrice").value || 0
+        ),
+        note:
+          document.getElementById("itemName").value.trim() +
+          " " +
+          (document.getElementById("itemNote")?.value.trim() || "")
+      });
+
+      alert(item.itemId + " သိမ်းပြီးပါပြီ");
+
+      await showItems(bundle);
+
+    } catch (err) {
+      alert(err.message);
+    }
+
   };
+
 }
 
 function showAddBundle() {
