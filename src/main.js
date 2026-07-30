@@ -142,7 +142,7 @@ function showItemDetail(bundle, item) {
 
 }
 
-async function showEditItem(bundle, item) {
+async function showEditItem(bundle) {
 
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle);
