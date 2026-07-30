@@ -140,6 +140,36 @@ function showItemDetail(bundle, item) {
     showEditItem(bundle, item);
   };
 
+  document.getElementById("deleteItemBtn").onclick = async () => {
+
+  if (!confirm("ဒီအထည်ကို ဖယ်ထားမလား?")) {
+    return;
+  }
+
+  try {
+
+    await updateItem({
+      id: item.id,
+      photo: item.photo,
+      cost: item.cost,
+      price: item.price,
+      note: item.note,
+      unsold: 0,
+      removed: 1
+    });
+
+    alert("အထည်ကို ဖယ်ထားလိုက်ပါပြီ");
+
+    await showItems(bundle);
+
+  } catch (err) {
+
+    alert(err.message);
+
+  }
+
+};
+
 }
 
 async function showEditItem(bundle, item) {
