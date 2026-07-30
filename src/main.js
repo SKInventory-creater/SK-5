@@ -9,7 +9,7 @@ import { addBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems, updateItem } from "./services/itemService.js";
+import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 

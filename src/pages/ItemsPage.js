@@ -1,9 +1,6 @@
 export default function ItemsPage(bundle, items) {
 
-const totalCost = items.reduce(
-  (sum, item) => sum + Number(item.cost || 0),
-  0
-);
+const totalCost = Number(bundle.cost);
 
 const totalSales = items
   .filter(item => item.unsold == 0 && item.removed == 0)

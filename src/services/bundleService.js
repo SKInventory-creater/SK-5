@@ -35,7 +35,8 @@ const result = await db.run(sql, [
 
 const bundleId = result.changes.lastId;
 
-const unitCost = Math.round(bundle.cost / bundle.qty);
+const unitCost = Math.floor(bundle.cost / bundle.qty);
+const remainder = bundle.cost - (unitCost * bundle.qty);
 
 for (let i = 1; i <= bundle.qty; i++) {
   await addItem({
@@ -44,7 +45,10 @@ for (let i = 1; i <= bundle.qty; i++) {
       bundle.bundleCode +
       String(i).padStart(3, "0"),
     photo: "",
-    cost: unitCost,
+    cost:
+  i === bundle.qty
+    ? unitCost + remainder
+    : unitCost,
     price: 0,
     note: ""
   });

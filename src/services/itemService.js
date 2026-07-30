@@ -116,3 +116,17 @@ export async function updateItem(item) {
 	]
   );
 }
+
+export async function getTotalProfit() {
+  const db = await initDatabase();
+
+  const result = await db.query(`
+    SELECT
+      SUM(price - cost) AS profit
+    FROM items
+    WHERE unsold = 0
+      AND removed = 0
+  `);
+
+  return Number(result.values?.[0]?.profit || 0);
+}
