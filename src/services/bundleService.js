@@ -42,7 +42,7 @@ for (let i = 1; i <= bundle.qty; i++) {
       bundle.bundleCode +
       String(i).padStart(3, "0"),
     photo: "",
-    cost: bundle.cost,
+    cost: Math.round(bundle.cost / bundle.qty),
     price: 0,
     note: ""
   });
