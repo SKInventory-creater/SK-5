@@ -9,6 +9,7 @@ import { addBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
+import ItemDetailPage from "./pages/ItemDetailPage.js";
 import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
@@ -114,6 +115,25 @@ async function showItems(bundle) {
 
   document.getElementById("addItemBtn").onclick = () => {
     showAddItem(bundle);
+  };
+
+  document.querySelectorAll(".item-card").forEach((card, index) => {
+
+  card.onclick = () => {
+    showItemDetail(bundle, items[index]);
+  };
+
+});
+
+}
+
+function showItemDetail(bundle, item) {
+
+  document.querySelector("#app").innerHTML =
+    ItemDetailPage(item);
+
+  document.getElementById("backBtn").onclick = () => {
+    showItems(bundle);
   };
 
 }
