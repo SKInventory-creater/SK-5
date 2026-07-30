@@ -54,16 +54,34 @@ export default function ItemsPage(bundle, items) {
       ? items.map(item => `
         <div class="item-card">
 
-          <div class="bundle-avatar">
-            ${item.itemId}
-          </div>
+  	<div class="item-photo">
+   	 📦
+	  </div>
 
-          <div class="bundle-info">
-            <h3>${item.itemId}</h3>
-            <p>ရောင်းစျေး ${Number(item.price).toLocaleString()} ကျပ်</p>
-          </div>
+	  <div class="item-info">
 
-        </div>
+	    <h3>${item.itemId}</h3>
+
+	    <p class="item-note">
+	      ${item.note || "မှတ်ချက် မရှိ"}
+	    </p>
+
+	    <div class="item-price-row">
+
+	      <span>
+	        အရင်း
+	        ${Number(item.cost).toLocaleString()} ကျပ်
+	      </span>
+
+	      <strong>
+	        ${Number(item.price).toLocaleString()} ကျပ်
+	      </strong>
+
+	    </div>
+
+	  </div>
+
+	</div>
       `).join("")
       : `
         <div class="empty-card">
