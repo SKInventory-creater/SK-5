@@ -9,7 +9,6 @@ import { addBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import ItemDetailPage from "./pages/ItemDetailPage.js";
 import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
@@ -124,51 +123,6 @@ async function showItems(bundle) {
   };
 
 });
-
-}
-
-function showItemDetail(bundle, item) {
-
-  document.querySelector("#app").innerHTML =
-    ItemDetailPage(item);
-
-  document.getElementById("backBtn").onclick = () => {
-    showItems(bundle);
-  };
-
-  document.getElementById("editItemBtn").onclick = () => {
-    showEditItem(bundle, item);
-  };
-
-  document.getElementById("deleteItemBtn").onclick = async () => {
-
-  if (!confirm("ဒီအထည်ကို ဖယ်ထားမလား?")) {
-    return;
-  }
-
-  try {
-
-    await updateItem({
-      id: item.id,
-      photo: item.photo,
-      cost: item.cost,
-      price: item.price,
-      note: item.note,
-      unsold: 0,
-      removed: 1
-    });
-
-    alert("အထည်ကို ဖယ်ထားလိုက်ပါပြီ");
-
-    await showItems(bundle);
-
-  } catch (err) {
-
-    alert(err.message);
-
-  }
-
-};
 
 }
 
