@@ -145,7 +145,7 @@ function showItemDetail(bundle, item) {
 async function showEditItem(bundle) {
 
   document.querySelector("#app").innerHTML =
-    AddItemPage(bundle);
+    AddItemPage(bundle, item);
 
   document.getElementById("backBtn").onclick = () => {
     alert("Edit Button Clicked");
@@ -205,7 +205,7 @@ async function showEditItem(bundle) {
 
 }
 
-async function showAddItem(bundle, item) {
+async function showAddItem(bundle) {
 
   const items = await getItems(bundle.id);
 
