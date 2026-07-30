@@ -9,6 +9,7 @@ import { addBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
+import { getItems } from "./services/itemService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -101,8 +102,12 @@ function showRegister() {
 }
 
 function showItems(bundle) {
+  async function showItems(bundle) {
+
+  const items = await getItems(bundle.id);
+
   document.querySelector("#app").innerHTML =
-    ItemsPage(bundle);
+    ItemsPage(bundle, items);
 
   document.getElementById("backBtn").onclick = () => {
     showDashboard();
@@ -111,6 +116,7 @@ function showItems(bundle) {
   document.getElementById("addItemBtn").onclick = () => {
     showAddItem(bundle);
   };
+}
 }
 
 function showAddItem(bundle) {

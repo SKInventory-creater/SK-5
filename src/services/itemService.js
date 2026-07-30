@@ -33,6 +33,47 @@ export async function addItem(item) {
   );
 }
 
+export async function generateItems(bundle) {
+  const db = await initDatabase();
+
+  for (let i = 1; i <= Number(bundle.qty); i++) {
+
+    const itemId =
+      bundle.bundleCode +
+      String(i).padStart(3, "0");
+
+    await db.run(
+      `
+      INSERT INTO items
+      (
+        bundleId,
+        itemId,
+        photo,
+        cost,
+        price,
+        unsold,
+        removed,
+        note,
+        createdAt
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+      [
+        bundle.id,
+        itemId,
+        "",
+        0,
+        0,
+        1,
+        0,
+        "",
+        Date.now()
+      ]
+    );
+
+  }
+}
+
 export async function getItems(bundleId) {
   const db = await initDatabase();
 

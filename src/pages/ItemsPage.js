@@ -1,4 +1,4 @@
-export default function ItemsPage(bundle) {
+export default function ItemsPage(bundle, items) {
   return `
   <main class="items-page">
 
@@ -46,25 +46,42 @@ export default function ItemsPage(bundle) {
     </div>
 
     <section
-      id="itemList"
-      class="item-list">
+  id="itemList"
+  class="item-list">
 
-      <div class="empty-card">
+  ${
+    items.length
+      ? items.map(item => `
+        <div class="item-card">
 
-        <div class="empty-icon">
-          📦
+          <div class="bundle-avatar">
+            ${item.itemId}
+          </div>
+
+          <div class="bundle-info">
+            <h3>${item.itemId}</h3>
+            <p>ရောင်းစျေး ${Number(item.price).toLocaleString()} ကျပ်</p>
+          </div>
+
         </div>
+      `).join("")
+      : `
+        <div class="empty-card">
 
-        <h3>အထည်မရှိသေးပါ</h3>
+          <div class="empty-icon">📦</div>
 
-        <p>
-          အောက်က ခလုတ်ကိုနှိပ်ပြီး
-          အထည်များ စတင်ထည့်နိုင်ပါသည်။
-        </p>
+          <h3>အထည်မရှိသေးပါ</h3>
 
-      </div>
+          <p>
+            အောက်က ခလုတ်ကိုနှိပ်ပြီး
+            အထည်များ စတင်ထည့်နိုင်ပါသည်။
+          </p>
 
-    </section>
+        </div>
+      `
+  }
+
+</section>
 
     <button
       id="addItemBtn"
