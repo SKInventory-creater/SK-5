@@ -124,20 +124,37 @@ async function showItems(bundle) {
 
 });
 
-  document.getElementById("searchItem").oninput = (e) => {
+  const searchInput = document.getElementById("searchItem");
+const statusFilter = document.getElementById("statusFilter");
 
-  const keyword = e.target.value.toLowerCase().trim();
+function filterItems() {
+
+  const keyword = searchInput.value.toLowerCase().trim();
+  const filter = statusFilter.value;
 
   document.querySelectorAll(".item-card").forEach((card) => {
 
     const text = card.textContent.toLowerCase();
 
+    const status = card.querySelector(".item-status-text")?.dataset.status || "";
+
+    const matchKeyword = text.includes(keyword);
+
+    const matchStatus =
+      filter === "all" ||
+      status === filter;
+
     card.style.display =
-      text.includes(keyword) ? "" : "none";
+      matchKeyword && matchStatus ? "" : "none";
 
   });
 
-};
+}
+
+searchInput.oninput = filterItems;
+statusFilter.onchange = filterItems;
+
+filterItems();
 
 }
 

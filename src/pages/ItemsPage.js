@@ -63,6 +63,24 @@ const totalProfit = totalSales - soldCost;
         placeholder="ကုတ်၊ အမည်ဖြင့် ရှာရန်">
     </div>
 
+    <div class="filter-box">
+
+	  <select id="statusFilter">
+
+	    <option value="all">အားလုံး</option>
+
+	    <option value="empty">မထည့်ရသေး</option>
+
+	    <option value="unsold">မရောင်းရသေး</option>
+
+	    <option value="reserved">ဖယ်ထား</option>
+
+	    <option value="sold">ရောင်းပြီး</option>
+
+	  </select>
+
+	</div>
+
     <section
   id="itemList"
   class="item-list">
@@ -85,15 +103,30 @@ const totalProfit = totalSales - soldCost;
 	    </p>
 
 	<div class="item-status">
-	${
-	  item.price == 0 && !item.note
-	    ? '<span class="status-empty">──────</span>'
-	    : item.removed
-	      ? '<span class="status-removed">🟠 ဖယ်ထား</span>'
-	      : item.unsold
-	        ? '<span class="status-unsold">🟢 မရောင်းရသေး</span>'
-	        : '<span class="status-sold">🔵 ရောင်းပြီး</span>'
-	}
+
+  <span
+    class="item-status-text"
+    data-status="${
+      item.price == 0 && !item.note
+        ? "empty"
+        : item.removed
+        ? "reserved"
+        : item.unsold
+        ? "unsold"
+        : "sold"
+	    }">
+
+	    ${
+	      item.price == 0 && !item.note
+		? "──────"
+	        : item.removed
+	        ? "🟠 ဖယ်ထား"
+	        : item.unsold
+	        ? "🟢 မရောင်းရသေး"
+	        : "🔵 ရောင်းပြီး"
+	    }
+
+	  </span>
 
 	</div>
 
