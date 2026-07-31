@@ -271,9 +271,10 @@ document.getElementById("pickPhotoBtn").onclick = async () => {
 
   } catch (err) {
 
-    console.log(err);
+  alert(err?.message || JSON.stringify(err));
+  console.log(err);
 
-  }
+}
 
 };
 
@@ -294,9 +295,10 @@ document.getElementById("cameraPhotoBtn").onclick = async () => {
 
   } catch (err) {
 
-    console.log(err);
+  alert(err?.message || JSON.stringify(err));
+  console.log(err);
 
-  }
+}
 
 };
 
