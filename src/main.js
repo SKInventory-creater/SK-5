@@ -415,7 +415,43 @@ async function showReports() {
     showDashboard();
   };
 
-  document.getElementById("dailyReportBtn").onclick = () => {
+  document.getElementById("dailyReportBtn").onclick = showDailyReport;
+
+}
+
+async function showDailyReport() {
+
+  const bundles = await getBundles();
+
+  const items = [];
+
+  for (const bundle of bundles) {
+    items.push(...await getItems(bundle.id));
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  const todayItems = items.filter(item =>
+    item.soldAt &&
+    item.soldAt.slice(0, 10) === today
+  );
+
+  const stats = {
+
+    totalSales: todayItems.reduce(
+      (sum, item) => sum + Number(item.price || 0),
+      0
+    ),
+
+    totalProfit: todayItems.reduce(
+      (sum, item) =>
+        sum + (Number(item.price || 0) - Number(item.cost || 0)),
+      0
+    ),
+
+    soldCount: todayItems.length
+
+  };
 
   document.querySelector("#app").innerHTML =
     DailyReportPage(stats);
@@ -423,8 +459,6 @@ async function showReports() {
   document.getElementById("backBtn").onclick = () => {
     showReports();
   };
-
-};
 
 }
 

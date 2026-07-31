@@ -24,6 +24,11 @@ export default function DailyReportPage(stats) {
         <h3>${stats.soldCount || 0} ထည်</h3>
       </div>
 
+      <div class="summary-box">
+	<small>ယနေ့ Report Date</small>
+	<h3>${new Date().toLocaleDateString()}</h3>
+      </div>
+
     </section>
 
   </main>
