@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "781027044446",
+    "project_id": "sk-5-db136",
+    "storage_bucket": "sk-5-db136.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781027044446:android:dabc2b15088c40e6c798cf",
+        "android_client_info": {
+          "package_name": "com.sk.inventory5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALO3q2SlD5fbLlpNM3H2jGHYbeWoenqrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
