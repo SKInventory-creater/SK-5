@@ -11,6 +11,7 @@ import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
 import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
+import DailyReportPage from "./pages/DailyReportPage.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -402,6 +403,17 @@ async function showReports() {
   document.getElementById("backBtn").onclick = () => {
     showDashboard();
   };
+
+  document.getElementById("dailyReportBtn").onclick = () => {
+
+  document.querySelector("#app").innerHTML =
+    DailyReportPage(stats);
+
+  document.getElementById("backBtn").onclick = () => {
+    showReports();
+  };
+
+};
 
 }
 
