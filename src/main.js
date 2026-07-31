@@ -248,9 +248,15 @@ async function showAddItem(bundle) {
     return;
   }
 
+
+document.querySelector("#app").innerHTML =
+    AddItemPage(bundle,item);
+
   let selectedPhoto = null;
 
 document.getElementById("pickPhotoBtn").onclick = async () => {
+
+      alert("Pick button clicked");
 
   try {
 
@@ -273,6 +279,8 @@ document.getElementById("pickPhotoBtn").onclick = async () => {
 
 document.getElementById("cameraPhotoBtn").onclick = async () => {
 
+      alert("Camera button clicked");
+
   try {
 
     const photo = await takePhoto();
@@ -291,9 +299,6 @@ document.getElementById("cameraPhotoBtn").onclick = async () => {
   }
 
 };
-
-  document.querySelector("#app").innerHTML =
-    AddItemPage(bundle,item);
 
   document.getElementById("backBtn").onclick = () => {
     showItems(bundle);
