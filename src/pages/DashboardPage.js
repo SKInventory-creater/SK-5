@@ -46,13 +46,6 @@ const totalProfit = await getTotalProfit();
 
 	</section>
 
-	<button
-	  id="reportsBtn"
-	  class="reports-btn">
-
-	  📊 အစီရင်ခံစာ
-
-	</button>
       <section id="bundleList">
 
   ${bundles.map(bundle => BundleCard(bundle)).join("")}
@@ -68,8 +61,8 @@ const totalProfit = await getTotalProfit();
           ဘေထုတ်များ
         </button>
 
-        <button>
-          အမြတ်ပေါင်းချုပ်
+        <button id="reportsBtn">
+          အစီရင်ခံစာ
         </button>
       </nav>
 
