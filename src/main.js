@@ -13,6 +13,7 @@ import { getItems, updateItem, getTotalProfit } from "./services/itemService.js"
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
+import { pickPhoto, takePhoto } from "./services/cameraService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -246,6 +247,50 @@ async function showAddItem(bundle) {
     showItems(bundle);
     return;
   }
+
+  let selectedPhoto = null;
+
+document.getElementById("pickPhotoBtn").onclick = async () => {
+
+  try {
+
+    const photo = await pickPhoto();
+
+    selectedPhoto = photo;
+
+    const preview = document.getElementById("photoPreview");
+
+    preview.src = photo.webPath;
+    preview.style.display = "block";
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
+
+document.getElementById("cameraPhotoBtn").onclick = async () => {
+
+  try {
+
+    const photo = await takePhoto();
+
+    selectedPhoto = photo;
+
+    const preview = document.getElementById("photoPreview");
+
+    preview.src = photo.webPath;
+    preview.style.display = "block";
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+};
 
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle,item);

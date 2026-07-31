@@ -21,10 +21,43 @@ export default function AddItemPage(bundle, item) {
           ပုံမရှိသေး
         </div>
 
+	<div class="photo-preview">
+
+	  <img
+	    id="photoPreview"
+	    src="${item.photo || ''}"
+	    style="
+	      width:120px;
+	      height:120px;
+	      object-fit:cover;
+	      border-radius:12px;
+	      display:${item.photo ? "block" : "none"};
+	      margin:auto;
+	    ">
+
+	</div>
+
         <div class="photo-buttons">
-          <button>🖼 ဓာတ်ပုံရွေး</button>
-          <button>📷 ဓာတ်ပုံရိုက်</button>
-        </div>
+
+	  <button
+	    id="pickPhotoBtn"
+	    type="button">
+	    🖼 ဓာတ်ပုံရွေး
+	  </button>
+
+	  <button
+	    id="cameraPhotoBtn"
+	    type="button">
+	    📷 ဓာတ်ပုံရိုက်
+	  </button>
+
+	  <input
+	    id="photoInput"
+	    type="file"
+	    accept="image/*"
+	    hidden>
+
+	</div>
 
       </div>
 
