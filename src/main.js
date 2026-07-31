@@ -12,6 +12,7 @@ import AddItemPage from "./pages/AddItemPage.js";
 import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
+import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -216,6 +217,8 @@ async function showEditItem(bundle, item) {
 	    ? (item.soldAt || new Date().toISOString())
 	    : null,
 
+      createdAt:
+          item.createdAt || new Date().toISOString(),
     });
 
     alert("ပြင်ဆင်ပြီးပါပြီ");
@@ -283,6 +286,9 @@ async function showAddItem(bundle) {
 	    document.getElementById("itemStatus").value === "sold"
 	      ? new Date().toISOString()
 	      : null,
+
+	  createdAt:
+	    new Date().toISOString(),
 
 	});
 
@@ -381,32 +387,7 @@ async function showReports() {
     items.push(...await getItems(bundle.id));
   }
 
-  const stats = {
-    totalCost: bundles.reduce(
-      (sum, b) => sum + Number(b.cost || 0),
-      0
-    ),
-
-    totalSales: items
-      .filter(i => !i.unsold && !i.removed)
-      .reduce(
-        (sum, i) => sum + Number(i.price || 0),
-        0
-      ),
-
-    totalProfit: items
-      .filter(i => !i.unsold && !i.removed)
-      .reduce(
-        (sum, i) => sum + (Number(i.price || 0) - Number(i.cost || 0)),
-        0
-      ),
-
-    soldCount: items.filter(i => !i.unsold && !i.removed).length,
-
-    unsoldCount: items.filter(i => i.unsold && !i.removed).length,
-
-    reservedCount: items.filter(i => i.removed).length
-  };
+  const stats = calculateReportStats(bundles, items);
 
   document.querySelector("#app").innerHTML =
     ReportsPage(stats);
@@ -436,22 +417,7 @@ async function showDailyReport() {
     item.soldAt.slice(0, 10) === today
   );
 
-  const stats = {
-
-    totalSales: todayItems.reduce(
-      (sum, item) => sum + Number(item.price || 0),
-      0
-    ),
-
-    totalProfit: todayItems.reduce(
-      (sum, item) =>
-        sum + (Number(item.price || 0) - Number(item.cost || 0)),
-      0
-    ),
-
-    soldCount: todayItems.length
-
-  };
+  const stats = calculateDailyReport(todayItems);
 
   document.querySelector("#app").innerHTML =
     DailyReportPage(stats);
