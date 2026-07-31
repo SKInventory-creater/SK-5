@@ -211,6 +211,11 @@ async function showEditItem(bundle, item) {
       removed:
 	  document.getElementById("itemStatus").value === "reserved",
 
+      soldAt:
+	  document.getElementById("itemStatus").value === "sold"
+	    ? (item.soldAt || new Date().toISOString())
+	    : null,
+
     });
 
     alert("ပြင်ဆင်ပြီးပါပြီ");
@@ -272,7 +277,13 @@ async function showAddItem(bundle) {
 	  removed:
 	    document.getElementById("itemStatus").value === "reserved"
 	      ? 1
-	      : 0
+	      : 0,
+
+          soldAt:
+	    document.getElementById("itemStatus").value === "sold"
+	      ? new Date().toISOString()
+	      : null,
+
 	});
 
       alert(item.itemId + " သိမ်းပြီးပါပြီ");
