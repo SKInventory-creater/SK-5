@@ -113,8 +113,13 @@ async function showItems(bundle) {
   };
 
   document.getElementById("addItemBtn").onclick = () => {
+  alert("ADD BUTTON");
+  try {
     showAddItem(bundle);
-  };
+  } catch (e) {
+    alert(e.stack || e.message);
+  }
+};
 
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
