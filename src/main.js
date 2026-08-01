@@ -37,14 +37,10 @@ function showLogin() {
       await  showDashboard();
 
     } catch (err) {
-      alert(err.message);
+  alert(JSON.stringify(err));
+  console.error(err);
+}
 
-      if (err.code) {
-      alert(err.code);
-    }
-
-      console.error(err);
-    }
   };
 
 	  goRegisterBtn.onclick = () => {
