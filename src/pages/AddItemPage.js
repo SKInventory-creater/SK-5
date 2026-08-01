@@ -40,10 +40,9 @@ export default function AddItemPage(bundle, item) {
         <div class="photo-buttons">
 
 	  <button
-	    id="pickPhotoBtn"
-	    type="button">
-	    🖼 ဓာတ်ပုံရွေး
-	  </button>
+	  id="pickPhotoBtn"
+	  type="button"
+	  onclick="alert('INLINE CLICK')">
 
 	  <button
 	    id="cameraPhotoBtn"

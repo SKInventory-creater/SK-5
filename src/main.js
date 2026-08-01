@@ -252,6 +252,13 @@ async function showAddItem(bundle) {
 document.querySelector("#app").innerHTML =
     AddItemPage(bundle,item);
 
+alert("Page loaded");
+
+   const btn = document.getElementById("pickPhotoBtn");
+alert(btn ? btn.outerHTML : "NULL");
+
+alert(document.getElementById("cameraPhotoBtn"));
+
   let selectedPhoto = null;
 
 document.getElementById("pickPhotoBtn").onclick = async () => {
