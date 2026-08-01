@@ -248,66 +248,49 @@ async function showAddItem(bundle) {
     return;
   }
 
+  document.querySelector("#app").innerHTML = AddItemPage(bundle, item);
 
-document.querySelector("#app").innerHTML =
-    AddItemPage(bundle,item);
+let selectedPhoto = null;
 
-alert("Page loaded");
+requestAnimationFrame(() => {
 
-   const btn = document.getElementById("pickPhotoBtn");
-alert(btn ? btn.outerHTML : "NULL");
+  document.getElementById("pickPhotoBtn").onclick = async () => {
+    alert("Pick button clicked");
 
-alert(document.getElementById("cameraPhotoBtn"));
+    try {
+      const photo = await pickPhoto();
 
-  let selectedPhoto = null;
+      selectedPhoto = photo;
 
-document.getElementById("pickPhotoBtn").onclick = async () => {
+      const preview = document.getElementById("photoPreview");
+      preview.src = photo.webPath;
+      preview.style.display = "block";
 
-      alert("Pick button clicked");
+    } catch (err) {
+      alert(err?.message || JSON.stringify(err));
+      console.log(err);
+    }
+  };
 
-  try {
+  document.getElementById("cameraPhotoBtn").onclick = async () => {
+    alert("Camera button clicked");
 
-    const photo = await pickPhoto();
+    try {
+      const photo = await takePhoto();
 
-    selectedPhoto = photo;
+      selectedPhoto = photo;
 
-    const preview = document.getElementById("photoPreview");
+      const preview = document.getElementById("photoPreview");
+      preview.src = photo.webPath;
+      preview.style.display = "block";
 
-    preview.src = photo.webPath;
-    preview.style.display = "block";
+    } catch (err) {
+      alert(err?.message || JSON.stringify(err));
+      console.log(err);
+    }
+  };
 
-  } catch (err) {
-
-  alert(err?.message || JSON.stringify(err));
-  console.log(err);
-
-}
-
-};
-
-document.getElementById("cameraPhotoBtn").onclick = async () => {
-
-      alert("Camera button clicked");
-
-  try {
-
-    const photo = await takePhoto();
-
-    selectedPhoto = photo;
-
-    const preview = document.getElementById("photoPreview");
-
-    preview.src = photo.webPath;
-    preview.style.display = "block";
-
-  } catch (err) {
-
-  alert(err?.message || JSON.stringify(err));
-  console.log(err);
-
-}
-
-};
+});
 
   document.getElementById("backBtn").onclick = () => {
     showItems(bundle);
