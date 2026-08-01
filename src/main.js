@@ -248,9 +248,17 @@ async function showAddItem(bundle) {
 
 let selectedPhoto = null;
 
-requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
 
-  document.getElementById("pickPhotoBtn").onclick = async () => {
+  alert("FRAME START");
+
+  const pickBtn = document.getElementById("pickPhotoBtn");
+  const camBtn = document.getElementById("cameraPhotoBtn");
+
+  alert("pick = " + !!pickBtn);
+  alert("camera = " + !!camBtn);
+
+  pickBtn.onclick = async () => {
     alert("Pick button clicked");
 
     try {
@@ -268,7 +276,7 @@ requestAnimationFrame(() => {
     }
   };
 
-  document.getElementById("cameraPhotoBtn").onclick = async () => {
+  camBtn.onclick = async () => {
     alert("Camera button clicked");
 
     try {
