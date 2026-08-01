@@ -91,8 +91,12 @@ const totalProfit = totalSales - soldCost;
         <div class="item-card">
 
   	<div class="item-photo">
-   	 📦
-	  </div>
+	  ${
+	    item.photo
+	      ? `<img src="${item.photo}" class="item-photo-img">`
+	      : `📦`
+	  }
+	</div>
 
 	  <div class="item-info">
 
