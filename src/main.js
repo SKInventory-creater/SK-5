@@ -239,6 +239,8 @@ async function showEditItem(bundle, item) {
 
 async function showAddItem(bundle) {
 
+alert("showAddItem ENTER");
+
   const items = await getItems(bundle.id);
 
   const item = items.find(i => Number(i.price) === 0);
