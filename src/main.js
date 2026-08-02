@@ -14,6 +14,7 @@ import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
 import { pickPhoto, takePhoto } from "./services/cameraService.js";
+import { uploadItemPhoto } from "./services/storageService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -257,16 +258,10 @@ let selectedPhoto = null;
 
   requestAnimationFrame(() => {
 
-  alert("FRAME START");
-
   const pickBtn = document.getElementById("pickPhotoBtn");
   const camBtn = document.getElementById("cameraPhotoBtn");
 
-  alert("pick = " + !!pickBtn);
-  alert("camera = " + !!camBtn);
-
   pickBtn.onclick = async () => {
-    alert("Pick button clicked");
 
     try {
       const photo = await pickPhoto();
@@ -284,7 +279,6 @@ let selectedPhoto = null;
   };
 
   camBtn.onclick = async () => {
-    alert("Camera button clicked");
 
     try {
       const photo = await takePhoto();
@@ -309,11 +303,21 @@ let selectedPhoto = null;
 
   document.getElementById("saveItemBtn").onclick = async () => {
 
+   let photoUrl = item.photo || "";
+
+if (selectedPhoto) {
+  photoUrl = await uploadItemPhoto(
+    await (await fetch(selectedPhoto.webPath)).blob(),
+    item.itemId
+  );
+}
+
     try {
 
       await updateItem({
 	  id: item.id,
-	  photo: "",
+	  photo: photoUrl,
+	  alert(photoUrl);
 	  cost: Number(
 	    document.getElementById("itemCost").value || item.cost
 	  ),
