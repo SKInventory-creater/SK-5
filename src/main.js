@@ -239,132 +239,87 @@ async function showEditItem(bundle, item) {
 }
 
 async function showAddItem(bundle) {
-
-alert("showAddItem ENTER");
-
   const items = await getItems(bundle.id);
 
   const item = items.find(i => Number(i.price) === 0);
 
   if (!item) {
     alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
-    showItems(bundle);
+    await showItems(bundle);
     return;
   }
 
   document.querySelector("#app").innerHTML = AddItemPage(bundle, item);
 
-alert("PAGE CREATED");
-alert(!!document.getElementById("saveItemBtn"));
-alert(!!document.getElementById("pickPhotoBtn"));
+  let selectedPhoto = null;
 
-let selectedPhoto = null;
+  const preview = document.getElementById("photoPreview");
 
-  requestAnimationFrame(() => {
-
-  const pickBtn = document.getElementById("pickPhotoBtn");
-  const camBtn = document.getElementById("cameraPhotoBtn");
-
-  pickBtn.onclick = async () => {
-
+  document.getElementById("pickPhotoBtn").onclick = async () => {
     try {
       const photo = await pickPhoto();
-
       selectedPhoto = photo;
-
-      const preview = document.getElementById("photoPreview");
       preview.src = photo.webPath;
       preview.style.display = "block";
-
     } catch (err) {
-      alert(err?.message || JSON.stringify(err));
-      console.log(err);
+      console.error(err);
+      alert(err.message || JSON.stringify(err));
     }
   };
 
-  camBtn.onclick = async () => {
-
+  document.getElementById("cameraPhotoBtn").onclick = async () => {
     try {
       const photo = await takePhoto();
-
       selectedPhoto = photo;
-
-      const preview = document.getElementById("photoPreview");
       preview.src = photo.webPath;
       preview.style.display = "block";
-
     } catch (err) {
-      alert(err?.message || JSON.stringify(err));
-      console.log(err);
+      console.error(err);
+      alert(err.message || JSON.stringify(err));
     }
   };
-
-});
 
   document.getElementById("backBtn").onclick = () => {
     showItems(bundle);
   };
 
   document.getElementById("saveItemBtn").onclick = async () => {
-
-   let photoUrl = item.photo || "";
-
-if (selectedPhoto) {
-  photoUrl = await uploadItemPhoto(
-    await (await fetch(selectedPhoto.webPath)).blob(),
-    item.itemId
-  );
-}
-
     try {
+      let photoUrl = item.photo || "";
+
+      if (selectedPhoto) {
+        const blob = await (await fetch(selectedPhoto.webPath)).blob();
+        photoUrl = await uploadItemPhoto(blob, item.itemId);
+      }
 
       await updateItem({
-	  id: item.id,
-	  photo: photoUrl,
-	  cost: Number(
-	    document.getElementById("itemCost").value || item.cost
-	  ),
-	  price: Number(
-	    document.getElementById("itemPrice").value || 0
-	  ),
-	  note:
-	    document.getElementById("itemName").value.trim() +
-	    " " +
-	    (document.getElementById("itemNote")?.value.trim() || ""),
-
-	  unsold:
-	    document.getElementById("itemStatus").value === "sold"
-	      ? 1
-	      : 0,
-
-	  removed:
-	    document.getElementById("itemStatus").value === "reserved"
-	      ? 1
-	      : 0,
-
-          soldAt:
-	    document.getElementById("itemStatus").value === "sold"
-	      ? new Date().toISOString()
-	      : null,
-
-	  createdAt:
-	    new Date().toISOString(),
-
-	});
-
-	alert(photoUrl);
+        id: item.id,
+        photo: photoUrl,
+        cost: Number(document.getElementById("itemCost").value || item.cost),
+        price: Number(document.getElementById("itemPrice").value || 0),
+        note:
+          document.getElementById("itemName").value.trim() +
+          " " +
+          (document.getElementById("itemNote")?.value.trim() || ""),
+        unsold:
+          document.getElementById("itemStatus").value === "sold" ? 1 : 0,
+        removed:
+          document.getElementById("itemStatus").value === "reserved" ? 1 : 0,
+        soldAt:
+          document.getElementById("itemStatus").value === "sold"
+            ? new Date().toISOString()
+            : null,
+        createdAt: new Date().toISOString(),
+      });
 
       alert(item.itemId + " သိမ်းပြီးပါပြီ");
-
       await showItems(bundle);
 
     } catch (err) {
-  console.error(err);
-  alert(JSON.stringify(err));
-}
-
+      console.error(err);
+      alert(err.message || JSON.stringify(err));
+    }
   };
-
 }
 
 function showAddBundle() {
