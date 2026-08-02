@@ -317,7 +317,6 @@ if (selectedPhoto) {
       await updateItem({
 	  id: item.id,
 	  photo: photoUrl,
-	  alert(photoUrl);
 	  cost: Number(
 	    document.getElementById("itemCost").value || item.cost
 	  ),
@@ -348,6 +347,8 @@ if (selectedPhoto) {
 	    new Date().toISOString(),
 
 	});
+
+	alert(photoUrl);
 
       alert(item.itemId + " သိမ်းပြီးပါပြီ");
 
