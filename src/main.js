@@ -295,11 +295,16 @@ async function showAddItem(bundle) {
 	  saveBtn.disabled = true;
 	  saveBtn.textContent = "ပုံတင်နေသည်...";
 
+		alert("1");
+
 	  const blob =
  	   await (await fetch(selectedPhoto.webPath)).blob();
 
+		alert("2");
  	 photoUrl =
  	   await uploadItemPhoto(blob, item.itemId);
+
+		alert("3");
 
  	  saveBtn.disabled = false;
 	  saveBtn.textContent = "သိမ်းမည်";
