@@ -355,8 +355,9 @@ if (selectedPhoto) {
       await showItems(bundle);
 
     } catch (err) {
-      alert(err.message);
-    }
+  console.error(err);
+  alert(JSON.stringify(err));
+}
 
   };
 
