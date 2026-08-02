@@ -14,7 +14,7 @@ import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
 import { pickPhoto, takePhoto } from "./services/cameraService.js";
-import { uploadItemPhoto } from "./services/storageService.js";
+import { saveItemPhoto } from "./services/storageService.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -114,18 +114,13 @@ async function showItems(bundle) {
   };
 
   document.getElementById("addItemBtn").onclick = () => {
-  alert("ADD BUTTON");
-  try {
-    showAddItem(bundle);
-  } catch (e) {
-    alert(e.stack || e.message);
-  }
+  showItemForm(bundle);
 };
 
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
   card.onclick = () => {
-    showEditItem(bundle, items[index]);
+    showItemForm(bundle, items[index]);
   };
 
 });
@@ -164,180 +159,173 @@ filterItems();
 
 }
 
-async function showItemForm(bundle, item, isEdit) {
+async function showItemForm(bundle, editItem = null) {
 
-  document.querySelector("#app").innerHTML =
-    AddItemPage(bundle, item);
+  const items = await getItems(bundle.id);
 
-  document.getElementById("backBtn").onclick = () => {
-    showItems(bundle);
-  };
+  const item =
+    editItem ||
+    items.find(i => Number(i.price) === 0);
 
-  document.getElementById("itemName").value =
-    item.note || "";
-
-  document.getElementById("itemPrice").value =
-    item.price || "";
-
-  document.getElementById("itemCost").value =
-    item.cost || "";
-
-  if (item.removed) {
-    document.getElementById("itemStatus").value = "reserved";
-  } else if (item.unsold) {
-    document.getElementById("itemStatus").value = "unsold";
-  } else {
-    document.getElementById("itemStatus").value = "sold";
+  if (!item) {
+    alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
+    return showItems(bundle);
   }
 
-}
+  const isEdit = editItem !== null;
 
-async function showEditItem(bundle, item) {
+  document.querySelector("#app").innerHTML =
+    AddItemPage(bundle, item, isEdit);
 
-  return showItemForm(bundle, item, false);
+  let selectedPhoto = null;
 
-  document.getElementById("saveItemBtn").onclick = async () => {
+  const preview =
+    document.getElementById("photoPreview");
+
+     document.getElementById("pickPhotoBtn").onclick = async () => {
+
+    try {
+
+      const photo = await pickPhoto();
+
+      selectedPhoto = photo;
+
+      preview.src = photo.webPath;
+
+      preview.style.display = "block";
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(err.message || JSON.stringify(err));
+
+    }
+
+  };
+
+      document.getElementById("cameraPhotoBtn").onclick = async () => {
+
+    try {
+
+      const photo = await takePhoto();
+
+      selectedPhoto = photo;
+
+      preview.src = photo.webPath;
+
+      preview.style.display = "block";
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(err.message || JSON.stringify(err));
+
+    }
+
+  };
+
+      document.getElementById("backBtn").onclick = () => {
+
+    showItems(bundle);
+
+  };
+    const saveBtn = document.getElementById("saveItemBtn");
+
+saveBtn.onclick = async () => {
 
   try {
-    await updateItem({
 
-      id: item.id,
-      photo: item.photo,
+    let photoUrl = item.photo || "";
 
-      cost: Number(
-        document.getElementById("itemCost").value
-      ),
+    if (selectedPhoto) {
 
-      price: Number(
-        document.getElementById("itemPrice").value
-      ),
+      saveBtn.disabled = true;
+      saveBtn.textContent = "ပုံတင်နေသည်...";
 
-      note:
-        document.getElementById("itemName").value.trim(),
+      photoUrl =
+  await saveItemPhoto(selectedPhoto, item.itemId);
 
-      unsold:
-	  document.getElementById("itemStatus").value !== "sold",
+    const status =
+  document.getElementById("itemStatus").value;
 
-      removed:
-	  document.getElementById("itemStatus").value === "reserved",
+await updateItem({
 
-      soldAt:
-	  document.getElementById("itemStatus").value === "sold"
-	    ? (item.soldAt || new Date().toISOString())
-	    : null,
+  id: item.id,
+  photo: photoUrl,
 
-      createdAt:
-          item.createdAt || new Date().toISOString(),
-    });
+  cost: Number(document.getElementById("itemCost").value || item.cost),
 
-    alert("ပြင်ဆင်ပြီးပါပြီ");
+  price: Number(document.getElementById("itemPrice").value || 0),
+
+  note:
+    document.getElementById("itemName").value.trim() +
+    " " +
+    (document.getElementById("itemNote")?.value.trim() || ""),
+
+  unsold: status === "unsold",
+  removed: status === "reserved",
+
+  soldAt:
+    status === "sold"
+      ? (item.soldAt || new Date().toISOString())
+      : null,
+
+  createdAt: item.createdAt
+
+});
+
+    alert(
+      isEdit
+        ? "ပြင်ဆင်ပြီးပါပြီ"
+        : item.itemId + " သိမ်းပြီးပါပြီ"
+    );
 
     await showItems(bundle);
 
   } catch (err) {
 
-    alert(err.message);
+    console.error(err);
+
+    alert(err.message || JSON.stringify(err));
+
+  } finally {
+
+    saveBtn.disabled = false;
+    saveBtn.textContent = "သိမ်းမည်";
 
   }
 
 };
+     if (isEdit) {
 
-}
+  document.getElementById("deleteItemBtn").onclick = async () => {
 
-async function showAddItem(bundle) {
-  const items = await getItems(bundle.id);
-
-  const item = items.find(i => Number(i.price) === 0);
-
-  if (!item) {
-    alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
-    await showItems(bundle);
-    return;
-  }
-
-return showItemForm(bundle, item, true);
-
-  let selectedPhoto = null;
-
-  const preview = document.getElementById("photoPreview");
-
-  document.getElementById("pickPhotoBtn").onclick = async () => {
-    try {
-      const photo = await pickPhoto();
-      selectedPhoto = photo;
-      preview.src = photo.webPath;
-      preview.style.display = "block";
-    } catch (err) {
-      console.error(err);
-      alert(err.message || JSON.stringify(err));
+    if (!confirm("ဒီအထည်ကို ဖျက်မှာ သေချာပါသလား?")) {
+      return;
     }
-  };
-
-  document.getElementById("cameraPhotoBtn").onclick = async () => {
-    try {
-      const photo = await takePhoto();
-      selectedPhoto = photo;
-      preview.src = photo.webPath;
-      preview.style.display = "block";
-    } catch (err) {
-      console.error(err);
-      alert(err.message || JSON.stringify(err));
-    }
-  };
-
-   const saveBtn = document.getElementById("saveItemBtn");
-
-	saveBtn.onclick = async () => {
 
     try {
-      let photoUrl = item.photo || "";
 
-      if (selectedPhoto) {
+      await deleteItem(item.id);
 
-	  saveBtn.disabled = true;
-	  saveBtn.textContent = "ပုံတင်နေသည်...";
+      alert("အထည်ကို ဖျက်ပြီးပါပြီ");
 
-	  const blob =
- 	   await (await fetch(selectedPhoto.webPath)).blob();
-
- 	 photoUrl = URL.createObjectURL(blob);
-
- 	  saveBtn.disabled = false;
-	  saveBtn.textContent = "သိမ်းမည်";
-	}
-
-      await updateItem({
-        id: item.id,
-        photo: photoUrl,
-        cost: Number(document.getElementById("itemCost").value || item.cost),
-        price: Number(document.getElementById("itemPrice").value || 0),
-        note:
-          document.getElementById("itemName").value.trim() +
-          " " +
-          (document.getElementById("itemNote")?.value.trim() || ""),
-        unsold:
-          document.getElementById("itemStatus").value === "sold" ? 1 : 0,
-        removed:
-          document.getElementById("itemStatus").value === "reserved" ? 1 : 0,
-        soldAt:
-          document.getElementById("itemStatus").value === "sold"
-            ? new Date().toISOString()
-            : null,
-        createdAt: new Date().toISOString(),
-      });
-
-      alert(item.itemId + " သိမ်းပြီးပါပြီ");
       await showItems(bundle);
 
     } catch (err) {
 
-	  saveBtn.disabled = false;
-	  saveBtn.textContent = "သိမ်းမည်";
-
       console.error(err);
+
       alert(err.message || JSON.stringify(err));
+
     }
+
   };
+
+}
+
 }
 
 function showAddBundle() {
@@ -362,6 +350,10 @@ function showAddBundle() {
   document.getElementById("bundleCode").value.trim().toUpperCase();
 
 if (await bundleCodeExists(bundleCode)) {
+
+  saveBundleBtn.disabled = false;
+  saveBundleBtn.textContent = "သိမ်းမည်";
+
   alert("ဒီ Code ကို အသုံးပြုပြီးသား ဖြစ်ပါတယ်");
   return;
 }
@@ -382,6 +374,11 @@ if (await bundleCodeExists(bundleCode)) {
 
   } catch (err) {
     alert(err.message);
+	} finally {
+
+   saveBundleBtn.disabled = false;
+   saveBundleBtn.textContent = "သိမ်းမည်";
+
   }
 };
 

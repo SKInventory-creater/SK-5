@@ -1,18 +1,30 @@
-export async function uploadItemPhoto(file, itemId) {
+import { Filesystem, Directory } from "@capacitor/filesystem";
 
-  alert("UPLOAD START");
+export async function saveItemPhoto(photo, itemId) {
 
-  const fileRef = ref(storage, `items/${itemId}.jpg`);
+  const response = await fetch(photo.webPath);
+  const blob = await response.blob();
 
-  alert("REF OK");
+  const base64 = await new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result.split(",")[1]);
+    };
+    reader.readAsDataURL(blob);
+  });
 
-  await uploadBytes(fileRef, file);
+  const fileName = `${itemId}.jpg`;
 
-  alert("UPLOAD DONE");
+  await Filesystem.writeFile({
+    path: fileName,
+    data: base64,
+    directory: Directory.Data
+  });
 
-  const url = await getDownloadURL(fileRef);
+  const uri = await Filesystem.getUri({
+    path: fileName,
+    directory: Directory.Data
+  });
 
-  alert("URL DONE");
-
-  return url;
+  return uri.uri;
 }
