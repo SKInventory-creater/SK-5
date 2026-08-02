@@ -254,6 +254,10 @@ alert("showAddItem ENTER");
 
   document.querySelector("#app").innerHTML = AddItemPage(bundle, item);
 
+alert("PAGE CREATED");
+alert(!!document.getElementById("saveItemBtn"));
+alert(!!document.getElementById("pickPhotoBtn"));
+
 let selectedPhoto = null;
 
   requestAnimationFrame(() => {
