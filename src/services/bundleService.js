@@ -76,3 +76,11 @@ export async function getBundles() {
 
   return result.values ?? [];
 }
+
+export async function bundleCodeExists(code) {
+  const bundles = await getBundles();
+
+  return bundles.some(
+    b => b.bundleCode.trim().toUpperCase() === code.trim().toUpperCase()
+  );
+}

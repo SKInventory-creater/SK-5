@@ -6,11 +6,16 @@ export default function AddItemPage(bundle, item) {
       <button id="backBtn">←</button>
 
       <div>
-        <h2>အထည်အသစ်ထည့်ရန်</h2>
-        <span class="bundle-badge">
-          ကုတ်: ${bundle.bundleCode}
-        </span>
-      </div>
+  <h2>အထည်အသစ်ထည့်ရန်</h2>
+
+  <div class="bundle-badge">
+    ဘေ: ${bundle.bundleCode}
+	  </div>
+
+	  <div class="bundle-badge">
+	    အထည်: ${item.itemId}
+	  </div>
+	</div>
     </header>
 
     <section class="form-card">
@@ -136,6 +141,13 @@ export default function AddItemPage(bundle, item) {
         သိမ်းမည်
 
       </button>
+
+	<button
+	  id="deleteItemBtn"
+	  class="btn-danger"
+	  type="button">
+	  🗑 ဖျက်မည်
+	</button>
 
     </section>
 

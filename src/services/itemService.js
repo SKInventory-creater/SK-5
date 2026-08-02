@@ -130,3 +130,15 @@ export async function getTotalProfit() {
 
   return Number(result.values?.[0]?.profit || 0);
 }
+
+export async function deleteItem(id) {
+  const db = await initDatabase();
+
+  await db.run(
+    `
+    DELETE FROM items
+    WHERE id=?
+    `,
+    [id]
+  );
+}

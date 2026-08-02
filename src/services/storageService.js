@@ -1,19 +1,18 @@
-import { storage } from "../firebase/config.js";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "firebase/storage";
-
 export async function uploadItemPhoto(file, itemId) {
 
-  const fileRef = ref(
-    storage,
-    `items/${itemId}.jpg`
-  );
+  alert("UPLOAD START");
+
+  const fileRef = ref(storage, `items/${itemId}.jpg`);
+
+  alert("REF OK");
 
   await uploadBytes(fileRef, file);
 
-  return await getDownloadURL(fileRef);
+  alert("UPLOAD DONE");
 
+  const url = await getDownloadURL(fileRef);
+
+  alert("URL DONE");
+
+  return url;
 }

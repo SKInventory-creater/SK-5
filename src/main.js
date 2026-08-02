@@ -5,11 +5,11 @@ import RegisterPage from "./pages/RegisterPage.js";
 import LoginPage from "./pages/LoginPage.js";
 import DashboardPage from "./pages/DashboardPage.js";
 import AddBundlePage from "./pages/AddBundlePage.js";
-import { addBundle } from "./services/bundleService.js";
+import { addBundle, bundleCodeExists } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
+import { getItems, updateItem, getTotalProfit, deleteItem } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
@@ -164,7 +164,7 @@ filterItems();
 
 }
 
-async function showEditItem(bundle, item) {
+async function showItemForm(bundle, item, isEdit) {
 
   document.querySelector("#app").innerHTML =
     AddItemPage(bundle, item);
@@ -189,6 +189,12 @@ async function showEditItem(bundle, item) {
   } else {
     document.getElementById("itemStatus").value = "sold";
   }
+
+}
+
+async function showEditItem(bundle, item) {
+
+  return showItemForm(bundle, item, false);
 
   document.getElementById("saveItemBtn").onclick = async () => {
 
@@ -249,7 +255,7 @@ async function showAddItem(bundle) {
     return;
   }
 
-  document.querySelector("#app").innerHTML = AddItemPage(bundle, item);
+return showItemForm(bundle, item, true);
 
   let selectedPhoto = null;
 
@@ -279,10 +285,6 @@ async function showAddItem(bundle) {
     }
   };
 
-  document.getElementById("backBtn").onclick = () => {
-    showItems(bundle);
-  };
-
    const saveBtn = document.getElementById("saveItemBtn");
 
 	saveBtn.onclick = async () => {
@@ -295,16 +297,10 @@ async function showAddItem(bundle) {
 	  saveBtn.disabled = true;
 	  saveBtn.textContent = "ပုံတင်နေသည်...";
 
-		alert("1");
-
 	  const blob =
  	   await (await fetch(selectedPhoto.webPath)).blob();
 
-		alert("2");
-
  	 photoUrl = URL.createObjectURL(blob);
-
-		alert("3");
 
  	  saveBtn.disabled = false;
 	  saveBtn.textContent = "သိမ်းမည်";
@@ -356,13 +352,29 @@ function showAddBundle() {
   const saveBundleBtn = document.getElementById("saveBundleBtn");
 
   saveBundleBtn.onclick = async () => {
+
+	saveBundleBtn.disabled = true;
+	saveBundleBtn.textContent = "သိမ်းနေသည်...";
+
   try {
+
+	const bundleCode =
+  document.getElementById("bundleCode").value.trim().toUpperCase();
+
+if (await bundleCodeExists(bundleCode)) {
+  alert("ဒီ Code ကို အသုံးပြုပြီးသား ဖြစ်ပါတယ်");
+  return;
+}
+
     await addBundle({
-      bundleCode: document.getElementById("bundleCode").value.trim(),
+      bundleCode: bundleCode,
       bundleName: document.getElementById("bundleName").value.trim(),
       qty: Number(document.getElementById("bundleQty").value),
       cost: Number(document.getElementById("bundleCost").value)
     });
+
+	saveBundleBtn.disabled = false;
+	saveBundleBtn.textContent = "သိမ်းမည်";
 
     alert("ဘေထုတ် သိမ်းပြီးပါပြီ");
 
