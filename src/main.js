@@ -285,6 +285,8 @@ async function showAddItem(bundle) {
 
    const saveBtn = document.getElementById("saveItemBtn");
 
+	saveBtn.onclick = async () => {
+
     try {
       let photoUrl = item.photo || "";
 
