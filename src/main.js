@@ -301,8 +301,8 @@ async function showAddItem(bundle) {
  	   await (await fetch(selectedPhoto.webPath)).blob();
 
 		alert("2");
- 	 photoUrl =
- 	   await uploadItemPhoto(blob, item.itemId);
+
+ 	 photoUrl = URL.createObjectURL(blob);
 
 		alert("3");
 
