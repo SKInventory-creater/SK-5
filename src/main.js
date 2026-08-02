@@ -246,6 +246,7 @@ saveBtn.onclick = async () => {
 
       photoUrl =
   await saveItemPhoto(selectedPhoto, item.itemId);
+}
 
     const status =
   document.getElementById("itemStatus").value;
