@@ -283,14 +283,25 @@ async function showAddItem(bundle) {
     showItems(bundle);
   };
 
-  document.getElementById("saveItemBtn").onclick = async () => {
+   const saveBtn = document.getElementById("saveItemBtn");
+
     try {
       let photoUrl = item.photo || "";
 
       if (selectedPhoto) {
-        const blob = await (await fetch(selectedPhoto.webPath)).blob();
-        photoUrl = await uploadItemPhoto(blob, item.itemId);
-      }
+
+	  saveBtn.disabled = true;
+	  saveBtn.textContent = "ပုံတင်နေသည်...";
+
+	  const blob =
+ 	   await (await fetch(selectedPhoto.webPath)).blob();
+
+ 	 photoUrl =
+ 	   await uploadItemPhoto(blob, item.itemId);
+
+ 	  saveBtn.disabled = false;
+	  saveBtn.textContent = "သိမ်းမည်";
+	}
 
       await updateItem({
         id: item.id,
@@ -316,6 +327,10 @@ async function showAddItem(bundle) {
       await showItems(bundle);
 
     } catch (err) {
+
+	  saveBtn.disabled = false;
+	  saveBtn.textContent = "သိမ်းမည်";
+
       console.error(err);
       alert(err.message || JSON.stringify(err));
     }
