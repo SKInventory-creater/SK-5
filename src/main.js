@@ -9,7 +9,7 @@ import { addBundle, bundleCodeExists } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems, updateItem, getTotalProfit, deleteItem } from "./services/itemService.js";
+import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
@@ -125,45 +125,6 @@ async function showItems(bundle) {
 
 });
 
-  document.querySelectorAll(".sell-btn").forEach(btn => {
-
-  btn.onclick = async (e) => {
-
-    e.stopPropagation();
-
-    const item = items.find(i => i.id == btn.dataset.id);
-
-    if (!item) return;
-
-    const price = prompt(
-      item.itemId + " ရောင်းစျေးထည့်ပါ",
-      item.price || ""
-    );
-
-    if (price === null) return;
-
-    await updateItem({
-
-      ...item,
-
-      price: Number(price),
-
-      unsold: false,
-
-      removed: false,
-
-      soldAt: new Date().toISOString()
-
-    });
-
-    alert("ရောင်းပြီးပါပြီ");
-
-    await showItems(bundle);
-
-  };
-
-});
-
   const searchInput = document.getElementById("searchItem");
 const statusFilter = document.getElementById("statusFilter");
 
@@ -233,6 +194,8 @@ async function showItemForm(bundle, editItem = null) {
 
       preview.style.display = "block";
 
+      document.getElementById("photoEmpty").style.display = "none";
+
     } catch (err) {
 
       console.error(err);
@@ -254,6 +217,8 @@ async function showItemForm(bundle, editItem = null) {
       preview.src = photo.webPath;
 
       preview.style.display = "block";
+
+      document.getElementById("photoEmpty").style.display = "none";
 
     } catch (err) {
 

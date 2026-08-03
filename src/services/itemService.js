@@ -95,25 +95,27 @@ export async function updateItem(item) {
 
   await db.run(
     `
-      UPDATE items
-	SET
-	  photo=?,
-	  cost=?,
-	  price=?,
-	  note=?,
-	  unsold=?,
-	  removed=?
-	WHERE id=?
+    UPDATE items
+    SET
+      photo=?,
+      cost=?,
+      price=?,
+      unsold=?,
+      removed=?,
+      note=?,
+      createdAt=?
+    WHERE id=?
     `,
-     [
-	  item.photo,
-	  item.cost,
-	  item.price,
-	  item.note,
-	  item.unsold,
-	  item.removed,
-	  item.id
-	]
+    [
+      item.photo,
+      item.cost,
+      item.price,
+      item.unsold,
+      item.removed,
+      item.note,
+      item.createdAt,
+      item.id
+    ]
   );
 }
 
@@ -129,16 +131,4 @@ export async function getTotalProfit() {
   `);
 
   return Number(result.values?.[0]?.profit || 0);
-}
-
-export async function deleteItem(id) {
-  const db = await initDatabase();
-
-  await db.run(
-    `
-    DELETE FROM items
-    WHERE id=?
-    `,
-    [id]
-  );
 }
