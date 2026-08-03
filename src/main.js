@@ -5,7 +5,7 @@ import RegisterPage from "./pages/RegisterPage.js";
 import LoginPage from "./pages/LoginPage.js";
 import DashboardPage from "./pages/DashboardPage.js";
 import AddBundlePage from "./pages/AddBundlePage.js";
-import { addBundle, bundleCodeExists } from "./services/bundleService.js";
+import { addBundle, bundleCodeExists, deleteBundle } from "./services/bundleService.js";
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
@@ -112,6 +112,32 @@ async function showItems(bundle) {
   document.getElementById("backBtn").onclick = () => {
     showDashboard();
   };
+
+  document.getElementById("deleteBundleBtn").onclick = async () => {
+
+  if (
+    !confirm(
+      `${bundle.bundleCode} ကို ဖျက်မှာ သေချာပါသလား?`
+    )
+  ) {
+    return;
+  }
+
+  try {
+
+    await deleteBundle(bundle.id);
+
+    alert("ဘေထုတ် ဖျက်ပြီးပါပြီ");
+
+    showDashboard();
+
+  } catch (err) {
+
+    alert(err.message);
+
+  }
+
+};
 
   document.getElementById("addItemBtn").onclick = () => {
   showItemForm(bundle);

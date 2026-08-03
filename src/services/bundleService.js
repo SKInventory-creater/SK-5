@@ -84,3 +84,19 @@ export async function bundleCodeExists(code) {
     b => b.bundleCode.trim().toUpperCase() === code.trim().toUpperCase()
   );
 }
+
+export async function deleteBundle(bundleId) {
+  const db = await initDatabase();
+
+  // Items အရင်ဖျက်
+  await db.run(
+    `DELETE FROM items WHERE bundleId=?`,
+    [bundleId]
+  );
+
+  // Bundle ဖျက်
+  await db.run(
+    `DELETE FROM bundles WHERE id=?`,
+    [bundleId]
+  );
+}

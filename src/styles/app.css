@@ -838,3 +838,22 @@ body{
   height: 100%;
   object-fit: cover;
 }
+
+.bottom-actions{
+display:flex;
+gap:12px;
+margin-top:20px;
+}
+
+.bottom-actions button{
+flex:1;
+}
+
+.danger-btn{
+background:#d32f2f;
+color:#fff;
+border:none;
+padding:14px;
+border-radius:12px;
+font-weight:bold;
+}

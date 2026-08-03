@@ -169,14 +169,22 @@ const totalProfit = totalSales - soldCost;
 
 </section>
 
-    <button
-      id="addItemBtn"
-      class="floating-add-item">
+    <div class="bottom-actions">
 
-      + အထည်ထည့်
+<button
+id="addItemBtn"
+class="floating-add-item">
++ အထည်ထည့်
+</button>
 
-    </button>
+<button
+id="deleteBundleBtn"
+class="danger-btn">
+🗑 ဘေထုတ်ဖျက်
+</button>
 
-  </main>
-  `;
+</div>
+
+</main>
+`;
 }
