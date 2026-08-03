@@ -134,6 +134,17 @@ const totalProfit = totalSales - soldCost;
 
 	</div>
 
+	${item.price != 0 && item.unsold
+	  ? `
+	    <button
+	      class="sell-btn"
+	      data-id="${item.id}">
+	      💰 ရောင်းမည်
+	    </button>
+	  `
+	  : ""
+	}
+
 	    <div class="item-price-row">
 
 	      <span>

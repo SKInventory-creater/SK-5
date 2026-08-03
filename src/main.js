@@ -125,6 +125,45 @@ async function showItems(bundle) {
 
 });
 
+  document.querySelectorAll(".sell-btn").forEach(btn => {
+
+  btn.onclick = async (e) => {
+
+    e.stopPropagation();
+
+    const item = items.find(i => i.id == btn.dataset.id);
+
+    if (!item) return;
+
+    const price = prompt(
+      item.itemId + " ရောင်းစျေးထည့်ပါ",
+      item.price || ""
+    );
+
+    if (price === null) return;
+
+    await updateItem({
+
+      ...item,
+
+      price: Number(price),
+
+      unsold: false,
+
+      removed: false,
+
+      soldAt: new Date().toISOString()
+
+    });
+
+    alert("ရောင်းပြီးပါပြီ");
+
+    await showItems(bundle);
+
+  };
+
+});
+
   const searchInput = document.getElementById("searchItem");
 const statusFilter = document.getElementById("statusFilter");
 
@@ -299,33 +338,6 @@ await updateItem({
   }
 
 };
-     if (isEdit) {
-
-  document.getElementById("deleteItemBtn").onclick = async () => {
-
-    if (!confirm("ဒီအထည်ကို ဖျက်မှာ သေချာပါသလား?")) {
-      return;
-    }
-
-    try {
-
-      await deleteItem(item.id);
-
-      alert("အထည်ကို ဖျက်ပြီးပါပြီ");
-
-      await showItems(bundle);
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert(err.message || JSON.stringify(err));
-
-    }
-
-  };
-
-}
 
 }
 

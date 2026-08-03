@@ -142,13 +142,6 @@ export default function AddItemPage(bundle, item) {
 
       </button>
 
-	<button
-	  id="deleteItemBtn"
-	  class="btn-danger"
-	  type="button">
-	  🗑 ဖျက်မည်
-	</button>
-
     </section>
 
   </main>
