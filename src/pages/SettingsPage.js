@@ -4,7 +4,7 @@ export default function SettingsPage() {
 
       <header class="page-header">
         <button id="backBtn">←</button>
-        <h2>Settings</h2>
+        <h2>Settings TEST 123</h2>
       </header>
 
       <section class="settings-list">
