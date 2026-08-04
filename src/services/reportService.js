@@ -52,3 +52,24 @@ export function calculateDailyReport(todayItems) {
   };
 
 }
+
+export function calculateMonthlyReport(monthItems) {
+
+  return {
+
+    totalSales: monthItems.reduce(
+      (sum, item) => sum + Number(item.price || 0),
+      0
+    ),
+
+    totalProfit: monthItems.reduce(
+      (sum, item) =>
+        sum + (Number(item.price || 0) - Number(item.cost || 0)),
+      0
+    ),
+
+    soldCount: monthItems.length
+
+  };
+
+}

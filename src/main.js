@@ -12,7 +12,7 @@ import AddItemPage from "./pages/AddItemPage.js";
 import { getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
-import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
+import { calculateReportStats, calculateDailyReport, calculateMonthlyReport } from "./services/reportService.js";
 import { pickPhoto, takePhoto } from "./services/cameraService.js";
 import { saveItemPhoto } from "./services/storageService.js";
 import DeleteBundlePage from "./pages/DeleteBundlePage.js";
@@ -20,6 +20,7 @@ import SettingsMenuPage from "./pages/SettingsMenuPage.js";
 import SettingsPage from "./pages/SettingsPage.js";
 import { exportLocalData } from "./services/backupService.js";
 import { uploadBackup } from "./firebase/backup.js";
+import MonthlyReportPage from "./pages/MonthlyReportPage.js";
 
 import { loginUser, registerUser, logoutUser, currentUser } from "./services/authService.js";
 
@@ -629,6 +630,8 @@ async function showReports() {
 
   document.getElementById("dailyReportBtn").onclick = showDailyReport;
 
+  document.getElementById("monthlyReportBtn").onclick = showMonthlyReport;
+
 }
 
 async function showDailyReport() {
@@ -652,6 +655,35 @@ async function showDailyReport() {
 
   document.querySelector("#app").innerHTML =
     DailyReportPage(stats);
+
+  document.getElementById("backBtn").onclick = () => {
+    showReports();
+  };
+
+}
+
+
+async function showMonthlyReport() {
+
+  const bundles = await getBundles();
+
+  const items = [];
+
+  for (const bundle of bundles) {
+    items.push(...await getItems(bundle.id));
+  }
+
+  const month = new Date().toISOString().slice(0, 7);
+
+  const monthItems = items.filter(item =>
+    item.soldAt &&
+    item.soldAt.slice(0, 7) === month
+  );
+
+  const stats = calculateMonthlyReport(monthItems);
+
+  document.querySelector("#app").innerHTML =
+    MonthlyReportPage(stats, month);
 
   document.getElementById("backBtn").onclick = () => {
     showReports();
