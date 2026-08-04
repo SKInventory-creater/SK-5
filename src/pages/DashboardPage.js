@@ -22,9 +22,10 @@ const totalProfit = await getTotalProfit();
   အထည် ${totalItems.toLocaleString()} ခု</p>
         </div>
 
-        <button class="add-bundle-btn" id="addBundleBtn">
-          +
-        </button>
+	<button class="menuBtn" id= "menuBtn">
+	  ⋮
+	</button>
+
       </header>
 
       <section class="profit-card">
@@ -51,10 +52,6 @@ const totalProfit = await getTotalProfit();
   ${bundles.map(bundle => BundleCard(bundle)).join("")}
 
 </section>
-
-      <button id="menuBtn" class="fab">
-        ⚙
-      </button>
 
       <nav class="bottom-nav">
         <button class="active">

@@ -377,12 +377,6 @@ if (logoutBtn) {
   };
 }
 
-  const addBundleBtn = document.getElementById("addBundleBtn");
-
-addBundleBtn.onclick = () => {
-  showAddBundle();
-};
-
   const menuBtn = document.getElementById("menuBtn");
 
 menuBtn.onclick = () => {
