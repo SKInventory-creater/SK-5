@@ -21,7 +21,7 @@ import SettingsPage from "./pages/SettingsPage.js";
 import { exportLocalData } from "./services/backupService.js";
 import { uploadBackup } from "./firebase/backup.js";
 
-import { loginUser, registerUser, logoutUser } from "./services/authService.js";
+import { loginUser, registerUser, logoutUser, currentUser } from "./services/authService.js";
 
 import { createShopAccount } from "./services/shopService.js";
 
@@ -524,7 +524,7 @@ async function showSettings() {
 
   try {
 
-    const user = getCurrentUser();
+    const user = currentUser();
 
     if (!user) {
       alert("Login လိုအပ်ပါသည်");

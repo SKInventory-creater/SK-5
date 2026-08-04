@@ -1,7 +1,8 @@
 import {
   login,
   register,
-  logout
+  logout,
+  getCurrentUser
 } from "../firebase/auth.js";
 
 export async function loginUser(email, password) {
@@ -22,4 +23,8 @@ export async function registerUser(email, password) {
 
 export async function logoutUser() {
   return await logout();
+}
+
+export function currentUser() {
+  return getCurrentUser();
 }
