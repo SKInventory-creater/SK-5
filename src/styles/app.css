@@ -886,3 +886,29 @@ font-weight:bold;
 .popup-menu button:hover{
   background:#f5f5f5;
 }
+
+.settings-page{
+  padding:20px;
+}
+
+.menu-list{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin-top:24px;
+}
+
+.menu-btn{
+  width:100%;
+  padding:18px;
+  border:none;
+  border-radius:16px;
+  background:#2563EB;
+  color:#fff;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.menu-btn.danger{
+  background:#d32f2f;
+}
