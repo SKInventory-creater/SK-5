@@ -177,21 +177,6 @@ popupMenu.onclick = (e) => {
   e.stopPropagation();
 };
 
-document.getElementById("deleteBundleBtn").onclick = async () => {
-  if (!confirm(`"${bundle.bundleName}" ကို ဖျက်မှာ သေချာပါသလား?`)) {
-    return;
-  }
-
-  try {
-    await deleteBundle(bundle.id);
-    alert("ဘေထုတ် ဖျက်ပြီးပါပြီ");
-    await showDashboard();
-  } catch (err) {
-    console.error(err);
-    alert(err.message || JSON.stringify(err));
-  }
-};
-
 }
 
 async function showItemForm(bundle, editItem = null) {

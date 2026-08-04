@@ -181,12 +181,6 @@ class="floating-add-item">
 + အထည်ထည့်
 </button>
 
-<button
-id="deleteBundleBtn"
-class="danger-btn">
-🗑 ဘေထုတ်ဖျက်
-</button>
-
 </div>
 
 <div id="popupMenu" class="popup-menu" style="display:none;">
