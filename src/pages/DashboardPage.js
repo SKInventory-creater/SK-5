@@ -28,6 +28,16 @@ const totalProfit = await getTotalProfit();
 
       </header>
 
+	<div class="search-box">
+	  <input
+	    id="dashboardSearch"
+	    type="text"
+	    placeholder=" အထည်ကုတ် / Note / Bundle Code ဖြင့်ရှာရန်"
+	  />
+	</div>
+
+	<div id="searchResults"></div>
+
       <section class="profit-card">
         <span>စုစုပေါင်းအမြတ်</span>
         <h2>${totalProfit.toLocaleString()} ကျပ်</h2>

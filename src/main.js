@@ -9,7 +9,7 @@ import { addBundle, bundleCodeExists, deleteBundle } from "./services/bundleServ
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems, updateItem, getTotalProfit } from "./services/itemService.js";
+import { getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
@@ -366,6 +366,47 @@ if (await bundleCodeExists(bundleCode)) {
 
 async function showDashboard() {
   document.querySelector("#app").innerHTML = await DashboardPage();
+
+  const searchInput = document.getElementById("dashboardSearch");
+const searchResults = document.getElementById("searchResults");
+
+searchInput.oninput = async () => {
+  const keyword = searchInput.value.trim();
+
+  if (!keyword) {
+    searchResults.innerHTML = "";
+    return;
+  }
+
+  const items = await searchItems(keyword);
+
+  searchResults.innerHTML = items.map(item => `
+    <div class="item-card search-item" data-id="${item.id}">
+      <strong>${item.itemId}</strong><br>
+      <small>${item.note || ""}</small>
+    </div>
+  `).join("");
+};
+
+document.querySelectorAll(".search-item").forEach(card => {
+
+  card.onclick = async () => {
+
+    const item = items.find(i => i.id == card.dataset.id);
+
+    if (!item) return;
+
+    const bundles = await getBundles();
+
+    const bundle = bundles.find(b => b.id == item.bundleId);
+
+    if (!bundle) return;
+
+    showItemForm(bundle, item);
+
+  };
+
+});
 
   const logoutBtn = document.getElementById("logoutBtn");
 

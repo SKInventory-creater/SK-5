@@ -132,3 +132,23 @@ export async function getTotalProfit() {
 
   return Number(result.values?.[0]?.profit || 0);
 }
+
+export async function searchItems(keyword) {
+  const db = await initDatabase();
+
+  const text = `%${keyword.trim()}%`;
+
+  const result = await db.query(
+    `
+    SELECT *
+    FROM items
+    WHERE
+      itemId LIKE ?
+      OR note LIKE ?
+    ORDER BY itemId ASC
+    `,
+    [text, text]
+  );
+
+  return result.values ?? [];
+}
