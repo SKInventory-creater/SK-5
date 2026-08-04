@@ -26,6 +26,22 @@ const totalProfit = await getTotalProfit();
 	  ⋮
 	</button>
 
+	<div id="popupMenu" class="popup-menu" style="display:none;">
+
+	  <button id="addBundleMenu">
+	    ➕ Add Bundle
+	  </button>
+
+	  <button id="deleteBundleMenu">
+	    🗑 Delete Bundle
+	  </button>
+
+	  <button id="settingsMenu">
+	    ⚙ Settings
+	  </button>
+
+	</div>
+
       </header>
 
 	<div class="search-box">

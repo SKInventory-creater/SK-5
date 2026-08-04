@@ -17,6 +17,7 @@ import { pickPhoto, takePhoto } from "./services/cameraService.js";
 import { saveItemPhoto } from "./services/storageService.js";
 import DeleteBundlePage from "./pages/DeleteBundlePage.js";
 import SettingsMenuPage from "./pages/SettingsMenuPage.js";
+import SettingsPage from "./pages/SettingsPage.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -427,6 +428,39 @@ menuBtn.onclick = () => {
   showSettingsMenu();
 };
 
+  const popupMenu = document.getElementById("popupMenu");
+
+menuBtn.onclick = (e) => {
+
+  e.stopPropagation();
+
+  popupMenu.style.display =
+    popupMenu.style.display === "block"
+      ? "none"
+      : "block";
+
+};
+
+document.onclick = () => {
+  popupMenu.style.display = "none";
+};
+
+popupMenu.onclick = (e) => {
+  e.stopPropagation();
+};
+
+document.getElementById("addBundleMenu").onclick = () => {
+  showAddBundle();
+};
+
+document.getElementById("deleteBundleMenu").onclick = () => {
+  showDeleteBundles();
+};
+
+document.getElementById("settingsMenu").onclick = () => {
+  showSettings();
+};
+
   document.getElementById("reportsBtn").onclick = () => {
     showReports();
   };
@@ -469,6 +503,43 @@ async function showSettingsMenu() {
     await logoutUser();
     showLogin();
   };
+}
+
+async function showSettings() {
+
+  document.querySelector("#app").innerHTML =
+    SettingsPage();
+
+  document.getElementById("backBtn").onclick = () => {
+    showDashboard();
+  };
+
+  document.getElementById("shopInfoBtn").onclick = () => {
+    alert("Shop Information");
+  };
+
+  document.getElementById("backupBtn").onclick = () => {
+    alert("Backup");
+  };
+
+  document.getElementById("restoreBtn").onclick = () => {
+    alert("Restore");
+  };
+
+  document.getElementById("aboutBtn").onclick = () => {
+    alert("SK Inventory 5\nVersion 1.0.0");
+  };
+
+  document.getElementById("logoutBtn").onclick = async () => {
+
+    if (!confirm("Logout လုပ်မှာ သေချာပါသလား?")) return;
+
+    await logoutUser();
+
+    showLogin();
+
+  };
+
 }
 
 async function showDeleteBundles() {
