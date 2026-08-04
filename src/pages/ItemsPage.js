@@ -35,6 +35,10 @@ const totalProfit = totalSales - soldCost;
         <p>${bundle.qty} ထည်</p>
       </div>
 
+      <button id="menuBtn" class="menu-btn">
+	  ⋮
+      </button>
+
     </header>
 
     <section class="items-summary">
@@ -183,6 +187,13 @@ class="danger-btn">
 🗑 ဘေထုတ်ဖျက်
 </button>
 
+</div>
+
+<div id="popupMenu" class="popup-menu" style="display:none;">
+  <button id="settingsBtn">⚙️ Settings</button>
+  <button id="reportsBtn">📊 Reports</button>
+  <button id="deleteBundleBtn">🗑 ဘေထုတ်ဖျက်</button>
+  <button id="logoutBtn">🚪 Logout</button>
 </div>
 
 </main>

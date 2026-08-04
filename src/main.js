@@ -157,6 +157,26 @@ statusFilter.onchange = filterItems;
 
 filterItems();
 
+const menuBtn = document.getElementById("menuBtn");
+const popupMenu = document.getElementById("popupMenu");
+
+menuBtn.onclick = (e) => {
+  e.stopPropagation();
+
+  popupMenu.style.display =
+    popupMenu.style.display === "block"
+      ? "none"
+      : "block";
+};
+
+document.addEventListener("click", () => {
+  popupMenu.style.display = "none";
+});
+
+popupMenu.onclick = (e) => {
+  e.stopPropagation();
+};
+
 document.getElementById("deleteBundleBtn").onclick = async () => {
   if (!confirm(`"${bundle.bundleName}" ကို ဖျက်မှာ သေချာပါသလား?`)) {
     return;
