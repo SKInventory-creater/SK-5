@@ -18,6 +18,8 @@ import { saveItemPhoto } from "./services/storageService.js";
 import DeleteBundlePage from "./pages/DeleteBundlePage.js";
 import SettingsMenuPage from "./pages/SettingsMenuPage.js";
 import SettingsPage from "./pages/SettingsPage.js";
+import { exportLocalData } from "./services/backupService.js";
+import { uploadBackup } from "./firebase/backup.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -518,9 +520,32 @@ async function showSettings() {
     alert("Shop Information");
   };
 
-  document.getElementById("backupBtn").onclick = () => {
-    alert("Backup");
-  };
+  document.getElementById("backupBtn").onclick = async () => {
+
+  try {
+
+    const user = getCurrentUser();
+
+    if (!user) {
+      alert("Login လိုအပ်ပါသည်");
+      return;
+    }
+
+    const data = await exportLocalData();
+
+    await uploadBackup(user.uid, data);
+
+    alert("☁ Backup အောင်မြင်ပါသည်");
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(err.message || JSON.stringify(err));
+
+  }
+
+};
 
   document.getElementById("restoreBtn").onclick = () => {
     alert("Restore");
