@@ -654,7 +654,7 @@ async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 
   const stats = calculateDailyReport(todayItems);
 
   document.querySelector("#app").innerHTML =
-    DailyReportPage(stats);
+    DailyReportPage(stats, selectedDate );
 
   document.getElementById("backBtn").onclick = () => {
     showReports();
@@ -662,7 +662,7 @@ async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 
 
   const reportDate = document.getElementById("reportDate");
 
-reportDate.value = new Date().toISOString().slice(0, 10);
+reportDate.value = selectedDate;
 
 reportDate.onchange = () => {
   showDailyReport(reportDate.value);

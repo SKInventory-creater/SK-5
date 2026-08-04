@@ -1,4 +1,4 @@
-export default function DailyReportPage(stats) {
+export default function DailyReportPage(stats, selectedDate) {
   return `
   <main class="reports-page">
 
