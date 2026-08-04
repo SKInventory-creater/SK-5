@@ -15,6 +15,7 @@ import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport } from "./services/reportService.js";
 import { pickPhoto, takePhoto } from "./services/cameraService.js";
 import { saveItemPhoto } from "./services/storageService.js";
+import DeleteBundlePage from "./pages/DeleteBundlePage.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -401,6 +402,12 @@ if (logoutBtn) {
     showAddBundle();
   };
 
+  const menuBtn = document.getElementById("menuBtn");
+
+menuBtn.onclick = () => {
+  showMenu();
+};
+
   document.getElementById("reportsBtn").onclick = () => {
     showReports();
   };
@@ -421,6 +428,47 @@ bundleButtons.forEach(button => {
     }
   };
 });
+
+}
+
+async function showDeleteBundles() {
+
+  const bundles = await getBundles();
+
+  document.querySelector("#app").innerHTML =
+    DeleteBundlePage(bundles);
+
+  document.getElementById("backBtn").onclick = () => {
+    showDashboard();
+  };
+
+  document.querySelectorAll(".deleteBundleBtn").forEach(btn => {
+
+    btn.onclick = async () => {
+
+      if (!confirm("ဒီဘေထုတ်ကို ဖျက်မှာ သေချာပါသလား?")) {
+        return;
+      }
+
+      try {
+
+        await deleteBundle(Number(btn.dataset.id));
+
+        alert("ဘေထုတ်ဖျက်ပြီးပါပြီ");
+
+        await showDeleteBundles();
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert(err.message || JSON.stringify(err));
+
+      }
+
+    };
+
+  });
 
 }
 

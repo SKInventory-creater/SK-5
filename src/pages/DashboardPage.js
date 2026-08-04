@@ -52,7 +52,7 @@ const totalProfit = await getTotalProfit();
 
 </section>
 
-      <button class="fab">
+      <button id="menuBtn" class="fab">
         ⚙
       </button>
 
