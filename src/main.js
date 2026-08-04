@@ -634,7 +634,7 @@ async function showReports() {
 
 }
 
-async function showDailyReport() {
+async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 10)) {
 
   const bundles = await getBundles();
 
@@ -647,9 +647,9 @@ async function showDailyReport() {
   const today = new Date().toISOString().slice(0, 10);
 
   const todayItems = items.filter(item =>
-    item.soldAt &&
-    item.soldAt.slice(0, 10) === today
-  );
+  item.soldAt &&
+  item.soldAt.slice(0, 10) === selectedDate
+);
 
   const stats = calculateDailyReport(todayItems);
 
@@ -659,6 +659,14 @@ async function showDailyReport() {
   document.getElementById("backBtn").onclick = () => {
     showReports();
   };
+
+  const reportDate = document.getElementById("reportDate");
+
+reportDate.value = new Date().toISOString().slice(0, 10);
+
+reportDate.onchange = () => {
+  showDailyReport(reportDate.value);
+};
 
 }
 

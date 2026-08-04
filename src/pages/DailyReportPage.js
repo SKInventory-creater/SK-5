@@ -7,6 +7,13 @@ export default function DailyReportPage(stats) {
       <h2>နေ့စဉ် Report</h2>
     </header>
 
+    <div class="report-filter">
+      <input
+        type="date"
+        id="reportDate"
+      />
+    </div>
+
     <section class="reports-summary">
 
       <div class="summary-box">
