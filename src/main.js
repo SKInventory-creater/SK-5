@@ -386,13 +386,12 @@ searchInput.oninput = async () => {
       <small>${item.note || ""}</small>
     </div>
   `).join("");
-};
 
-document.querySelectorAll(".search-item").forEach(card => {
+  document.querySelectorAll(".search-item").forEach(card => {
 
   card.onclick = async () => {
 
-	alert(card.dataset.id);
+    const items = await searchItems(searchInput.value.trim());
 
     const item = items.find(i => i.id == card.dataset.id);
 
@@ -409,6 +408,8 @@ document.querySelectorAll(".search-item").forEach(card => {
   };
 
 });
+
+};
 
   const logoutBtn = document.getElementById("logoutBtn");
 
