@@ -392,6 +392,8 @@ document.querySelectorAll(".search-item").forEach(card => {
 
   card.onclick = async () => {
 
+	alert(card.dataset.id);
+
     const item = items.find(i => i.id == card.dataset.id);
 
     if (!item) return;
