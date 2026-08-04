@@ -618,10 +618,6 @@ body{
 }
 
 .floating-add-item{
-  position:fixed;
-  left:20px;
-  right:20px;
-  bottom:24px;
   height:54px;
   border:none;
   border-radius:16px;
