@@ -16,6 +16,7 @@ import { calculateReportStats, calculateDailyReport } from "./services/reportSer
 import { pickPhoto, takePhoto } from "./services/cameraService.js";
 import { saveItemPhoto } from "./services/storageService.js";
 import DeleteBundlePage from "./pages/DeleteBundlePage.js";
+import SettingsMenuPage from "./pages/SettingsMenuPage.js";
 
 import { loginUser, registerUser, logoutUser } from "./services/authService.js";
 
@@ -157,26 +158,6 @@ searchInput.oninput = filterItems;
 statusFilter.onchange = filterItems;
 
 filterItems();
-
-const menuBtn = document.getElementById("menuBtn");
-const popupMenu = document.getElementById("popupMenu");
-
-menuBtn.onclick = (e) => {
-  e.stopPropagation();
-
-  popupMenu.style.display =
-    popupMenu.style.display === "block"
-      ? "none"
-      : "block";
-};
-
-document.addEventListener("click", () => {
-  popupMenu.style.display = "none";
-});
-
-popupMenu.onclick = (e) => {
-  e.stopPropagation();
-};
 
 }
 
@@ -398,10 +379,14 @@ if (logoutBtn) {
 
   const addBundleBtn = document.getElementById("addBundleBtn");
 
+addBundleBtn.onclick = () => {
+  showAddBundle();
+};
+
   const menuBtn = document.getElementById("menuBtn");
 
 menuBtn.onclick = () => {
-  showMenu();
+  showSettingsMenu();
 };
 
   document.getElementById("reportsBtn").onclick = () => {
@@ -425,6 +410,27 @@ bundleButtons.forEach(button => {
   };
 });
 
+}
+
+async function showSettingsMenu() {
+  document.querySelector("#app").innerHTML = SettingsMenuPage();
+
+  document.getElementById("backBtn").onclick = () => {
+    showDashboard();
+  };
+
+  document.getElementById("addBundleBtn").onclick = () => {
+    showAddBundle();
+  };
+
+  document.getElementById("deleteBundlesBtn").onclick = () => {
+    showDeleteBundles();
+  };
+
+  document.getElementById("logoutBtn").onclick = async () => {
+    await logoutUser();
+    showLogin();
+  };
 }
 
 async function showDeleteBundles() {
