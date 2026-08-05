@@ -21,6 +21,8 @@ import SettingsPage from "./pages/SettingsPage.js";
 import { exportLocalData, restoreLocalData } from "./services/backupService.js";
 import { uploadBackup, downloadBackup } from "./firebase/backup.js";
 import MonthlyReportPage from "./pages/MonthlyReportPage.js";
+import ShopInformationPage from "./pages/ShopInformationPage.js";
+import { getShopInformation } from "./services/shopService.js";
 
 import { loginUser, registerUser, logoutUser, currentUser } from "./services/authService.js";
 
@@ -508,6 +510,26 @@ async function showSettingsMenu() {
   };
 }
 
+async function showShopInformation() {
+
+  const user = currentUser();
+
+  if (!user) {
+    alert("Login လိုအပ်ပါသည်");
+    return;
+  }
+
+  const info = await getShopInformation(user.uid);
+
+  document.querySelector("#app").innerHTML =
+    ShopInformationPage(info);
+
+  document.getElementById("backBtn").onclick = () => {
+    showSettings();
+  };
+
+}
+
 async function showSettings() {
 
   document.querySelector("#app").innerHTML =
@@ -518,8 +540,8 @@ async function showSettings() {
   };
 
   document.getElementById("shopInfoBtn").onclick = () => {
-    alert("Shop Information");
-  };
+  showShopInformation();
+};
 
   document.getElementById("backupBtn").onclick = async () => {
 

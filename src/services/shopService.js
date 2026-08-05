@@ -1,6 +1,8 @@
 import {
   createShop,
-  createUserProfile
+  createUserProfile,
+  getShop,
+  getUserProfile
 } from "../firebase/firestore.js";
 
 export async function createShopAccount(data) {
@@ -19,4 +21,24 @@ export async function createShopAccount(data) {
     phone: data.phone,
     email: data.email
   });
+}
+
+export async function getShopInformation(uid) {
+  const user = await getUserProfile(uid);
+
+  if (!user) {
+    throw new Error("User Profile မတွေ့ပါ");
+  }
+
+  const shop = await getShop(user.shopId);
+
+  return {
+    shopId: user.shopId,
+    role: user.role,
+    email: user.email,
+    name: user.name,
+    phone: user.phone,
+    shopName: shop?.shopName || "",
+    ownerName: shop?.ownerName || ""
+  };
 }
