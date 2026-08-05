@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS items (
   unsold INTEGER DEFAULT 1,
   removed INTEGER DEFAULT 0,
   note TEXT,
+  soldAt TEXT,
   createdAt INTEGER
 );
 `;

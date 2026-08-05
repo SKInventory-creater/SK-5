@@ -103,6 +103,7 @@ export async function updateItem(item) {
       unsold=?,
       removed=?,
       note=?,
+      soldAt=?,
       createdAt=?
     WHERE id=?
     `,
@@ -113,6 +114,7 @@ export async function updateItem(item) {
       item.unsold,
       item.removed,
       item.note,
+      item.soldAt,
       item.createdAt,
       item.id
     ]

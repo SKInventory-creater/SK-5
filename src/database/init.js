@@ -11,5 +11,14 @@ export async function initDatabase() {
 
   await db.execute(CREATE_ITEMS_TABLE);
 
+  try {
+  await db.execute(`
+    ALTER TABLE items
+    ADD COLUMN soldAt TEXT
+  `);
+} catch (e) {
+  // soldAt column ရှိပြီးသားဆိုရင် Ignore
+}
+
   return db;
 }
