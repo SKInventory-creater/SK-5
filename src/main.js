@@ -18,8 +18,8 @@ import { saveItemPhoto } from "./services/storageService.js";
 import DeleteBundlePage from "./pages/DeleteBundlePage.js";
 import SettingsMenuPage from "./pages/SettingsMenuPage.js";
 import SettingsPage from "./pages/SettingsPage.js";
-import { exportLocalData } from "./services/backupService.js";
-import { uploadBackup } from "./firebase/backup.js";
+import { exportLocalData, restoreLocalData } from "./services/backupService.js";
+import { uploadBackup, downloadBackup } from "./firebase/backup.js";
 import MonthlyReportPage from "./pages/MonthlyReportPage.js";
 
 import { loginUser, registerUser, logoutUser, currentUser } from "./services/authService.js";
@@ -548,9 +548,32 @@ async function showSettings() {
 
 };
 
-  document.getElementById("restoreBtn").onclick = () => {
-    alert("Restore");
-  };
+  document.getElementById("restoreBtn").onclick = async () => {
+  try {
+    const user = currentUser();
+
+    if (!user) {
+      alert("Login လိုအပ်ပါသည်");
+      return;
+    }
+
+    if (!confirm("Backup မှ Data ပြန်ယူမလား?")) {
+      return;
+    }
+
+    const backup = await downloadBackup(user.uid);
+
+    await restoreLocalData(backup);
+
+    alert("♻ Restore အောင်မြင်ပါသည်");
+
+    await showDashboard();
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message || JSON.stringify(err));
+  }
+};
 
   document.getElementById("aboutBtn").onclick = () => {
     alert("SK Inventory 5\nVersion 1.0.0");
