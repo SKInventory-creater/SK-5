@@ -49,7 +49,7 @@ export async function getShopInformation(uid) {
     name: user.name,
     phone: user.phone,
     shopName: shop?.shopName || "",
-    ownerName: shop?.ownerName || ""
+    ownerName: shop?.ownerName || "",
     inviteCode: shop?.inviteCode || ""
   };
 }
