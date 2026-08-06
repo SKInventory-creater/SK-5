@@ -62,7 +62,7 @@ export async function createStaffAccount(data) {
   await createUserProfile(
     credential.user.uid,
     {
-      shopId: shop.Id,
+      shopId: shop.id,
       role: "staff",
       name: data.name,
       phone: data.phone,
