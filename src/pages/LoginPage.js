@@ -27,6 +27,10 @@ export default function LoginPage() {
           Create Shop
         </button>
 
+	<button id="staffRegisterPageBtn">
+	  Staff Register
+	</button>
+
       </div>
     </main>
   `;

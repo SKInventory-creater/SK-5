@@ -37,6 +37,8 @@ function showLogin() {
 
   const loginBtn = document.getElementById("loginBtn");
   const goRegisterBtn = document.getElementById("goRegisterBtn");
+  const goStaffRegisterBtn =
+  document.getElementById("goStaffRegisterBtn");
 
   loginBtn.onclick = async () => {
     try {
@@ -77,6 +79,11 @@ if (profile.role === "admin") {
 	  goRegisterBtn.onclick = () => {
     showRegister();
   };
+
+	goStaffRegisterBtn.onclick = () => {
+  showStaffRegister();
+};
+
 }
 
 function showRegister() {
