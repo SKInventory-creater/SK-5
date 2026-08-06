@@ -565,6 +565,9 @@ async function showStaffManagement() {
 
 const staff = await loadStaffList(admin.shopId);
 
+console.log(staff);
+alert(JSON.stringify(staff));
+
 const list = document.getElementById("staffList");
 
 list.innerHTML = "";
