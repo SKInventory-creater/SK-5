@@ -42,3 +42,10 @@ export async function currentUserProfile() {
   return await getUserProfile(user.uid);
 
 }
+
+export async function createStaffAccount(
+  email,
+  password
+) {
+  return await register(email, password);
+}

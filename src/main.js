@@ -26,7 +26,7 @@ import { getShopInformation } from "./services/shopService.js";
 import StaffManagementPage from "./pages/StaffManagementPage.js";
 import StaffRegisterPage from "./pages/StaffRegisterPage.js";
 
-import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile } from "./services/authService.js";
+import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile, createStaffAccount } from "./services/authService.js";
 
 import { createShopAccount } from "./services/shopService.js";
 

@@ -42,3 +42,22 @@ export async function getShopInformation(uid) {
     ownerName: shop?.ownerName || ""
   };
 }
+
+import { register } from "../firebase/auth.js";
+
+export async function createStaffAccount(data) {
+  const credential = await register(
+    data.email,
+    data.password
+  );
+
+  await createUserProfile(credential.user.uid, {
+    shopId: data.shopId,
+    role: "staff",
+    name: data.name,
+    phone: data.phone,
+    email: data.email
+  });
+
+  return credential.user;
+}
