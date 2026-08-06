@@ -5,6 +5,8 @@ import {
   getCurrentUser
 } from "../firebase/auth.js";
 
+import { getUserProfile } from "../firebase/firestore.js";
+
 export async function loginUser(email, password) {
   if (!email || !password) {
     throw new Error("Email နှင့် Password ထည့်ပါ");
@@ -27,4 +29,16 @@ export async function logoutUser() {
 
 export function currentUser() {
   return getCurrentUser();
+}
+
+export async function currentUserProfile() {
+
+  const user = getCurrentUser();
+
+  if (!user) {
+    return null;
+  }
+
+  return await getUserProfile(user.uid);
+
 }

@@ -17,6 +17,10 @@ export default function SettingsMenuPage() {
           🗑 ဘေထုတ်ဖျက်
         </button>
 
+	<button id="staffManagementBtn" class="menu-btn">
+	  👥 Staff Management
+	</button>
+
         <button id="logoutBtn" class="menu-btn">
           🚪 Logout
         </button>

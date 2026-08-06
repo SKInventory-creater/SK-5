@@ -23,8 +23,10 @@ import { uploadBackup, downloadBackup } from "./firebase/backup.js";
 import MonthlyReportPage from "./pages/MonthlyReportPage.js";
 import ShopInformationPage from "./pages/ShopInformationPage.js";
 import { getShopInformation } from "./services/shopService.js";
+import StaffManagementPage from "./pages/StaffManagementPage.js";
+import StaffRegisterPage from "./pages/StaffRegisterPage.js";
 
-import { loginUser, registerUser, logoutUser, currentUser } from "./services/authService.js";
+import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile } from "./services/authService.js";
 
 import { createShopAccount } from "./services/shopService.js";
 
@@ -39,11 +41,31 @@ function showLogin() {
   loginBtn.onclick = async () => {
     try {
       await loginUser(
-        document.getElementById("email").value.trim(),
-        document.getElementById("password").value
-      );
+  document.getElementById("email").value.trim(),
+  document.getElementById("password").value
+);
 
-      await  showDashboard();
+const profile = await currentUserProfile();
+
+if (!profile) {
+  throw new Error("User Profile မတွေ့ပါ");
+}
+
+if (profile.role === "admin") {
+
+  await showDashboard(profile);
+
+} else if (profile.role === "staff") {
+
+  alert("Staff Login");
+
+  await showDashboard(profile);
+
+} else {
+
+  throw new Error("Role မမှန်ပါ");
+
+}
 
     } catch (err) {
   alert(JSON.stringify(err));
@@ -370,8 +392,25 @@ if (await bundleCodeExists(bundleCode)) {
 
 }
 
-async function showDashboard() {
+async function showDashboard(profile = null) {
+
   document.querySelector("#app").innerHTML = await DashboardPage();
+
+   if (!profile) {
+  profile = await currentUserProfile();
+
+  if (!profile) {
+    alert("User Profile မတွေ့ပါ");
+    await logoutUser();
+    return showLogin();
+  }
+}
+
+   if (profile.role === "staff") {
+
+  document.getElementById("menuBtn").style.display = "none";
+
+}
 
   const searchInput = document.getElementById("dashboardSearch");
 const searchResults = document.getElementById("searchResults");
@@ -508,6 +547,40 @@ async function showSettingsMenu() {
     await logoutUser();
     showLogin();
   };
+
+  document.getElementById("staffManagementBtn").onclick = () => {
+    showStaffManagement();
+  };
+}
+
+async function showStaffManagement() {
+
+  document.querySelector("#app").innerHTML =
+    StaffManagementPage();
+
+  document.getElementById("backBtn").onclick = () => {
+    showSettingsMenu();
+  };
+
+  document.getElementById("createStaffBtn").onclick = () => {
+  showStaffRegister();
+};
+
+}
+
+async function showStaffRegister() {
+
+  document.querySelector("#app").innerHTML =
+    StaffRegisterPage();
+
+  document.getElementById("backBtn").onclick = () => {
+    showStaffManagement();
+  };
+
+  document.getElementById("createStaffBtn").onclick = async () => {
+    alert("Staff Account Create - Next Step");
+  };
+
 }
 
 async function showShopInformation() {
