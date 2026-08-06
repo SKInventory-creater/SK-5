@@ -589,15 +589,14 @@ createBtn.onclick = async () => {
 async function showStaffRegister() {
 
   document.querySelector("#app").innerHTML =
-    StaffRegisterPage();
 
-  document.getElementById("backBtn").onclick = () => {
-    showStaffManagement();
-  };
+document.getElementById("backBtn").onclick = () => {
+  showStaffManagement();
+};
 
-  document.getElementById("createStaffBtn").onclick = async () => {
-    alert("Staff Account Create - Next Step");
-  };
+document.getElementById("createStaffBtn").onclick = async () => {
+  alert("Staff Account Create - Next Step");
+};
 
 }
 

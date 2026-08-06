@@ -1,14 +1,21 @@
 export default function StaffRegisterPage() {
   return `
     <main class="login-page">
+
       <div class="login-card">
 
-        <h1>Create Staff</h1>
+        <h1>Staff Register</h1>
+
+        <input
+          id="inviteCode"
+          type="text"
+          placeholder="Invitation Code"
+        />
 
         <input
           id="staffName"
           type="text"
-          placeholder="Staff Name"
+          placeholder="Name"
         />
 
         <input
@@ -29,15 +36,16 @@ export default function StaffRegisterPage() {
           placeholder="Password"
         />
 
-        <button id="createStaffBtn">
-          Create Staff Account
+        <button id="staffRegisterBtn">
+          Register
         </button>
 
-        <button id="backBtn">
+        <button id="backLoginBtn">
           Back
         </button>
 
       </div>
+
     </main>
   `;
 }
