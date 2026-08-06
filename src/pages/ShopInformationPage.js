@@ -39,6 +39,25 @@ export default function ShopInformationPage(info) {
           ${info.role}
         </div>
 
+	<div class="setting-card">
+	  <label>Invitation Code</label>
+
+	  <div class="invite-row">
+
+	    <input
+	      id="inviteCode"
+	      value="${info.inviteCode}"
+	      readonly
+	    />
+
+	    <button id="copyInviteBtn">
+	      Copy
+	    </button>
+
+	</div>
+
+	</div>
+
       </section>
 
     </main>

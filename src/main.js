@@ -623,6 +623,24 @@ async function showShopInformation() {
     showSettings();
   };
 
+  const copyBtn =
+    document.getElementById("copyInviteBtn");
+
+  if (copyBtn) {
+
+    copyBtn.onclick = async () => {
+
+      const code =
+        document.getElementById("inviteCode").value;
+
+      await navigator.clipboard.writeText(code);
+
+      alert("Invitation Code ကူးပြီးပါပြီ");
+
+    };
+
+  }
+
 }
 
 async function showSettings() {

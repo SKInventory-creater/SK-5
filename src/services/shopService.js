@@ -50,6 +50,7 @@ export async function getShopInformation(uid) {
     phone: user.phone,
     shopName: shop?.shopName || "",
     ownerName: shop?.ownerName || ""
+    inviteCode: shop?.inviteCode || ""
   };
 }
 
