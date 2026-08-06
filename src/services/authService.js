@@ -46,6 +46,10 @@ export async function currentUserProfile() {
 export async function createStaffAccount(data) {
 
   const shop = await getShopByInviteCode(data.inviteCode);
+
+	console.log(shop);
+	alert(JSON.stringify(shop));
+
     if (!shop) {
   throw new Error("Invitation Code မှားနေပါသည်");
 }
