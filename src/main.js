@@ -632,9 +632,15 @@ alert("Staff Account ဖန်တီးပြီးပါပြီ");
 
 showLogin();
 
-  } catch (err) {
-    alert(err.message);
-  }
+} catch (err) {
+  console.error(err);
+
+  alert(
+    "CODE : " + err.code +
+    "\n\nMESSAGE : " + err.message
+  );
+}
+
 };
 
 }
