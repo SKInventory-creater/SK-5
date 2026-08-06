@@ -603,10 +603,29 @@ async function showStaffRegister() {
   };
 
   document.getElementById("staffRegisterBtn").onclick = async () => {
+  try {
 
-    alert("Staff Register - Next Step");
+    const inviteCode =
+      document.getElementById("inviteCode").value.trim();
 
-  };
+    const name =
+      document.getElementById("staffName").value.trim();
+
+    const phone =
+      document.getElementById("staffPhone").value.trim();
+
+    const email =
+      document.getElementById("staffEmail").value.trim();
+
+    const password =
+      document.getElementById("staffPassword").value;
+
+    alert("Invitation Code = " + inviteCode);
+
+  } catch (err) {
+    alert(err.message);
+  }
+};
 
 }
 
