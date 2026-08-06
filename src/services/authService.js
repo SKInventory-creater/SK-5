@@ -5,7 +5,7 @@ import {
   getCurrentUser
 } from "../firebase/auth.js";
 
-import { getUserProfile, createUserProfile } from "../firebase/firestore.js";
+import { getUserProfile, createUserProfile, getShopByInviteCode } from "../firebase/firestore.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -45,6 +45,11 @@ export async function currentUserProfile() {
 
 export async function createStaffAccount(data) {
 
+  const shop = await getShopByInviteCode(data.inviteCode);
+    if (!shop) {
+  throw new Error("Invitation Code မှားနေပါသည်");
+}
+
   const credential = await register(
     data.email,
     data.password
@@ -53,7 +58,7 @@ export async function createStaffAccount(data) {
   await createUserProfile(
     credential.user.uid,
     {
-      shopId: data.shopId,
+      shopId: shopId,
       role: "staff",
       name: data.name,
       phone: data.phone,

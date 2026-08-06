@@ -620,7 +620,17 @@ async function showStaffRegister() {
     const password =
       document.getElementById("staffPassword").value;
 
-    alert("Invitation Code = " + inviteCode);
+    await createStaffAccount({
+  inviteCode,
+  name,
+  phone,
+  email,
+  password
+});
+
+alert("Staff Account ဖန်တီးပြီးပါပြီ");
+
+showLogin();
 
   } catch (err) {
     alert(err.message);

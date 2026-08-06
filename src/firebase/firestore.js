@@ -2,7 +2,11 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
 } from "firebase/firestore";
 
 import { app } from "./config.js";
@@ -56,4 +60,24 @@ export async function getUserProfile(uid) {
   );
 
   return snap.exists() ? snap.data() : null;
+}
+
+export async function getShopByInviteCode(inviteCode) {
+
+  const q = query(
+    collection(db, "shops"),
+    where("inviteCode", "==", inviteCode)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    return null;
+  }
+
+  return {
+    id: snap.docs[0].id,
+    ...snap.docs[0].data()
+  };
+
 }
