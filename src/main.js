@@ -561,9 +561,23 @@ async function showStaffManagement() {
 
   const createBtn = document.getElementById("createStaffBtn");
 
+  let staff = [];
+
+try {
+
   const admin = await currentUserProfile();
 
-const staff = await loadStaffList(admin.shopId);
+  staff = await loadStaffList(admin.shopId);
+
+  alert(JSON.stringify(staff));
+
+} catch (err) {
+
+  console.error(err);
+
+  alert(err.message || JSON.stringify(err));
+
+}
 
 console.log(staff);
 alert(JSON.stringify(staff));
