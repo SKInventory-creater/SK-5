@@ -7,12 +7,22 @@ import {
 
 export async function createShopAccount(data) {
   console.log("createShopAccount", data);
+
+  const inviteCode =
+  Math.random()
+    .toString(36)
+    .substring(2, 8)
+    .toUpperCase();
+
   await createShop(data.shopId, {
-    shopName: data.shopName,
-    ownerName: data.ownerName,
-    phone: data.phone,
-    adminUid: data.adminUid
-  });
+  shopName: data.shopName,
+  ownerName: data.ownerName,
+  phone: data.phone,
+  adminUid: data.adminUid,
+  inviteCode: inviteCode,
+  active: true,
+  createdAt: Date.now()
+});
 
   await createUserProfile(data.adminUid, {
     shopId: data.shopId,

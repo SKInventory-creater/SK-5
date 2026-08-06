@@ -558,6 +558,28 @@ async function showStaffManagement() {
   document.querySelector("#app").innerHTML =
     StaffManagementPage();
 
+  const createBtn = document.getElementById("createStaffBtn");
+
+createBtn.onclick = async () => {
+  try {
+    const admin = await currentUserProfile();
+
+    await createStaffAccount({
+      shopId: admin.shopId,
+      name: document.getElementById("staffName").value.trim(),
+      phone: document.getElementById("staffPhone").value.trim(),
+      email: document.getElementById("staffEmail").value.trim(),
+      password: document.getElementById("staffPassword").value
+    });
+
+    alert("Staff Account ဖန်တီးပြီးပါပြီ");
+
+  } catch (err) {
+    alert(err.message);
+    console.error(err);
+  }
+};
+
   document.getElementById("backBtn").onclick = () => {
     showSettingsMenu();
   };

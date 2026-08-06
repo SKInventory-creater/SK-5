@@ -17,8 +17,11 @@ export async function createShop(shopId, data) {
       ownerName: data.ownerName,
       phone: data.phone,
       adminUid: data.adminUid,
-      active: true,
-      createdAt: Date.now()
+
+      inviteCode: data.inviteCode,
+
+      active: data.active,
+      createdAt: data.createdAt
     }
   );
 }

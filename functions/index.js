@@ -30,3 +30,40 @@ setGlobalOptions({ maxInstances: 10 });
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+exports.createStaffUser = onCall(async (request) => {
+
+  const auth = request.auth;
+
+  if (!auth) {
+    throw new Error("Unauthorized");
+  }
+
+  const data = request.data;
+
+  const user = await admin.auth().createUser({
+    email: data.email,
+    password: data.password,
+    displayName: data.name
+  });
+
+  await admin.firestore()
+    .collection("users")
+    .doc(user.uid)
+    .set({
+      uid: user.uid,
+      shopId: data.shopId,
+      role: "staff",
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      active: true,
+      createdAt: Date.now()
+    });
+
+  return {
+    success: true,
+    uid: user.uid
+  };
+
+});
