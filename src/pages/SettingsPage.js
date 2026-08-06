@@ -21,6 +21,10 @@ export default function SettingsPage() {
           ♻ Restore
         </button>
 
+	<button id="staffManagementBtn">
+	👥 Staff Management
+	</button>
+
         <button id="aboutBtn" class="settings-item">
           ℹ App Version
         </button>

@@ -584,10 +584,6 @@ createBtn.onclick = async () => {
     showSettingsMenu();
   };
 
-  document.getElementById("createStaffBtn").onclick = () => {
-  showStaffRegister();
-};
-
 }
 
 async function showStaffRegister() {
@@ -647,6 +643,10 @@ async function showSettings() {
 
   document.querySelector("#app").innerHTML =
     SettingsPage();
+
+  document.getElementById("staffManagementBtn").onclick = () => {
+  showStaffManagement();
+};
 
   document.getElementById("backBtn").onclick = () => {
     showDashboard();

@@ -5,7 +5,7 @@ import {
   getCurrentUser
 } from "../firebase/auth.js";
 
-import { getUserProfile } from "../firebase/firestore.js";
+import { getUserProfile, createUserProfile } from "../firebase/firestore.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -43,9 +43,24 @@ export async function currentUserProfile() {
 
 }
 
-export async function createStaffAccount(
-  email,
-  password
-) {
-  return await register(email, password);
+export async function createStaffAccount(data) {
+
+  const credential = await register(
+    data.email,
+    data.password
+  );
+
+  await createUserProfile(
+    credential.user.uid,
+    {
+      shopId: data.shopId,
+      role: "staff",
+      name: data.name,
+      phone: data.phone,
+      email: data.email
+    }
+  );
+
+  return credential.user;
+
 }
