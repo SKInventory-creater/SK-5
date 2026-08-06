@@ -81,3 +81,20 @@ export async function getShopByInviteCode(inviteCode) {
   };
 
 }
+
+export async function getStaffList(shopId) {
+
+  const q = query(
+    collection(db, "users"),
+    where("shopId", "==", shopId),
+    where("role", "==", "staff")
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map(doc => ({
+    uid: doc.id,
+    ...doc.data()
+  }));
+
+}

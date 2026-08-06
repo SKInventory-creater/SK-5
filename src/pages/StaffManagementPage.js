@@ -39,6 +39,12 @@ export default function StaffManagementPage() {
           ➕ Create Staff Account
         </button>
 
+	<hr>
+
+	<h3>Staff List</h3>
+
+	<div id="staffList"></div>
+
       </section>
 
     </main>

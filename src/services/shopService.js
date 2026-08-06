@@ -2,7 +2,8 @@ import {
   createShop,
   createUserProfile,
   getShop,
-  getUserProfile
+  getUserProfile,
+  getStaffList
 } from "../firebase/firestore.js";
 
 export async function createShopAccount(data) {
@@ -71,4 +72,8 @@ export async function createStaffAccount(data) {
   });
 
   return credential.user;
+}
+
+export async function loadStaffList(shopId) {
+  return await getStaffList(shopId);
 }

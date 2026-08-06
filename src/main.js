@@ -413,12 +413,6 @@ async function showDashboard(profile = null) {
   }
 }
 
-   if (profile.role === "staff") {
-
-  document.getElementById("menuBtn").style.display = "none";
-
-}
-
   const searchInput = document.getElementById("dashboardSearch");
 const searchResults = document.getElementById("searchResults");
 
@@ -567,7 +561,33 @@ async function showStaffManagement() {
 
   const createBtn = document.getElementById("createStaffBtn");
 
-createBtn.onclick = async () => {
+  const admin = await currentUserProfile();
+
+const staff = await loadStaffList(admin.shopId);
+
+const list = document.getElementById("staffList");
+
+list.innerHTML = "";
+
+staff.forEach(user => {
+
+  list.innerHTML += `
+    <div class="staff-card">
+
+      <b>${user.name}</b><br>
+
+      📧 ${user.email}<br>
+
+      📱 ${user.phone}<br>
+
+      Role : ${user.role}
+
+    </div>
+  `;
+
+});
+
+      createBtn.onclick = async () => {
   try {
     const admin = await currentUserProfile();
 
@@ -688,9 +708,19 @@ async function showSettings() {
   document.querySelector("#app").innerHTML =
     SettingsPage();
 
+   const profile = await currentUserProfile();
+
+  if (profile.role === "admin") {
+
   document.getElementById("staffManagementBtn").onclick = () => {
-  showStaffManagement();
-};
+    showStaffManagement();
+  };
+
+} else {
+
+  document.getElementById("staffManagementBtn").style.display = "none";
+
+}
 
   document.getElementById("backBtn").onclick = () => {
     showDashboard();
