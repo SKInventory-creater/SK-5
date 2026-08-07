@@ -1,15 +1,22 @@
 import { addItem } from "./itemService.js";
 import { initDatabase } from "../database/init.js";
 import { getCurrentUser } from "../firebase/auth.js";
+import { getUserProfile } from "../firebase/firestore.js";
 
 export async function addBundle(bundle) {
   const db = await initDatabase();
 
   const user = getCurrentUser();
 
-  if (!user) {
-    throw new Error("User is not logged in");
-  }
+if (!user) {
+  throw new Error("User is not logged in");
+}
+
+const profile = await getUserProfile(user.uid);
+
+if (!profile) {
+  throw new Error("User Profile မတွေ့ပါ");
+}
 
   const sql = `
     INSERT INTO bundles
@@ -25,7 +32,7 @@ export async function addBundle(bundle) {
   `;
 
 const result = await db.run(sql, [
-  user.uid,
+  profile.shopId,
   bundle.bundleCode,
   bundle.bundleName,
   bundle.qty,
@@ -64,15 +71,21 @@ export async function getBundles() {
     return [];
   }
 
-  const result = await db.query(
-    `
-    SELECT *
-    FROM bundles
-    WHERE shopId = ?
-    ORDER BY createdAt DESC
-    `,
-    [user.uid]
-  );
+  const profile = await getUserProfile(user.uid);
+
+if (!profile) {
+  return [];
+}
+
+const result = await db.query(
+  `
+  SELECT *
+  FROM bundles
+  WHERE shopId = ?
+  ORDER BY createdAt DESC
+  `,
+  [profile.shopId]
+);
 
   return result.values ?? [];
 }
