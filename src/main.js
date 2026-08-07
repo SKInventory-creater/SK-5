@@ -498,8 +498,6 @@ if (profile.role === "staff") {
 
   document.getElementById("deleteBundleMenu").style.display = "none";
 
-  document.getElementById("settingsMenu").style.display = "none";
-
 }
 
 document.getElementById("addBundleMenu").onclick = () => {
