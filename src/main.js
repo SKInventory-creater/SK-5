@@ -934,10 +934,26 @@ const list =
 
 list.innerHTML = soldItems.map(item => `
   <div class="staff-card">
-    <b>${item.itemId}</b><br>
-    💰 ${Number(item.price).toLocaleString()} ကျပ်<br>
-    💵 အမြတ် ${(Number(item.price)-Number(item.cost)).toLocaleString()} ကျပ်<br>
-    🕒 ${item.soldAt}
+
+    <b>🧾 ${item.itemId}</b>
+    <hr>
+
+    <div>🏷️ <b>မှတ်ချက်</b><br>
+      ${item.note || "-"}
+    </div><br>
+
+    <div>💰 <b>ရောင်းဈေး</b><br>
+      ${Number(item.price || 0).toLocaleString()} ကျပ်
+    </div><br>
+
+    <div>💵 <b>အမြတ်</b><br>
+      ${(Number(item.price || 0) - Number(item.cost || 0)).toLocaleString()} ကျပ်
+    </div><br>
+
+    <div>🕒 <b>ရောင်းချိန်</b><br>
+      ${new Date(item.soldAt).toLocaleString()}
+    </div>
+
   </div>
 `).join("");
 
@@ -959,7 +975,10 @@ reportDate.onchange = () => {
 }
 
 }
-async function showMonthlyReport() {
+
+async function showMonthlyReport(
+  selectedMonth = new Date().toISOString().slice(0, 7)
+) {
 
   const bundles = await getBundles();
 
@@ -969,20 +988,59 @@ async function showMonthlyReport() {
     items.push(...await getItems(bundle.id));
   }
 
-  const month = new Date().toISOString().slice(0, 7);
-
   const monthItems = items.filter(item =>
     item.soldAt &&
-    item.soldAt.slice(0, 7) === month
+    item.soldAt.slice(0, 7) === selectedMonth
   );
 
   const stats = calculateMonthlyReport(monthItems);
 
   document.querySelector("#app").innerHTML =
-    MonthlyReportPage(stats, month);
+    MonthlyReportPage(stats, selectedMonth);
+
+  const list =
+    document.getElementById("monthlySoldList");
+
+  list.innerHTML = monthItems.map(item => `
+    <div class="staff-card">
+
+      <b>🧾 ${item.itemId}</b>
+      <hr>
+
+      <div>
+        🏷️ <b>မှတ်ချက်</b><br>
+        ${item.note || "-"}
+      </div><br>
+
+      <div>
+        💰 <b>ရောင်းဈေး</b><br>
+        ${Number(item.price || 0).toLocaleString()} ကျပ်
+      </div><br>
+
+      <div>
+        💵 <b>အမြတ်</b><br>
+        ${(Number(item.price || 0) - Number(item.cost || 0)).toLocaleString()} ကျပ်
+      </div><br>
+
+      <div>
+        🕒 <b>ရောင်းချိန်</b><br>
+        ${new Date(item.soldAt).toLocaleString()}
+      </div>
+
+    </div>
+  `).join("");
 
   document.getElementById("backBtn").onclick = () => {
     showReports();
+  };
+
+  const reportMonth =
+    document.getElementById("reportMonth");
+
+  reportMonth.value = selectedMonth;
+
+  reportMonth.onchange = () => {
+    showMonthlyReport(reportMonth.value);
   };
 
 }
