@@ -589,40 +589,40 @@ list.innerHTML = "";
 staff.forEach(user => {
 
   list.innerHTML += `
-    <div class="staff-card">
+  <div class="staff-card">
 
-      <b>${user.name}</b><br>
+    <b>${user.name}</b><br>
 
-      📧 ${user.email}<br>
+    📧 ${user.email}<br>
 
-      📱 ${user.phone}<br>
+    📱 ${user.phone}<br>
 
-      Role : ${user.role}
+    Role : ${user.role}<br><br>
 
-    </div>
-  `;
+    <button
+      class="deleteStaffBtn"
+      data-id="${user.uid}">
+      🗑 Delete
+    </button>
+
+  </div>
+`;
 
 });
 
-      createBtn.onclick = async () => {
-  try {
-    const admin = await currentUserProfile();
+  document.querySelectorAll(".deleteStaffBtn").forEach(btn => {
 
-    await createStaffAccount({
-      shopId: admin.shopId,
-      name: document.getElementById("staffName").value.trim(),
-      phone: document.getElementById("staffPhone").value.trim(),
-      email: document.getElementById("staffEmail").value.trim(),
-      password: document.getElementById("staffPassword").value
-    });
+  btn.onclick = async () => {
 
-    alert("Staff Account ဖန်တီးပြီးပါပြီ");
+    if (!confirm("ဒီ Staff ကိုဖျက်မှာသေချာပါသလား?")) {
+      return;
+    }
 
-  } catch (err) {
-    alert(err.message);
-    console.error(err);
-  }
-};
+    alert(btn.dataset.id);
+
+  };
+
+});
 
   document.getElementById("backBtn").onclick = () => {
     showSettingsMenu();
