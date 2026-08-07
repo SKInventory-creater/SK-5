@@ -64,6 +64,9 @@ export async function createStaffAccount(data) {
     data.password
   );
 
+  try {
+  console.log("Before createUserProfile");
+
   await createUserProfile(credential.user.uid, {
     shopId: data.shopId,
     role: "staff",
@@ -71,6 +74,13 @@ export async function createStaffAccount(data) {
     phone: data.phone,
     email: data.email
   });
+
+  console.log("After createUserProfile");
+
+} catch (err) {
+  console.error("createUserProfile Error:", err);
+  alert(JSON.stringify(err));
+}
 
   return credential.user;
 }
