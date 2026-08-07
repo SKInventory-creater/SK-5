@@ -41,40 +41,61 @@ function showLogin() {
   document.getElementById("goStaffRegisterBtn");
 
   loginBtn.onclick = async () => {
+  try {
+
+    await loginUser(
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+
+    const user = currentUser();
+
+    const profile = await currentUserProfile();
+
+    if (!profile) {
+      throw new Error("User Profile မတွေ့ပါ");
+    }
+
+    // ===== Auto Restore =====
     try {
-      await loginUser(
-  document.getElementById("email").value.trim(),
-  document.getElementById("password").value
-);
 
-const profile = await currentUserProfile();
+      const backup =
+        await downloadBackup(user.uid);
 
-if (!profile) {
-  throw new Error("User Profile မတွေ့ပါ");
-}
+      await restoreLocalData(backup);
 
-if (profile.role === "admin") {
+      console.log("Restore OK");
 
-  await showDashboard(profile);
+    } catch (e) {
 
-} else if (profile.role === "staff") {
+      console.log("No Backup");
 
-  alert("Staff Login");
+    }
+    // ========================
 
-  await showDashboard(profile);
+    if (profile.role === "admin") {
 
-} else {
+      await showDashboard(profile);
 
-  throw new Error("Role မမှန်ပါ");
+    } else if (profile.role === "staff") {
 
-}
+      alert("Staff Login");
 
-    } catch (err) {
-  alert(JSON.stringify(err));
-  console.error(err);
-}
+      await showDashboard(profile);
 
-  };
+    } else {
+
+      throw new Error("Role မမှန်ပါ");
+
+    }
+
+  } catch (err) {
+
+    alert(JSON.stringify(err));
+    console.error(err);
+
+  }
+};
 
 	  goRegisterBtn.onclick = () => {
     showRegister();
