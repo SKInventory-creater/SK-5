@@ -9,7 +9,7 @@ import { addBundle, bundleCodeExists, deleteBundle } from "./services/bundleServ
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
-import { getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
+import { getItems, updateItem, getTotalProfit, searchItems, getDailySoldItems } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport, calculateMonthlyReport } from "./services/reportService.js";
@@ -912,8 +912,33 @@ async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 
 
   const stats = calculateDailyReport(todayItems);
 
-  document.querySelector("#app").innerHTML =
-    DailyReportPage(stats, selectedDate );
+const soldItems =
+  await getDailySoldItems(selectedDate);
+
+document.querySelector("#app").innerHTML =
+  DailyReportPage(stats, selectedDate);
+
+const summary =
+  document.querySelector(".reports-summary");
+
+summary.insertAdjacentHTML(
+  "beforeend",
+  `
+    <div id="dailySoldList"></div>
+  `
+);
+
+const list =
+  document.getElementById("dailySoldList");
+
+list.innerHTML = soldItems.map(item => `
+  <div class="staff-card">
+    <b>${item.itemId}</b><br>
+    💰 ${Number(item.price).toLocaleString()} ကျပ်<br>
+    💵 အမြတ် ${(Number(item.price)-Number(item.cost)).toLocaleString()} ကျပ်<br>
+    🕒 ${item.soldAt}
+  </div>
+`).join("");
 
   document.getElementById("backBtn").onclick = () => {
     showReports();
