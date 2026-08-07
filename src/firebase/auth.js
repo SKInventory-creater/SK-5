@@ -1,14 +1,14 @@
 import {
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut
 } from "firebase/auth";
 
-import { app } from "./config.js";
-
-export const auth = getAuth(app);
+import {
+  auth,
+  secondaryAuth
+} from "./config.js";
 
 export function authState(callback) {
   return onAuthStateChanged(auth, callback);
@@ -25,6 +25,15 @@ export function login(email, password) {
 export function register(email, password) {
   return createUserWithEmailAndPassword(
     auth,
+    email,
+    password
+  );
+}
+
+// Staff Account ဖန်တီးဖို့
+export function registerSecondary(email, password) {
+  return createUserWithEmailAndPassword(
+    secondaryAuth,
     email,
     password
   );

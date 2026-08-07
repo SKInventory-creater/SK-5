@@ -6,6 +6,7 @@ import {
   getStaffList,
   deleteStaff
 } from "../firebase/firestore.js";
+import { registerSecondary } from "../firebase/auth.js";
 
 export async function createShopAccount(data) {
   console.log("createShopAccount", data);
@@ -56,13 +57,11 @@ export async function getShopInformation(uid) {
   };
 }
 
-import { register } from "../firebase/auth.js";
-
 export async function createStaffAccount(data) {
-  const credential = await register(
-    data.email,
-    data.password
-  );
+  const credential = await registerSecondary(
+  data.email,
+  data.password
+);
 
   try {
   console.log("Before createUserProfile");
