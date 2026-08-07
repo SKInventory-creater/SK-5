@@ -158,16 +158,14 @@ export async function searchItems(keyword) {
 export async function getDailySoldItems(date) {
   const db = await initDatabase();
 
-  const result = await db.execute(
-    `
+  const result = await db.query(`
     SELECT *
     FROM items
     WHERE unsold = 0
       AND removed = 0
-      AND substr(soldAt,1,10)='${date}'
-    ORDER BY soldAt DESC;
-    `
-  );
+      AND soldAt LIKE '${date}%'
+    ORDER BY soldAt DESC
+  `);
 
   return result.values ?? [];
 }
