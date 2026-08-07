@@ -28,7 +28,7 @@ import StaffRegisterPage from "./pages/StaffRegisterPage.js";
 
 import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile, createStaffAccount } from "./services/authService.js";
 
-import { createShopAccount } from "./services/shopService.js";
+import { createShopAccount, loadStaffList } from "./services/shopService.js";
 
 import { authState } from "./firebase/auth.js";
 
