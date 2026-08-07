@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 
 import { app } from "./config.js";
+import { deleteDoc } from "firebase/firestore";
 
 export const db = getFirestore(app);
 
@@ -97,4 +98,10 @@ export async function getStaffList(shopId) {
     ...doc.data()
   }));
 
+}
+
+export async function deleteStaff(uid) {
+  await deleteDoc(
+    doc(db, "users", uid)
+  );
 }

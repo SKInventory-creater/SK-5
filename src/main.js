@@ -28,7 +28,7 @@ import StaffRegisterPage from "./pages/StaffRegisterPage.js";
 
 import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile, createStaffAccount } from "./services/authService.js";
 
-import { createShopAccount, loadStaffList } from "./services/shopService.js";
+import { createShopAccount, loadStaffList, removeStaff } from "./services/shopService.js";
 
 import { authState } from "./firebase/auth.js";
 
@@ -618,7 +618,11 @@ staff.forEach(user => {
       return;
     }
 
-    alert(btn.dataset.id);
+   await removeStaff(btn.dataset.id);
+
+alert("Staff ဖျက်ပြီးပါပြီ");
+
+showStaffManagement();
 
   };
 
