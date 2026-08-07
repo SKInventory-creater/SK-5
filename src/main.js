@@ -894,6 +894,7 @@ async function showReports() {
 }
 
 async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 10)) {
+  try {
 
   const bundles = await getBundles();
 
@@ -952,9 +953,12 @@ reportDate.onchange = () => {
   showDailyReport(reportDate.value);
 };
 
+} catch (err) {
+  alert(err.message + "\n\n" + err.stack);
+  console.error(err);
 }
 
-
+}
 async function showMonthlyReport() {
 
   const bundles = await getBundles();
