@@ -32,6 +32,7 @@ import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile, c
 import { createShopAccount, loadStaffList, removeStaff } from "./services/shopService.js";
 
 import { authState } from "./firebase/auth.js";
+import { App } from "@capacitor/app";
 
 async function autoBackup() {
   const user = currentUser();
@@ -49,6 +50,26 @@ async function autoBackup() {
 
     console.error("Auto Backup failed:", err);
 
+  }
+}
+
+const pageHistory = [];
+
+function navigateTo(pageFunction) {
+  pageHistory.push(pageFunction);
+  pageFunction();
+}
+
+function goBackPage() {
+  if (pageHistory.length > 1) {
+    pageHistory.pop();
+
+    const previousPage =
+      pageHistory[pageHistory.length - 1];
+
+    previousPage();
+  } else {
+    App.exitApp();
   }
 }
 
@@ -188,18 +209,18 @@ async function showItems(bundle) {
     ItemsPage(bundle, items);
 
   document.getElementById("backBtn").onclick = () => {
-    showDashboard();
+    goBackPage();
   };
 
   document.getElementById("addItemBtn").onclick = () => {
-  showItemForm(bundle);
+  navigateTo(() => showItemForm(bundle));
 };
 
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
   card.onclick = () => {
-    showItemEdit(bundle, items[index]);
-  };
+  navigateTo(() => showItemEdit(bundle, items[index]));
+};
 
 });
 
@@ -243,7 +264,7 @@ async function showItemEdit(bundle, item) {
     ItemEditPage(item);
 
   document.getElementById("backBtn").onclick = () => {
-    showItems(bundle);
+    goBackPage();
   };
 
   let selectedPhoto = null;
@@ -532,7 +553,7 @@ function showAddBundle() {
   const cancelBundleBtn = document.getElementById("cancelBundleBtn");
 
   cancelBundleBtn.onclick = () => {
-   showDashboard();
+   goBackPage();
   };
 
   const saveBundleBtn = document.getElementById("saveBundleBtn");
@@ -634,7 +655,7 @@ searchInput.oninput = async () => {
 
     if (!bundle) return;
 
-    showItemForm(bundle, item);
+    navigateTo(() => showItemForm(bundle, item));
 
   };
 
@@ -655,7 +676,7 @@ if (logoutBtn) {
   const menuBtn = document.getElementById("menuBtn");
 
 menuBtn.onclick = () => {
-  showSettingsMenu();
+  navigateTo(showSettingsMenu);
 };
 
   const popupMenu = document.getElementById("popupMenu");
@@ -686,19 +707,19 @@ if (profile.role === "staff") {
 }
 
 document.getElementById("addBundleMenu").onclick = () => {
-  showAddBundle();
+  navigateTo(showAddBundle);
 };
 
 document.getElementById("deleteBundleMenu").onclick = () => {
-  showDeleteBundles();
+  navigateTo(showDeleteBundles);
 };
 
 document.getElementById("settingsMenu").onclick = () => {
-  showSettings();
+  navigateTo(showSettings);
 };
 
   document.getElementById("reportsBtn").onclick = () => {
-    showReports();
+    navigateTo(showReports);
   };
 
   const bundleButtons = document.querySelectorAll(".open-bundle-btn");
@@ -713,7 +734,7 @@ bundleButtons.forEach(button => {
 
     if (bundle) {
       alert(bundle.bundleName);
-      showItems(bundle);
+      navigateTo(() => showItems(bundle));
     }
   };
 });
@@ -935,7 +956,7 @@ async function showSettings() {
 }
 
   document.getElementById("backBtn").onclick = () => {
-    showDashboard();
+    goBackPage();
   };
 
   document.getElementById("shopInfoBtn").onclick = () => {
@@ -1020,7 +1041,7 @@ async function showDeleteBundles() {
     DeleteBundlePage(bundles);
 
   document.getElementById("backBtn").onclick = () => {
-    showDashboard();
+    goBackPage();
   };
 
   document.querySelectorAll(".deleteBundleBtn").forEach(btn => {
@@ -1232,6 +1253,10 @@ async function showMonthlyReport(
 }
 
 document.querySelector("#app").innerHTML = SplashPage();
+
+App.addListener("backButton", () => {
+  goBackPage();
+});
 
 setTimeout(() => {
 
