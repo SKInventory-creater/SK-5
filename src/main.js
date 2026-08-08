@@ -820,7 +820,7 @@ showStaffManagement();
 });
 
   document.getElementById("backBtn").onclick = () => {
-    showSettingsMenu();
+    showSettings();
   };
 
 }
