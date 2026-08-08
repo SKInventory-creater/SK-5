@@ -68,8 +68,6 @@ function goBackPage() {
       pageHistory[pageHistory.length - 1];
 
     previousPage();
-  } else {
-    App.exitApp();
   }
 }
 
