@@ -57,17 +57,24 @@ const pageHistory = [];
 
 function navigateTo(pageFunction) {
   pageHistory.push(pageFunction);
+  console.log("NAVIGATE:", pageHistory.length);
   pageFunction();
 }
 
 function goBackPage() {
+  console.log("BACK BEFORE:", pageHistory.length);
+
   if (pageHistory.length > 1) {
     pageHistory.pop();
 
     const previousPage =
       pageHistory[pageHistory.length - 1];
 
+    console.log("BACK AFTER:", pageHistory.length);
+
     previousPage();
+  } else {
+    showDashboard();
   }
 }
 
@@ -673,10 +680,6 @@ if (logoutBtn) {
 
   const menuBtn = document.getElementById("menuBtn");
 
-menuBtn.onclick = () => {
-  navigateTo(showSettingsMenu);
-};
-
   const popupMenu = document.getElementById("popupMenu");
 
 menuBtn.onclick = (e) => {
@@ -743,15 +746,15 @@ async function showSettingsMenu() {
   document.querySelector("#app").innerHTML = SettingsMenuPage();
 
   document.getElementById("backBtn").onclick = () => {
-    showDashboard();
+    goBackPage();
   };
 
   document.getElementById("addBundleBtn").onclick = () => {
-    showAddBundle();
+    navigateTo(showAddBundle);
   };
 
   document.getElementById("deleteBundlesBtn").onclick = () => {
-    showDeleteBundles();
+    navigateTo(showDeleteBundles);
   };
 
   document.getElementById("logoutBtn").onclick = async () => {
@@ -760,7 +763,7 @@ async function showSettingsMenu() {
   };
 
   document.getElementById("staffManagementBtn").onclick = () => {
-    showStaffManagement();
+    navigateTo(showStaffManagement);
   };
 }
 
@@ -839,7 +842,7 @@ showStaffManagement();
 });
 
   document.getElementById("backBtn").onclick = () => {
-    showSettings();
+    goBackPage();
   };
 
 }
@@ -850,7 +853,7 @@ async function showStaffRegister() {
     StaffRegisterPage();
 
   document.getElementById("backLoginBtn").onclick = () => {
-    showLogin();
+    navigateTo(showLogin);
   };
 
   document.getElementById("staffRegisterBtn").onclick = async () => {
@@ -911,7 +914,7 @@ async function showShopInformation() {
     ShopInformationPage(info);
 
   document.getElementById("backBtn").onclick = () => {
-    showSettings();
+    navigateTo(showSettings);
   };
 
   const copyBtn =
@@ -944,7 +947,7 @@ async function showSettings() {
   if (profile.role === "admin") {
 
   document.getElementById("staffManagementBtn").onclick = () => {
-    showStaffManagement();
+    navigateTo(showStaffManagement);
   };
 
 } else {
@@ -958,7 +961,7 @@ async function showSettings() {
   };
 
   document.getElementById("shopInfoBtn").onclick = () => {
-  showShopInformation();
+    navigateTo(showShopInformation);
 };
 
   document.getElementById("backupBtn").onclick = async () => {
@@ -1265,10 +1268,20 @@ setTimeout(() => {
   authState(async (user) => {
 
     if (user) {
-      await  showDashboard();
-    } else {
-      showLogin();
-    }
+
+  pageHistory.length = 0;
+
+  pageHistory.push(() => showDashboard());
+
+  await showDashboard();
+
+} else {
+
+  pageHistory.length = 0;
+
+  showLogin();
+
+}
 
   });
 
