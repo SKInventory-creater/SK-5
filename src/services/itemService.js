@@ -1,4 +1,6 @@
 import { initDatabase } from "../database/init.js";
+import { getCurrentUser } from "../firebase/auth.js";
+import { getUserProfile } from "../firebase/firestore.js";
 
 export async function addItem(item) {
   const db = await initDatabase();
@@ -156,16 +158,36 @@ export async function searchItems(keyword) {
 }
 
 export async function getDailySoldItems(date) {
+
   const db = await initDatabase();
 
-  const result = await db.query(`
-    SELECT *
+  const user = getCurrentUser();
+
+  if (!user) {
+    return [];
+  }
+
+  const profile = await getUserProfile(user.uid);
+
+  if (!profile) {
+    return [];
+  }
+
+  const result = await db.query(
+    `
+    SELECT items.*
     FROM items
-    WHERE unsold = 0
-      AND removed = 0
-      AND soldAt LIKE '${date}%'
-    ORDER BY soldAt DESC
-  `);
+    INNER JOIN bundles
+      ON items.bundleId = bundles.id
+    WHERE
+      bundles.shopId = ?
+      AND items.unsold = 0
+      AND items.removed = 0
+      AND substr(items.soldAt,1,10) = ?
+    ORDER BY items.soldAt DESC
+    `,
+    [profile.shopId, date]
+  );
 
   return result.values ?? [];
 }

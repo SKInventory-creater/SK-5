@@ -4,12 +4,19 @@ import {
   getShop,
   getUserProfile,
   getStaffList,
-  deleteStaff
+  deleteStaff,
+  getShopByName
 } from "../firebase/firestore.js";
 import { registerSecondary } from "../firebase/auth.js";
 
 export async function createShopAccount(data) {
   console.log("createShopAccount", data);
+
+  const existingShop = await getShopByName(data.shopName);
+
+  if (existingShop) {
+    throw new Error("ဒီဆိုင်နာမည်ကို အသုံးပြုပြီးသားဖြစ်ပါတယ်");
+  }
 
   const inviteCode =
   Math.random()

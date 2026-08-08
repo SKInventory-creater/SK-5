@@ -105,3 +105,22 @@ export async function deleteStaff(uid) {
     doc(db, "users", uid)
   );
 }
+
+export async function getShopByName(shopName) {
+
+  const q = query(
+    collection(db, "shops"),
+    where("shopName", "==", shopName.trim())
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    return null;
+  }
+
+  return {
+    id: snap.docs[0].id,
+    ...snap.docs[0].data()
+  };
+}
