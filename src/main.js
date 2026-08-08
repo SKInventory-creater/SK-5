@@ -32,6 +32,25 @@ import { createShopAccount, loadStaffList, removeStaff } from "./services/shopSe
 
 import { authState } from "./firebase/auth.js";
 
+async function autoBackup() {
+  const user = currentUser();
+
+  if (!user) return;
+
+  try {
+    const data = await exportLocalData();
+
+    await uploadBackup(user.uid, data);
+
+    console.log("Auto Backup OK");
+
+  } catch (err) {
+
+    console.error("Auto Backup failed:", err);
+
+  }
+}
+
 function showLogin() {
   document.querySelector("#app").innerHTML = LoginPage();
 
@@ -339,6 +358,8 @@ await updateItem({
 
 });
 
+   await autoBackup();
+
     alert(
       isEdit
         ? "ပြင်ဆင်ပြီးပါပြီ"
@@ -400,6 +421,8 @@ if (await bundleCodeExists(bundleCode)) {
       qty: Number(document.getElementById("bundleQty").value),
       cost: Number(document.getElementById("bundleCost").value)
     });
+
+    await autoBackup();
 
 	saveBundleBtn.disabled = false;
 	saveBundleBtn.textContent = "သိမ်းမည်";
@@ -870,6 +893,8 @@ async function showDeleteBundles() {
       try {
 
         await deleteBundle(Number(btn.dataset.id));
+
+	await autoBackup();
 
         alert("ဘေထုတ်ဖျက်ပြီးပါပြီ");
 
