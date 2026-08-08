@@ -9,6 +9,7 @@ import { addBundle, bundleCodeExists, deleteBundle } from "./services/bundleServ
 import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
+import ItemEditPage from "./pages/ItemEditPage.js";
 import { getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
@@ -197,7 +198,7 @@ async function showItems(bundle) {
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
   card.onclick = () => {
-    showItemForm(bundle, items[index]);
+    showItemEdit(bundle, items[index]);
   };
 
 });
@@ -233,6 +234,146 @@ searchInput.oninput = filterItems;
 statusFilter.onchange = filterItems;
 
 filterItems();
+
+}
+
+async function showItemEdit(bundle, item) {
+
+  document.querySelector("#app").innerHTML =
+    ItemEditPage(item);
+
+  document.getElementById("backBtn").onclick = () => {
+    showItems(bundle);
+  };
+
+  let selectedPhoto = null;
+
+  const pickPhotoBtn =
+    document.getElementById("pickPhotoBtn");
+
+  pickPhotoBtn.onclick = async () => {
+
+    try {
+
+      const photo = await pickPhoto();
+
+      selectedPhoto = photo;
+
+      const preview =
+        document.getElementById("photoPreview");
+
+      if (preview) {
+        preview.src = photo.webPath;
+        preview.style.display = "block";
+      }
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        err.message ||
+        JSON.stringify(err)
+      );
+
+    }
+
+  };
+
+  document.getElementById("saveItemEditBtn").onclick =
+    async () => {
+
+      try {
+
+        let photoUrl = item.photo || "";
+
+        if (selectedPhoto) {
+
+          photoUrl =
+            await saveItemPhoto(
+              selectedPhoto,
+              item.itemId
+            );
+
+        }
+
+        const status =
+          document.getElementById("itemStatus").value;
+
+        let unsold = 1;
+        let removed = 0;
+        let soldAt = item.soldAt || null;
+
+        if (status === "sold") {
+
+          unsold = 0;
+          removed = 0;
+
+          if (!soldAt) {
+            soldAt = new Date().toISOString();
+          }
+
+        } else if (status === "removed") {
+
+          unsold = 1;
+          removed = 1;
+          soldAt = null;
+
+        } else {
+
+          unsold = 1;
+          removed = 0;
+          soldAt = null;
+
+        }
+
+        await updateItem({
+
+          id: item.id,
+
+          photo: photoUrl,
+
+          cost:
+            Number(
+              document.getElementById("itemCost").value || 0
+            ),
+
+          price:
+            Number(
+              document.getElementById("itemPrice").value || 0
+            ),
+
+          unsold,
+
+          removed,
+
+          note:
+            document.getElementById("itemNote").value.trim(),
+
+          soldAt,
+
+          createdAt: item.createdAt
+
+        });
+
+        await autoBackup();
+
+        alert("အထည်အချက်အလက် ပြင်ဆင်ပြီးပါပြီ");
+
+        await showItems(bundle);
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert(
+          err.message ||
+          JSON.stringify(err)
+        );
+
+      }
+
+    };
 
 }
 
