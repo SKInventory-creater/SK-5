@@ -1090,12 +1090,16 @@ async function showReports() {
     ReportsPage(stats);
 
   document.getElementById("backBtn").onclick = () => {
-    showDashboard();
+    goBackPage();
   };
 
-  document.getElementById("dailyReportBtn").onclick = showDailyReport;
+  document.getElementById("dailyReportBtn").onclick = () => {
+  navigateTo(showDailyReport);
+};
 
-  document.getElementById("monthlyReportBtn").onclick = showMonthlyReport;
+document.getElementById("monthlyReportBtn").onclick = () => {
+  navigateTo(showMonthlyReport);
+};
 
 }
 
@@ -1163,7 +1167,7 @@ list.innerHTML = soldItems.map(item => `
 `).join("");
 
   document.getElementById("backBtn").onclick = () => {
-    showReports();
+    goBackPage();
   };
 
   const reportDate = document.getElementById("reportDate");
@@ -1236,7 +1240,7 @@ async function showMonthlyReport(
   `).join("");
 
   document.getElementById("backBtn").onclick = () => {
-    showReports();
+    goBackPage()
   };
 
   const reportMonth =
