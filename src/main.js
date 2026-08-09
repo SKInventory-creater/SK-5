@@ -782,7 +782,6 @@ try {
 
   staff = await loadStaffList(admin.shopId);
 
-  alert(JSON.stringify(staff));
 
 } catch (err) {
 
@@ -793,7 +792,6 @@ try {
 }
 
 console.log(staff);
-alert(JSON.stringify(staff));
 
 const list = document.getElementById("staffList");
 
