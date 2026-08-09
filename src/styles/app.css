@@ -1818,3 +1818,186 @@ flex:1;
   border:1px solid #DDF0E6;
   border-radius:12px;
 }
+
+/* ===== FINAL SOFT UI POLISH ===== */
+
+/* ---------- Login / Signup ---------- */
+
+.login-page,
+.signup-page,
+.staff-register-page{
+  min-height:100vh;
+  padding:34px 18px 110px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  background:linear-gradient(
+    180deg,
+    #F8FAFF 0%,
+    #F4F7FC 55%,
+    #F1F5FA 100%
+  );
+}
+
+.login-card,
+.signup-card,
+.register-card{
+  width:100%;
+  max-width:420px;
+  margin-top:28px;
+  padding:24px 20px;
+  border:1px solid #E6EBF3;
+  border-radius:22px;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 10px 30px rgba(50,70,100,.06);
+}
+
+/* Login / Signup headings */
+
+.login-page h1,
+.signup-page h1,
+.staff-register-page h1{
+  margin-bottom:8px;
+  color:#354052;
+  font-weight:700;
+  letter-spacing:-.2px;
+}
+
+.login-page p,
+.signup-page p,
+.staff-register-page p{
+  color:#8993A3;
+}
+
+/* Inputs */
+
+.login-page input,
+.signup-page input,
+.staff-register-page input{
+  min-height:50px;
+  padding:13px 14px;
+  border:1px solid #E1E7EF;
+  border-radius:14px;
+  background:#FBFCFE;
+  color:#374151;
+  box-sizing:border-box;
+}
+
+.login-page input:focus,
+.signup-page input:focus,
+.staff-register-page input:focus{
+  border-color:#BFD0F3;
+  background:#FFFFFF;
+  box-shadow:0 0 0 3px rgba(79,127,232,.06);
+}
+
+/* Main login buttons */
+
+.login-page button[type="submit"],
+.signup-page button[type="submit"],
+.staff-register-page button[type="submit"]{
+  min-height:50px;
+  border:none;
+  border-radius:14px;
+  background:#EEF4FF;
+  color:#4F7FE8;
+  font-weight:700;
+  box-shadow:none;
+  transition:.18s ease;
+}
+
+.login-page button[type="submit"]:active,
+.signup-page button[type="submit"]:active,
+.staff-register-page button[type="submit"]:active{
+  transform:scale(.985);
+}
+
+/* ---------- Items Page ---------- */
+
+.items-page{
+  padding-bottom:24px !important;
+}
+
+/* Add Item stays near the item list instead of being pushed to page bottom */
+
+.items-page .bottom-actions{
+  position:sticky !important;
+  left:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:100%;
+  margin:16px 0 20px;
+  z-index:10;
+}
+
+.items-page .floating-add-item{
+  width:100%;
+  height:50px;
+  border:none;
+  border-radius:15px;
+  background:#EEF4FF;
+  color:#4F7FE8;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 5px 16px rgba(79,127,232,.10);
+  transition:.18s ease;
+}
+
+.items-page .floating-add-item:active{
+  transform:scale(.985);
+  background:#E8F0FF;
+}
+
+/* Item cards */
+
+.items-page .item-card{
+  border:1px solid #E8EDF3;
+  border-radius:16px;
+  background:#FFFFFF;
+  box-shadow:0 4px 14px rgba(40,60,90,.035);
+}
+
+/* Item photo */
+
+.items-page .item-photo,
+.item-photo{
+  background:#F4F7FC;
+  border:1px solid #E8EDF4;
+}
+
+.item-photo-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* ---------- Settings ---------- */
+
+.settings-page{
+  background:linear-gradient(
+    180deg,
+    #FAFCFE 0%,
+    #F5F8FC 100%
+  );
+}
+
+.settings-page .menu-list{
+  gap:11px;
+}
+
+.settings-page .menu-list .menu-btn{
+  min-height:54px;
+  border-radius:16px;
+  border:1px solid #E8EDF3;
+  box-shadow:0 4px 12px rgba(40,60,90,.035);
+}
+
+/* ---------- Soft danger ---------- */
+
+.danger-btn{
+  background:#FFF3F3;
+  color:#D96B6B;
+  border:1px solid #F2DEDE;
+}
+
