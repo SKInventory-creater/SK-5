@@ -53,12 +53,80 @@ async function autoBackup() {
   }
 }
 
+let pullStartY = 0;
+let pullDistance = 0;
+let isPulling = false;
+
+function setupPullToRefresh() {
+  const app = document.querySelector("#app");
+
+  if (!app) return;
+
+  app.ontouchstart = (event) => {
+    if (window.scrollY > 0) return;
+
+    pullStartY = event.touches[0].clientY;
+    pullDistance = 0;
+    isPulling = false;
+  };
+
+  app.ontouchmove = (event) => {
+    if (window.scrollY > 0) return;
+
+    const currentY = event.touches[0].clientY;
+    pullDistance = currentY - pullStartY;
+
+    if (pullDistance <= 0) return;
+
+    isPulling = true;
+
+    if (pullDistance > 20) {
+      app.style.transform =
+        `translateY(${Math.min(pullDistance * 0.35, 55)}px)`;
+      app.style.transition = "none";
+    }
+  };
+
+  app.ontouchend = async () => {
+    if (!isPulling) return;
+
+    const shouldRefresh = pullDistance >= 90;
+
+    app.style.transition = "transform .2s ease";
+
+    if (shouldRefresh) {
+      app.style.transform = "translateY(20px)";
+
+      try {
+        const currentPage =
+          pageHistory[pageHistory.length - 1];
+
+        if (currentPage) {
+          await currentPage();
+        }
+      } catch (err) {
+        console.error("Pull refresh failed:", err);
+      }
+    }
+
+    app.style.transform = "translateY(0)";
+
+    pullStartY = 0;
+    pullDistance = 0;
+    isPulling = false;
+  };
+}
+
 const pageHistory = [];
 
 function navigateTo(pageFunction) {
   pageHistory.push(pageFunction);
   console.log("NAVIGATE:", pageHistory.length);
   pageFunction();
+
+  setTimeout(() => {
+    setupPullToRefresh();
+  }, 0);
 }
 
 function goBackPage() {
@@ -80,6 +148,8 @@ function goBackPage() {
 
 function showLogin() {
   document.querySelector("#app").innerHTML = LoginPage();
+
+	setupPullToRefresh();
 
   const loginBtn = document.getElementById("loginBtn");
   const goRegisterBtn = document.getElementById("goRegisterBtn");
@@ -772,7 +842,6 @@ async function showStaffManagement() {
   document.querySelector("#app").innerHTML =
     StaffManagementPage();
 
-  const createBtn = document.getElementById("createStaffBtn");
 
   let staff = [];
 
