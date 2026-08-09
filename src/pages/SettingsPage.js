@@ -4,7 +4,7 @@ export default function SettingsPage() {
 
       <header class="page-header">
         <button id="backBtn">←</button>
-        <h2>Settings TEST 123</h2>
+        <h2>Settings</h2>
       </header>
 
       <section class="settings-list">
@@ -21,7 +21,7 @@ export default function SettingsPage() {
           ♻ Restore
         </button>
 
-	<button id="staffManagementBtn">
+	<button id="staffManagementBtn" class="settings-item">
 	👥 Staff Management
 	</button>
 
