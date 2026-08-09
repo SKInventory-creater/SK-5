@@ -294,7 +294,7 @@ async function showItems(bundle) {
   document.querySelectorAll(".item-card").forEach((card, index) => {
 
   card.onclick = () => {
-  navigateTo(() => showItemEdit(bundle, items[index]));
+  navigateTo(() => showItemEdit(bundle, items[index], index));
 };
 
 });
@@ -333,7 +333,7 @@ filterItems();
 
 }
 
-async function showItemEdit(bundle, item) {
+async function showItemEdit(bundle, item, itemIndex = -1) {
 
   document.querySelector("#app").innerHTML =
     ItemEditPage(item);
@@ -470,6 +470,37 @@ async function showItemEdit(bundle, item) {
       }
 
     };
+
+  const nextItemBtn = document.getElementById("nextItemBtn");
+
+if (nextItemBtn) {
+  nextItemBtn.onclick = async () => {
+    try {
+      const items = await getItems(bundle.id);
+
+      const nextIndex = itemIndex + 1;
+
+      if (nextIndex >= items.length) {
+        alert("နောက်ဆုံးအထည် ဖြစ်ပါတယ်");
+        return;
+      }
+
+      await showItemEdit(
+        bundle,
+        items[nextIndex],
+        nextIndex
+      );
+
+    } catch (err) {
+      console.error(err);
+
+      alert(
+        err.message ||
+        JSON.stringify(err)
+      );
+    }
+  };
+}
 
 }
 

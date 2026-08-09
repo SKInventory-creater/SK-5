@@ -102,6 +102,13 @@ export default function ItemEditPage(item) {
         သိမ်းမည်
       </button>
 
+	<button
+	  id="nextItemBtn"
+	  class="save-btn"
+	>
+	  နောက်တစ်ထည် →
+	</button>
+
     </section>
 
   </main>
