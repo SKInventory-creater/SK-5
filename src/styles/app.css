@@ -2166,3 +2166,119 @@ flex:1;
   transform:scale(.97);
   background:#E8F0FF;
 }
+
+/* ===== Dashboard Bundle Card - Soft Premium UI ===== */
+
+.dashboard-page .bundle-card{
+  display:flex;
+  align-items:center;
+  gap:0;
+  padding:14px;
+  margin-bottom:12px;
+
+  background:#FFFFFF;
+  border:1px solid #E9EEF5;
+  border-radius:18px;
+
+  box-shadow:0 4px 16px rgba(50,70,100,.045);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+}
+
+.dashboard-page .bundle-card:active{
+  transform:scale(.985);
+  box-shadow:0 2px 9px rgba(50,70,100,.035);
+}
+
+/* Bundle code */
+.dashboard-page .bundle-icon{
+  width:52px;
+  height:52px;
+  flex:0 0 52px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-right:13px;
+
+  border-radius:15px;
+  background:#F0F5FF;
+  color:#6688D9;
+
+  font-size:20px;
+  font-weight:700;
+}
+
+/* Bundle information */
+.dashboard-page .bundle-info{
+  flex:1;
+  min-width:0;
+}
+
+.dashboard-page .bundle-info h3{
+  margin:0;
+
+  color:#354052;
+  font-size:17px;
+  line-height:1.3;
+  font-weight:700;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.dashboard-page .bundle-info p{
+  margin:4px 0 8px;
+
+  color:#929BA9;
+  font-size:13px;
+}
+
+/* Price */
+.dashboard-page .bundle-price{
+  display:flex;
+  align-items:center;
+}
+
+.dashboard-page .bundle-price small{
+  display:block;
+  margin-bottom:1px;
+
+  color:#9AA3B0;
+  font-size:10px;
+}
+
+.dashboard-page .bundle-price strong{
+  color:#536070;
+  font-size:14px;
+  font-weight:650;
+}
+
+/* Right arrow */
+.dashboard-page .bundle-actions{
+  margin-left:8px;
+}
+
+.dashboard-page .bundle-actions button{
+  width:32px;
+  height:32px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+  border:none;
+  border-radius:10px;
+
+  background:#F7F9FC;
+  color:#A2AAB7;
+
+  font-size:22px;
+  line-height:1;
+}
