@@ -1827,10 +1827,11 @@ flex:1;
 .signup-page,
 .staff-register-page{
   min-height:100vh;
-  padding:34px 18px 110px;
+  padding:24px 18px 40px;
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:center;
+  box-sizing:border-box;
   background:linear-gradient(
     180deg,
     #F8FAFF 0%,
@@ -1844,12 +1845,12 @@ flex:1;
 .register-card{
   width:100%;
   max-width:420px;
-  margin-top:28px;
-  padding:24px 20px;
-  border:1px solid #E6EBF3;
+  padding:28px 22px;
+  border:1px solid #E7ECF3;
   border-radius:22px;
   background:rgba(255,255,255,.98);
-  box-shadow:0 10px 30px rgba(50,70,100,.06);
+  box-shadow:0 10px 30px rgba(50,70,100,.055);
+  box-sizing:border-box;
 }
 
 /* Login / Signup headings */
@@ -1921,13 +1922,13 @@ flex:1;
 /* Add Item stays near the item list instead of being pushed to page bottom */
 
 .items-page .bottom-actions{
-  position:sticky !important;
+  position:relative !important;
   left:auto !important;
   right:auto !important;
   bottom:auto !important;
   width:100%;
-  margin:16px 0 20px;
-  z-index:10;
+  margin:12px 0 16px;
+  z-index:1;
 }
 
 .items-page .floating-add-item{
@@ -1939,7 +1940,7 @@ flex:1;
   color:#4F7FE8;
   font-size:16px;
   font-weight:700;
-  box-shadow:0 5px 16px rgba(79,127,232,.10);
+  box-shadow:0 4px 14px rgba(79,127,232,.08);
   transition:.18s ease;
 }
 
@@ -1999,5 +2000,148 @@ flex:1;
   background:#FFF3F3;
   color:#D96B6B;
   border:1px solid #F2DEDE;
+}
+
+
+/* ===== FINAL AUTH UI POLISH ===== */
+
+.login-page{
+  min-height:100vh;
+  padding:24px 18px 40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  background:linear-gradient(
+    180deg,
+    #F8FAFF 0%,
+    #F4F7FC 55%,
+    #F1F5FA 100%
+  );
+}
+
+.login-page .login-card{
+  width:100%;
+  max-width:420px;
+  padding:28px 22px;
+  margin:0;
+  border:1px solid #E7ECF3;
+  border-radius:22px;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 10px 30px rgba(50,70,100,.055);
+  box-sizing:border-box;
+}
+
+/* Heading */
+.login-page .login-card h1{
+  margin:0 0 8px;
+  text-align:center;
+  color:#354052;
+  font-size:25px;
+  font-weight:700;
+  letter-spacing:-.2px;
+}
+
+.login-page .login-card > p{
+  margin:0 0 24px;
+  text-align:center;
+  color:#8993A3;
+  font-size:14px;
+}
+
+/* Inputs */
+.login-page .login-card input{
+  display:block;
+  width:100%;
+  min-height:50px;
+  margin:0 0 12px;
+  padding:13px 14px;
+  border:1px solid #E1E7EF;
+  border-radius:14px;
+  background:#FBFCFE;
+  color:#374151;
+  outline:none;
+  box-sizing:border-box;
+  font-size:15px;
+  transition:.18s ease;
+}
+
+.login-page .login-card input::placeholder{
+  color:#A0A9B6;
+}
+
+.login-page .login-card input:focus{
+  border-color:#C7D5F2;
+  background:#FFFFFF;
+  box-shadow:0 0 0 3px rgba(91,130,223,.055);
+}
+
+/* All auth buttons */
+.login-page .login-card button{
+  display:block;
+  width:100%;
+  min-height:50px;
+  margin:12px 0 0;
+  border:1px solid #DCE7FA;
+  border-radius:14px;
+  background:#EEF4FF;
+  color:#4F7FE8;
+  font-size:15px;
+  font-weight:700;
+  box-shadow:none;
+  transition:.18s ease;
+}
+
+.login-page .login-card button:active{
+  transform:scale(.985);
+  background:#E8F0FF;
+}
+
+/* Login primary */
+.login-page .login-card #loginBtn{
+  margin-top:18px;
+}
+
+/* Create shop */
+.login-page .login-card #goRegisterBtn{
+  background:#F2F8F5;
+  border-color:#DCEFE5;
+  color:#4FA982;
+}
+
+/* Staff register */
+.login-page .login-card #goStaffRegisterBtn{
+  background:#F5F2FC;
+  border-color:#E7E1F5;
+  color:#8172C7;
+}
+
+/* Register page */
+.login-page .login-card #registerBtn,
+.login-page .login-card #staffRegisterBtn{
+  margin-top:18px;
+}
+
+/* Back buttons */
+.login-page .login-card #backLoginBtn{
+  background:#F7F8FA;
+  border-color:#E8EBF0;
+  color:#687384;
+}
+
+/* Small screen */
+@media (max-width:380px){
+  .login-page{
+    padding:18px 12px 28px;
+  }
+
+  .login-page .login-card{
+    padding:24px 16px;
+    border-radius:20px;
+  }
+
+  .login-page .login-card h1{
+    font-size:23px;
+  }
 }
 
