@@ -3146,3 +3146,168 @@ flex:1;
     font-size:14px;
   }
 }
+
+/* =====================================================
+   SETTINGS PAGE - SOFT PASTEL UI
+   ===================================================== */
+
+.settings-page{
+  min-height:100vh;
+  box-sizing:border-box;
+  padding:16px 14px 90px;
+
+  background:linear-gradient(
+    180deg,
+    #F9FBFF 0%,
+    #F5F8FD 100%
+  );
+}
+
+/* Header */
+.settings-page .page-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:22px;
+}
+
+.settings-page .page-header h2{
+  margin:0;
+  color:#354052;
+  font-size:22px;
+  font-weight:750;
+  line-height:1.3;
+}
+
+/* Back button */
+.settings-page #backBtn{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+
+  border:1px solid #E4EAF2;
+  border-radius:14px;
+
+  background:#FFFFFF;
+  color:#566172;
+
+  font-size:21px;
+  line-height:1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:0 3px 12px rgba(30,50,80,.055);
+
+  transition:.18s ease;
+}
+
+.settings-page #backBtn:active{
+  transform:scale(.95);
+  background:#F5F8FC;
+}
+
+/* Settings list */
+.settings-page .settings-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* Setting item */
+.settings-page .settings-item{
+  width:100%;
+  min-height:62px;
+
+  box-sizing:border-box;
+
+  display:flex;
+  align-items:center;
+
+  padding:0 16px;
+
+  border:1px solid #E7ECF3;
+  border-radius:17px;
+
+  background:rgba(255,255,255,.97);
+  color:#3F4A5A;
+
+  font-size:15px;
+  font-weight:600;
+
+  text-align:left;
+
+  box-shadow:0 3px 12px rgba(30,50,80,.035);
+
+  transition:.18s ease;
+}
+
+/* Right arrow */
+.settings-page .settings-item::after{
+  content:"›";
+  margin-left:auto;
+
+  color:#A2ABB8;
+  font-size:24px;
+  font-weight:400;
+}
+
+/* Soft hover/press */
+.settings-page .settings-item:active{
+  transform:scale(.985);
+  background:#F7F9FC;
+}
+
+/* Individual soft pastel colors */
+.settings-page #shopInfoBtn{
+  background:#F2F6FF;
+  border-color:#E1E9F8;
+}
+
+.settings-page #backupBtn{
+  background:#F1FAF6;
+  border-color:#DFEEE7;
+}
+
+.settings-page #restoreBtn{
+  background:#FFF8EF;
+  border-color:#F1E6D6;
+}
+
+.settings-page #staffManagementBtn{
+  background:#F5F2FF;
+  border-color:#E8E1F7;
+}
+
+.settings-page #aboutBtn{
+  background:#F6F8FB;
+  border-color:#E7EBF1;
+}
+
+/* Logout */
+.settings-page .settings-item.danger{
+  margin-top:10px;
+
+  background:#FFF5F5;
+  border-color:#F2DEDE;
+  color:#D96B6B;
+}
+
+.settings-page .settings-item.danger::after{
+  color:#E2A0A0;
+}
+
+/* Small screens */
+@media (max-width:380px){
+  .settings-page{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .settings-page .settings-item{
+    min-height:58px;
+    padding:0 14px;
+    font-size:14px;
+  }
+}
