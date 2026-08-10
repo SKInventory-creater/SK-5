@@ -1,75 +1,93 @@
 export function calculateReportStats(bundles, items) {
 
+  const soldItems = items.filter(
+    item => !item.unsold && !item.removed
+  );
+
   return {
 
     totalCost: bundles.reduce(
-      (sum, b) => sum + Number(b.cost || 0),
+      (sum, bundle) => sum + Number(bundle.cost || 0),
       0
     ),
 
-    totalSales: items
-      .filter(i => !i.unsold && !i.removed)
-      .reduce(
-        (sum, i) => sum + Number(i.price || 0),
-        0
-      ),
+    totalSales: soldItems.reduce(
+      (sum, item) => sum + Number(item.price || 0),
+      0
+    ),
 
-    totalProfit: items
-      .filter(i => !i.unsold && !i.removed)
-      .reduce(
-        (sum, i) =>
-          sum + (Number(i.price || 0) - Number(i.cost || 0)),
-        0
-      ),
+    totalProfit: soldItems.reduce(
+      (sum, item) =>
+        sum +
+        (Number(item.price || 0) - Number(item.cost || 0)),
+      0
+    ),
 
-    soldCount: items.filter(i => !i.unsold && !i.removed).length,
+    soldCount: soldItems.length,
 
-    unsoldCount: items.filter(i => i.unsold && !i.removed).length,
+    unsoldCount: items.filter(
+      item => item.unsold && !item.removed
+    ).length,
 
-    reservedCount: items.filter(i => i.removed).length
+    reservedCount: items.filter(
+      item => item.removed
+    ).length
 
   };
 
 }
+
 
 export function calculateDailyReport(todayItems) {
 
+  const soldItems = todayItems.filter(
+    item => !item.unsold && !item.removed
+  );
+
   return {
 
-    totalSales: todayItems.reduce(
+    totalSales: soldItems.reduce(
       (sum, item) => sum + Number(item.price || 0),
       0
     ),
 
-    totalProfit: todayItems.reduce(
+    totalProfit: soldItems.reduce(
       (sum, item) =>
-        sum + (Number(item.price || 0) - Number(item.cost || 0)),
+        sum +
+        (Number(item.price || 0) - Number(item.cost || 0)),
       0
     ),
 
-    soldCount: todayItems.length
+    soldCount: soldItems.length
 
   };
 
 }
+
 
 export function calculateMonthlyReport(monthItems) {
 
+  const soldItems = monthItems.filter(
+    item => !item.unsold && !item.removed
+  );
+
   return {
 
-    totalSales: monthItems.reduce(
+    totalSales: soldItems.reduce(
       (sum, item) => sum + Number(item.price || 0),
       0
     ),
 
-    totalProfit: monthItems.reduce(
+    totalProfit: soldItems.reduce(
       (sum, item) =>
-        sum + (Number(item.price || 0) - Number(item.cost || 0)),
+        sum +
+        (Number(item.price || 0) - Number(item.cost || 0)),
       0
     ),
 
-    soldCount: monthItems.length
+    soldCount: soldItems.length
 
   };
 
 }
+
