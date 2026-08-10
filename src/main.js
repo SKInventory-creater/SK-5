@@ -1278,30 +1278,54 @@ summary.insertAdjacentHTML(
 const list =
   document.getElementById("dailySoldList");
 
-list.innerHTML = soldItems.map(item => `
-  <div class="staff-card">
+    list.innerHTML = soldItems.map(item => `
+    <div class="item-card">
 
-    <b>🧾 ${item.itemId}</b>
-    <hr>
+      <div class="item-photo">
+        ${
+          item.photo
+            ? `<img src="${item.photo}" class="item-photo-img">`
+            : `📦`
+        }
+      </div>
 
-    <div>🏷️ <b>မှတ်ချက်</b><br>
-      ${item.note || "-"}
-    </div><br>
+      <div class="item-info">
 
-    <div>💰 <b>ရောင်းဈေး</b><br>
-      ${Number(item.price || 0).toLocaleString()} ကျပ်
-    </div><br>
+        <div class="item-top-row">
+          <h3>${item.itemId}</h3>
 
-    <div>💵 <b>အမြတ်</b><br>
-      ${(Number(item.price || 0) - Number(item.cost || 0)).toLocaleString()} ကျပ်
-    </div><br>
+          <div class="item-price-row">
+            <span>
+              အရင်း ${Number(item.cost || 0).toLocaleString()} ကျပ်
+            </span>
 
-    <div>🕒 <b>ရောင်းချိန်</b><br>
-      ${new Date(item.soldAt).toLocaleString()}
+            <strong>
+              ${Number(item.price || 0).toLocaleString()} ကျပ်
+            </strong>
+          </div>
+        </div>
+
+        <div class="item-bottom-row">
+
+          <p class="item-note">
+            ${item.note || "မှတ်ချက် မရှိ"}
+          </p>
+
+          <div class="item-status">
+            <span
+              class="item-status-text"
+              data-status="sold"
+            >
+              🔵 ရောင်းပြီး
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-
-  </div>
-`).join("");
+  `).join("");
 
   document.getElementById("backBtn").onclick = () => {
     goBackPage();
@@ -1347,34 +1371,54 @@ async function showMonthlyReport(
   const list =
     document.getElementById("monthlySoldList");
 
-  list.innerHTML = monthItems.map(item => `
-    <div class="staff-card">
+      list.innerHTML = monthItems.map(item => `
+      <div class="item-card">
 
-      <b>🧾 ${item.itemId}</b>
-      <hr>
+        <div class="item-photo">
+          ${
+            item.photo
+              ? `<img src="${item.photo}" class="item-photo-img">`
+              : `📦`
+          }
+        </div>
 
-      <div>
-        🏷️ <b>မှတ်ချက်</b><br>
-        ${item.note || "-"}
-      </div><br>
+        <div class="item-info">
 
-      <div>
-        💰 <b>ရောင်းဈေး</b><br>
-        ${Number(item.price || 0).toLocaleString()} ကျပ်
-      </div><br>
+          <div class="item-top-row">
+            <h3>${item.itemId}</h3>
 
-      <div>
-        💵 <b>အမြတ်</b><br>
-        ${(Number(item.price || 0) - Number(item.cost || 0)).toLocaleString()} ကျပ်
-      </div><br>
+            <div class="item-price-row">
+              <span>
+                အရင်း ${Number(item.cost || 0).toLocaleString()} ကျပ်
+              </span>
 
-      <div>
-        🕒 <b>ရောင်းချိန်</b><br>
-        ${new Date(item.soldAt).toLocaleString()}
+              <strong>
+                ${Number(item.price || 0).toLocaleString()} ကျပ်
+              </strong>
+            </div>
+          </div>
+
+          <div class="item-bottom-row">
+
+            <p class="item-note">
+              ${item.note || "မှတ်ချက် မရှိ"}
+            </p>
+
+            <div class="item-status">
+              <span
+                class="item-status-text"
+                data-status="sold"
+              >
+                🔵 ရောင်းပြီး
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
-
-    </div>
-  `).join("");
+    `).join("");
 
   document.getElementById("backBtn").onclick = () => {
     goBackPage()
