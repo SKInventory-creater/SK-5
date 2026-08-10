@@ -3311,3 +3311,287 @@ flex:1;
     font-size:14px;
   }
 }
+
+/* =====================================================
+   SHOP INFORMATION PAGE - SOFT PASTEL UI
+   ===================================================== */
+
+.shop-information-page{
+  min-height:100vh;
+  padding:18px 14px 90px;
+  box-sizing:border-box;
+
+  background:linear-gradient(
+    180deg,
+    #FAFCFF 0%,
+    #F6F9FC 100%
+  );
+}
+
+/* Header */
+
+.shop-info-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.shop-info-back-btn{
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+
+  border:1px solid #E5EAF1;
+  border-radius:14px;
+
+  background:#FFFFFF;
+  color:#566172;
+
+  font-size:22px;
+  line-height:1;
+
+  box-shadow:0 3px 12px rgba(30,50,80,.06);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:.18s ease;
+}
+
+.shop-info-back-btn:active{
+  transform:scale(.96);
+  background:#F5F8FC;
+}
+
+.shop-info-title{
+  min-width:0;
+}
+
+.shop-info-title h2{
+  margin:0;
+  color:#354052;
+  font-size:21px;
+  font-weight:750;
+}
+
+.shop-info-title p{
+  margin:4px 0 0;
+  color:#929BA9;
+  font-size:12px;
+}
+
+/* Main information card */
+
+.shop-info-card{
+  background:#FFFFFF;
+  border:1px solid #E8EDF4;
+  border-radius:20px;
+
+  padding:18px;
+
+  box-shadow:
+    0 5px 18px rgba(30,50,80,.055);
+}
+
+/* Shop profile */
+
+.shop-info-profile{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.shop-info-avatar{
+  width:54px;
+  height:54px;
+  flex-shrink:0;
+
+  border-radius:17px;
+
+  background:#EEF4FF;
+  color:#5B82DF;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:26px;
+}
+
+.shop-info-profile h3{
+  margin:0;
+
+  color:#354052;
+  font-size:18px;
+  font-weight:750;
+}
+
+.shop-info-profile p{
+  margin:4px 0 0;
+
+  color:#929BA9;
+  font-size:12px;
+}
+
+/* Divider */
+
+.shop-info-divider{
+  height:1px;
+  margin:17px 0 4px;
+
+  background:#EEF1F5;
+}
+
+/* Information rows */
+
+.shop-info-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:13px 0;
+
+  border-bottom:1px solid #F0F2F5;
+}
+
+.shop-info-row:last-child{
+  border-bottom:none;
+  padding-bottom:2px;
+}
+
+.shop-info-icon{
+  width:40px;
+  height:40px;
+  flex-shrink:0;
+
+  border-radius:13px;
+
+  background:#F3F6FC;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+}
+
+.shop-info-content{
+  min-width:0;
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.shop-info-content span{
+  color:#929BA9;
+  font-size:12px;
+}
+
+.shop-info-content strong{
+  color:#465264;
+  font-size:14px;
+  font-weight:650;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Invitation card */
+
+.shop-invite-card{
+  margin-top:14px;
+
+  background:#F8FAFF;
+
+  border:1px solid #E4EBF8;
+  border-radius:20px;
+
+  padding:16px;
+
+  box-shadow:0 4px 14px rgba(30,50,80,.035);
+}
+
+.shop-invite-title{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  margin-bottom:13px;
+}
+
+.invite-icon{
+  background:#EEF4FF;
+}
+
+.shop-invite-title h3{
+  margin:0;
+
+  color:#3E4A5B;
+  font-size:15px;
+  font-weight:700;
+}
+
+.shop-invite-title p{
+  margin:3px 0 0;
+
+  color:#929BA9;
+  font-size:11px;
+}
+
+/* Invite code */
+
+.shop-invite-card .invite-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.shop-invite-card #inviteCode{
+  flex:1;
+  min-width:0;
+
+  height:46px;
+  box-sizing:border-box;
+
+  border:1px solid #DEE6F2;
+  border-radius:13px;
+
+  background:#FFFFFF;
+  color:#4B596B;
+
+  padding:0 12px;
+
+  font-size:14px;
+  font-weight:650;
+
+  outline:none;
+}
+
+.shop-invite-card #copyInviteBtn{
+  height:46px;
+
+  padding:0 14px;
+
+  border:1px solid #D8E5FA;
+  border-radius:13px;
+
+  background:#EEF4FF;
+  color:#4F7FE8;
+
+  font-size:13px;
+  font-weight:700;
+
+  white-space:nowrap;
+
+  transition:.18s ease;
+}
+
+.shop-invite-card #copyInviteBtn:active{
+  transform:scale(.97);
+  background:#E7EFFD;
+}
