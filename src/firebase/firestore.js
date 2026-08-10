@@ -64,34 +64,54 @@ export async function createUserProfile(uid, data) {
     role: data.role
   });
 
-  try {
-  await setDoc(userRef, {
-    uid,
-    shopId: data.shopId,
-    role: data.role,
-    name: data.name,
-    phone: data.phone,
-    email: data.email,
-    active: true,
-    createdAt: Date.now()
-  });
+    try {
+    await setDoc(userRef, {
+      uid,
+      shopId: data.shopId,
+      role: data.role,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      active: true,
+      createdAt: Date.now()
+    });
 
-  console.log("USER PROFILE setDoc OK:", "users/" + uid);
+    alert(
+      "USER PROFILE WRITE OK\n\n" +
+      "Path: users/" + uid
+    );
 
-} catch (err) {
-  console.error("USER PROFILE setDoc FAILED");
-  console.error("code:", err?.code);
-  console.error("message:", err?.message);
-  throw err;
-}
+    console.log(
+      "USER PROFILE setDoc OK:",
+      "users/" + uid
+    );
+
+  } catch (err) {
+    alert(
+      "USER PROFILE WRITE FAILED\n\n" +
+      "Code: " + (err?.code || "") + "\n\n" +
+      "Message: " + (err?.message || "")
+    );
+
+    console.error("USER PROFILE setDoc FAILED");
+    console.error("code:", err?.code);
+    console.error("message:", err?.message);
+
+    throw err;
+  }
 
   const snap = await getDoc(userRef);
 
   if (!snap.exists()) {
-    throw new Error("User Profile create ပြီးသော်လည်း မတွေ့ပါ");
+    throw new Error(
+      "User Profile create ပြီးသော်လည်း မတွေ့ပါ"
+    );
   }
 
-  console.log("USER PROFILE CREATED:", snap.data());
+  console.log(
+    "USER PROFILE CREATED:",
+    snap.data()
+  );
 }
 
 export async function getUserProfile(uid) {
