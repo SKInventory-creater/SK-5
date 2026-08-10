@@ -1,62 +1,95 @@
 export default function ShopInformationPage(info) {
   return `
-    <main class="settings-page">
+    <main class="shop-information-page">
 
-      <header class="page-header">
-        <button id="backBtn">←</button>
-        <h2>Shop Information</h2>
+      <header class="shop-info-header">
+        <button id="backBtn" class="shop-info-back-btn">←</button>
+
+        <div class="shop-info-title">
+          <h2>ဆိုင်အချက်အလက်</h2>
+          <p>ဆိုင်၏ အခြေခံအချက်အလက်များ</p>
+        </div>
       </header>
 
-      <section class="settings-list">
+      <section class="shop-info-card">
 
-        <div class="settings-item">
-          <strong>🏪 Shop Name</strong><br>
-          ${info.shopName}
+        <div class="shop-info-profile">
+          <div class="shop-info-avatar">🏪</div>
+
+          <div>
+            <h3>${info.shopName || "ဆိုင်အမည်မရှိ"}</h3>
+            <p>ဆိုင်အချက်အလက်</p>
+          </div>
         </div>
 
-        <div class="settings-item">
-          <strong>👤 Owner</strong><br>
-          ${info.ownerName}
+        <div class="shop-info-divider"></div>
+
+        <div class="shop-info-row">
+          <div class="shop-info-icon">👤</div>
+          <div class="shop-info-content">
+            <span>ပိုင်ရှင်</span>
+            <strong>${info.ownerName || "-"}</strong>
+          </div>
         </div>
 
-        <div class="settings-item">
-          <strong>📱 Phone</strong><br>
-          ${info.phone}
+        <div class="shop-info-row">
+          <div class="shop-info-icon">📱</div>
+          <div class="shop-info-content">
+            <span>ဖုန်းနံပါတ်</span>
+            <strong>${info.phone || "-"}</strong>
+          </div>
         </div>
 
-        <div class="settings-item">
-          <strong>📧 Email</strong><br>
-          ${info.email}
+        <div class="shop-info-row">
+          <div class="shop-info-icon">📧</div>
+          <div class="shop-info-content">
+            <span>အီးမေးလ်</span>
+            <strong>${info.email || "-"}</strong>
+          </div>
         </div>
 
-        <div class="settings-item">
-          <strong>🆔 Shop ID</strong><br>
-          ${info.shopId}
+        <div class="shop-info-row">
+          <div class="shop-info-icon">🆔</div>
+          <div class="shop-info-content">
+            <span>ဆိုင် ID</span>
+            <strong>${info.shopId || "-"}</strong>
+          </div>
         </div>
 
-        <div class="settings-item">
-          <strong>👑 Role</strong><br>
-          ${info.role}
+        <div class="shop-info-row">
+          <div class="shop-info-icon">👑</div>
+          <div class="shop-info-content">
+            <span>အခန်းကဏ္ဍ</span>
+            <strong>${info.role || "-"}</strong>
+          </div>
         </div>
 
-	<div class="setting-card">
-	  <label>Invitation Code</label>
+      </section>
 
-	  <div class="invite-row">
+      <section class="shop-invite-card">
 
-	    <input
-	      id="inviteCode"
-	      value="${info.inviteCode}"
-	      readonly
-	    />
+        <div class="shop-invite-title">
+          <div class="shop-info-icon invite-icon">🔑</div>
 
-	    <button id="copyInviteBtn">
-	      Copy
-	    </button>
+          <div>
+            <h3>ဖိတ်ခေါ်ကုဒ်</h3>
+            <p>Staff ထည့်ရန် အသုံးပြုနိုင်ပါသည်</p>
+          </div>
+        </div>
 
-	</div>
+        <div class="invite-row">
 
-	</div>
+          <input
+            id="inviteCode"
+            value="${info.inviteCode || ""}"
+            readonly
+          />
+
+          <button id="copyInviteBtn" type="button">
+            📋 ကူးမည်
+          </button>
+
+        </div>
 
       </section>
 

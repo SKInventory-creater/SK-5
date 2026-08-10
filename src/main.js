@@ -355,13 +355,24 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
 
       selectedPhoto = photo;
 
-      const preview =
-        document.getElementById("photoPreview");
+      let preview = document.getElementById("photoPreview");
 
-      if (preview) {
-        preview.src = photo.webPath;
-        preview.style.display = "block";
-      }
+if (!preview) {
+  const photoBox = document.querySelector(".edit-photo");
+
+  if (photoBox) {
+    photoBox.innerHTML = `
+      <img
+        id="photoPreview"
+        src="${photo.webPath}"
+        class="item-photo-img"
+      >
+    `;
+  }
+} else {
+  preview.src = photo.webPath;
+  preview.style.display = "block";
+}
 
     } catch (err) {
 

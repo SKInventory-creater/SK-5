@@ -12,7 +12,7 @@ export async function saveItemPhoto(photo, itemId) {
       try {
         const base64 = reader.result.split(",")[1];
 
-        const fileName = `item_${itemId}.jpg`;
+        const fileName = `item_${itemId}_${Date.now()}.jpg`;
 
         await Filesystem.writeFile({
           path: fileName,
@@ -25,8 +25,9 @@ export async function saveItemPhoto(photo, itemId) {
           directory: Directory.Data
         });
 
-        resolve(Capacitor.convertFileSrc(uri.uri));
-
+        resolve(
+          Capacitor.convertFileSrc(uri.uri)
+        );
       } catch (err) {
         reject(err);
       }

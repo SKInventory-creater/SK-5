@@ -20,57 +20,59 @@ export default function AddItemPage(bundle, item) {
 
     <section class="form-card">
 
-      <div class="photo-box">
+            <div class="photo-box">
 
         <div class="photo-preview">
-          ပုံမရှိသေး
+
+          <img
+            id="photoPreview"
+            src="${item.photo || ""}"
+            alt="အထည်ပုံ"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              display:${item.photo ? "block" : "none"};
+            "
+          >
+
+          <span
+            id="photoEmpty"
+            style="
+              display:${item.photo ? "none" : "flex"};
+            "
+          >
+            ပုံမရှိသေး
+          </span>
+
         </div>
-
-	<div class="photo-preview">
-	  <img
-	    id="photoPreview"
-	    src="${item.photo || ""}"
-	    style="
-	      width:120px;
-	      height:120px;
-	      object-fit:cover;
-	      border-radius:12px;
-	      margin:auto;
-	      display:${item.photo ? "block" : "none"};
-	    "
-	  >
-
-	  <span
-	    id="photoEmpty"
-	    style="
-	      display:${item.photo ? "none" : "block"};
-	    "
-	  >
-	    ပုံမရှိသေး
-	  </span>
-	</div>
 
         <div class="photo-buttons">
 
-	  <button
-	    id="pickPhotoBtn"
-	    type="button">
-	    🖼 ဓာတ်ပုံရွေး
-	  </button>
+          <button
+            id="pickPhotoBtn"
+            type="button"
+            class="photo-action-btn"
+          >
+            🖼️ ဓာတ်ပုံရွေး
+          </button>
 
-	  <button
-	    id="cameraPhotoBtn"
-	    type="button">
-	    📷 ဓာတ်ပုံရိုက်
-	  </button>
+          <button
+            id="cameraPhotoBtn"
+            type="button"
+            class="photo-action-btn"
+          >
+            📷 ဓာတ်ပုံရိုက်
+          </button>
 
-	  <input
-	    id="photoInput"
-	    type="file"
-	    accept="image/*"
-	    hidden>
+          <input
+            id="photoInput"
+            type="file"
+            accept="image/*"
+            hidden
+          >
 
-	</div>
+        </div>
 
       </div>
 
