@@ -56,12 +56,16 @@ export async function getShop(shopId) {
 export async function createUserProfile(uid, data) {
   const userRef = doc(db, "users", uid);
 
-  console.log("=== CREATE USER PROFILE ===");
-  console.log("UID:", uid);
-  console.log("Data:", data);
+  console.log("CREATE USER PROFILE");
+  console.log("Path:", "users/" + uid);
+  console.log("Data:", {
+    uid,
+    shopId: data.shopId,
+    role: data.role
+  });
 
   await setDoc(userRef, {
-    uid: uid,
+    uid,
     shopId: data.shopId,
     role: data.role,
     name: data.name,
@@ -71,14 +75,13 @@ export async function createUserProfile(uid, data) {
     createdAt: Date.now()
   });
 
-  const verifySnap = await getDoc(userRef);
+  const snap = await getDoc(userRef);
 
-  if (!verifySnap.exists()) {
-    throw new Error("User Profile Firestore ထဲ မသိမ်းနိုင်ပါ");
+  if (!snap.exists()) {
+    throw new Error("User Profile create ပြီးသော်လည်း မတွေ့ပါ");
   }
 
-  console.log("=== USER PROFILE CREATED ===");
-  console.log("Path: users/" + uid);
+  console.log("USER PROFILE CREATED:", snap.data());
 }
 
 export async function getUserProfile(uid) {

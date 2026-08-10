@@ -11,61 +11,77 @@ import { registerSecondary } from "../firebase/auth.js";
 
 export async function createShopAccount(data) {
   console.log("=== CREATE SHOP START ===");
-  console.log("SHOP DATA:", data);
+  console.log("Auth UID:", data.adminUid);
+  console.log("Shop ID:", data.shopId);
 
-  const existingShop = await getShopByName(data.shopName);
+  try {
+    // 1. Shop name စစ်
+    console.log("STEP 1: getShopByName");
 
-  if (existingShop) {
-    throw new Error("ဒီဆိုင်နာမည်ကို အသုံးပြုပြီးသားဖြစ်ပါတယ်");
+    const existingShop = await getShopByName(data.shopName);
+
+    if (existingShop) {
+      throw new Error("ဒီဆိုင်နာမည်ကို အသုံးပြုပြီးသားဖြစ်ပါတယ်");
+    }
+
+    const inviteCode = Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
+
+    // 2. Shop create
+    console.log("STEP 2: createShop");
+
+    await createShop(data.shopId, {
+      shopName: data.shopName,
+      ownerName: data.ownerName,
+      phone: data.phone,
+      adminUid: data.adminUid,
+      inviteCode,
+      active: true,
+      createdAt: Date.now()
+    });
+
+    console.log("STEP 2 OK: Shop created");
+
+    // 3. User profile create
+    console.log("STEP 3: createUserProfile");
+    console.log("users/" + data.adminUid);
+
+    await createUserProfile(data.adminUid, {
+      shopId: data.shopId,
+      role: "admin",
+      name: data.ownerName,
+      phone: data.phone,
+      email: data.email
+    });
+
+    console.log("STEP 3 OK: User profile created");
+
+    // 4. Verify profile
+    console.log("STEP 4: verify user profile");
+
+    const profile = await getUserProfile(data.adminUid);
+
+    if (!profile) {
+      throw new Error(
+        "User Profile Firestore ထဲ မတွေ့ပါ\n\n" +
+        "Path: users/" + data.adminUid
+      );
+    }
+
+    console.log("=== CREATE SHOP SUCCESS ===");
+
+    return profile;
+
+  } catch (err) {
+    console.error("=== CREATE SHOP FAILED ===");
+    console.error("Error code:", err?.code);
+    console.error("Error message:", err?.message);
+    console.error(err);
+
+    throw err;
   }
-
-  const inviteCode = Math.random()
-    .toString(36)
-    .substring(2, 8)
-    .toUpperCase();
-
-  // 1. Create Shop
-  console.log("1. Creating shop...");
-
-  await createShop(data.shopId, {
-    shopName: data.shopName,
-    ownerName: data.ownerName,
-    phone: data.phone,
-    adminUid: data.adminUid,
-    inviteCode,
-    active: true,
-    createdAt: Date.now()
-  });
-
-  console.log("2. Shop created successfully");
-
-  // 2. Create Admin Profile
-  console.log("3. Creating admin profile...");
-  console.log("Admin UID:", data.adminUid);
-  console.log("Admin Shop ID:", data.shopId);
-
-  await createUserProfile(data.adminUid, {
-    shopId: data.shopId,
-    role: "admin",
-    name: data.ownerName,
-    phone: data.phone,
-    email: data.email
-  });
-
-  console.log("4. Admin profile created successfully");
-
-  // 3. Verify
-  const profile = await getUserProfile(data.adminUid);
-
-  if (!profile) {
-    throw new Error(
-      "Shop ရှိသော်လည်း Admin User Profile မရှိပါ"
-    );
-  }
-
-  console.log("=== CREATE SHOP COMPLETE ===");
-  console.log("Shop:", data.shopId);
-  console.log("User:", data.adminUid);
 }
 
 export async function getShopInformation(uid) {
