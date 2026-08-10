@@ -234,46 +234,63 @@ function showRegister() {
   };
 
   registerBtn.onclick = async () => {
-    try {
-      const shopName = document.getElementById("shopName").value.trim();
-      const ownerName = document.getElementById("ownerName").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
+  const btn = document.getElementById("registerBtn");
 
-      const password = document.getElementById("password").value;
-      const confirmPassword =
-        document.getElementById("confirmPassword").value;
+  try {
+    const shopName = document.getElementById("shopName").value.trim();
+    const ownerName = document.getElementById("ownerName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-      if (password !== confirmPassword) {
-        alert("Password နှစ်ခု မတူပါ");
-        return;
-      }
+    const password = document.getElementById("password").value;
+    const confirmPassword =
+      document.getElementById("confirmPassword").value;
 
-      const credential = await registerUser(email, password);
-
-      const uid = credential.user.uid;
-
-      await createShopAccount({
-        shopId: uid,
-        adminUid: uid,
-        shopName,
-        ownerName,
-        phone,
-        email
-      });
-
-      alert("Shop Account Created");
-
-      await  showDashboard();
-
-    } catch (err) {
-      alert(err.message);
-
-      if (err.code) {
-        alert(err.code);
-      }
+    if (!shopName || !ownerName || !phone || !email || !password) {
+      alert("အချက်အလက်အားလုံး ဖြည့်ပါ");
+      return;
     }
-  };
+
+    if (password !== confirmPassword) {
+      alert("Password နှစ်ခု မတူပါ");
+      return;
+    }
+
+    // Double click မဖြစ်အောင်
+    btn.disabled = true;
+    btn.textContent = "ဆိုင်ဖန်တီးနေပါသည်...";
+
+    const credential = await registerUser(email, password);
+
+    const uid = credential.user.uid;
+
+    await createShopAccount({
+      shopId: uid,
+      adminUid: uid,
+      shopName,
+      ownerName,
+      phone,
+      email
+    });
+
+    // Create အောင်မြင်ပြီးတာနဲ့ Dashboard တန်းဝင်
+    btn.textContent = "ပြီးပါပြီ...";
+
+    await showDashboard();
+
+  } catch (err) {
+    console.error("Create Shop Error:", err);
+
+    alert(err.message || "ဆိုင်ဖန်တီးရာတွင် အမှားဖြစ်နေပါသည်");
+
+    // Error ဖြစ်မှ button ပြန်ဖွင့်
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "ဆိုင်ဖန်တီးမည်";
+    }
+  }
+};
+
 }
 
 async function showItems(bundle) {
