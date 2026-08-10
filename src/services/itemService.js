@@ -126,13 +126,31 @@ export async function updateItem(item) {
 export async function getTotalProfit() {
   const db = await initDatabase();
 
-  const result = await db.query(`
+  const user = getCurrentUser();
+
+  if (!user) {
+    return 0;
+  }
+
+  const profile = await getUserProfile(user.uid);
+
+  if (!profile || !profile.shopId) {
+    return 0;
+  }
+
+  const result = await db.query(
+    `
     SELECT
-      SUM(price - cost) AS profit
+      SUM(items.price - items.cost) AS profit
     FROM items
-    WHERE unsold = 0
-      AND removed = 0
-  `);
+    INNER JOIN bundles
+      ON items.bundleId = bundles.id
+    WHERE bundles.shopId = ?
+      AND items.unsold = 0
+      AND items.removed = 0
+    `,
+    [profile.shopId]
+  );
 
   return Number(result.values?.[0]?.profit || 0);
 }
