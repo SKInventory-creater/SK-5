@@ -15,19 +15,33 @@ import { deleteDoc } from "firebase/firestore";
 export const db = getFirestore(app);
 
 export async function createShop(shopId, data) {
-  await setDoc(
-    doc(db, "shops", shopId),
-    {
-      shopName: data.shopName,
-      ownerName: data.ownerName,
-      phone: data.phone,
-      adminUid: data.adminUid,
+  const shopRef = doc(db, "shops", shopId);
 
-      inviteCode: data.inviteCode,
+  await setDoc(shopRef, {
+    shopName: data.shopName,
+    ownerName: data.ownerName,
+    phone: data.phone,
+    adminUid: data.adminUid,
+    inviteCode: data.inviteCode,
+    active: data.active,
+    createdAt: data.createdAt
+  });
 
-      active: data.active,
-      createdAt: data.createdAt
-    }
+  const verifySnap = await getDoc(shopRef);
+
+  if (!verifySnap.exists()) {
+    alert(
+      "❌ Firestore Shop မတွေ့ပါ\n\n" +
+      "Path: shops/" + shopId
+    );
+
+    throw new Error("Shop Firestore ထဲမတွေ့ပါ");
+  }
+
+  alert(
+    "✅ Firestore Shop သိမ်းပြီးပါပြီ\n\n" +
+    "Shop ID: " + shopId + "\n" +
+    "Shop Name: " + data.shopName
   );
 }
 

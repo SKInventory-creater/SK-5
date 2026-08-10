@@ -3,18 +3,133 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /users/{userId} {
-      allow read, write: if request.auth != null;
+    // =========================
+    // Helper Functions
+    // =========================
+
+    function signedIn() {
+      return request.auth != null;
     }
 
+    function myProfile() {
+      return get(
+        /databases/$(database)/documents/users/$(request.auth.uid)
+      ).data;
+    }
+
+    function myShopId() {
+      return myProfile().shopId;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && myProfile().role == "admin";
+    }
+
+    function isStaff() {
+      return signedIn()
+        && myProfile().role == "staff";
+    }
+
+
+    // =========================
+    // USERS
+    // =========================
+
+    match /users/{userId} {
+
+      // ကိုယ့် profile ကိုပဲ ဖတ်နိုင်
+      allow read: if signedIn()
+        && request.auth.uid == userId;
+
+      // Admin က ကိုယ့် shop ထဲက Staff တွေကို ဖတ်နိုင်
+      allow read: if isAdmin()
+        && resource.data.shopId == myShopId()
+        && resource.data.role == "staff";
+
+
+      // Admin profile create
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role == "admin"
+        && request.resource.data.shopId == userId;
+
+
+      // Staff profile create
+      allow create: if isAdmin()
+        && request.resource.data.role == "staff"
+        && request.resource.data.shopId == myShopId();
+
+
+      // ကိုယ့် profile update
+      // role / shopId မပြောင်းနိုင်
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.shopId == resource.data.shopId;
+
+
+      // Admin က ကိုယ့် shop ထဲက Staff ကို update
+      allow update: if isAdmin()
+        && resource.data.role == "staff"
+        && resource.data.shopId == myShopId()
+        && request.resource.data.role == "staff"
+        && request.resource.data.shopId == myShopId();
+
+
+      // Client က user account delete မလုပ်နိုင်
+      allow delete: if false;
+    }
+
+
+    // =========================
+    // SHOPS
+    // =========================
+
     match /shops/{shopId} {
-  allow read: if true;
-  allow write: if request.auth != null;
-}
+
+      // ကိုယ့် shop ကိုပဲ ဖတ်နိုင်
+      allow read: if signedIn()
+        && myShopId() == shopId;
+
+
+      // Shop အသစ် create
+      // shopId = admin UID
+      allow create: if signedIn()
+        && request.auth.uid == shopId
+        && request.resource.data.adminUid == request.auth.uid
+        && request.resource.data.active == true;
+
+
+      // Shop Admin က ကိုယ့် shop ကိုပဲ update
+      allow update: if isAdmin()
+        && myShopId() == shopId
+        && resource.data.adminUid == request.auth.uid
+        && request.resource.data.adminUid == resource.data.adminUid;
+
+
+      // Client က shop delete မလုပ်နိုင်
+      allow delete: if false;
+    }
+
+
+    // =========================
+    // BACKUPS
+    // =========================
 
     match /backups/{userId} {
-      allow read, write: if request.auth != null
-                             && request.auth.uid == userId;
+
+      allow read, write: if signedIn()
+        && request.auth.uid == userId;
+    }
+
+
+    // =========================
+    // DENY EVERYTHING ELSE
+    // =========================
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
