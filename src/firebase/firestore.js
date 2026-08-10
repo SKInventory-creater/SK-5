@@ -64,6 +64,7 @@ export async function createUserProfile(uid, data) {
     role: data.role
   });
 
+  try {
   await setDoc(userRef, {
     uid,
     shopId: data.shopId,
@@ -74,6 +75,15 @@ export async function createUserProfile(uid, data) {
     active: true,
     createdAt: Date.now()
   });
+
+  console.log("USER PROFILE setDoc OK:", "users/" + uid);
+
+} catch (err) {
+  console.error("USER PROFILE setDoc FAILED");
+  console.error("code:", err?.code);
+  console.error("message:", err?.message);
+  throw err;
+}
 
   const snap = await getDoc(userRef);
 
