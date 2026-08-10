@@ -4056,3 +4056,331 @@ flex:1;
     font-size:10px;
   }
 }
+
+/* =====================================================
+   Delete Bundle Page - Soft Premium UI
+   ===================================================== */
+
+.delete-bundle-page{
+  min-height:100%;
+  padding:14px;
+  box-sizing:border-box;
+}
+
+/* Header */
+
+.delete-bundle-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.delete-back-btn{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:1px solid #E8EDF4;
+  border-radius:14px;
+
+  background:#FFFFFF;
+  color:#596575;
+
+  font-size:20px;
+  line-height:1;
+
+  box-shadow:0 3px 12px rgba(50,70,100,.04);
+
+  transition:
+    transform .18s ease,
+    background .18s ease;
+}
+
+.delete-back-btn:active{
+  transform:scale(.96);
+  background:#F6F8FC;
+}
+
+/* Header title */
+
+.delete-header-title{
+  min-width:0;
+}
+
+.delete-header-title h2{
+  margin:0;
+
+  color:#354052;
+  font-size:18px;
+  line-height:1.3;
+  font-weight:700;
+}
+
+.delete-header-title span{
+  display:block;
+
+  margin-top:3px;
+
+  color:#929CAA;
+  font-size:11px;
+  line-height:1.4;
+}
+
+/* Bundle list */
+
+.delete-bundle-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* Bundle card */
+
+.delete-bundle-card{
+  display:flex;
+  align-items:center;
+
+  min-height:68px;
+
+  padding:12px 13px;
+
+  box-sizing:border-box;
+
+  background:#FFFFFF;
+
+  border:1px solid #E9EEF5;
+  border-radius:17px;
+
+  box-shadow:0 4px 16px rgba(50,70,100,.045);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.delete-bundle-card:active{
+  transform:scale(.985);
+  box-shadow:0 2px 9px rgba(50,70,100,.035);
+}
+
+/* Bundle icon */
+
+.delete-bundle-icon{
+  width:48px;
+  height:48px;
+
+  flex:0 0 48px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-right:12px;
+
+  border-radius:14px;
+
+  background:#F0F5FF;
+  color:#6688D9;
+
+  font-size:21px;
+}
+
+/* Bundle information */
+
+.delete-bundle-info{
+  flex:1;
+  min-width:0;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.delete-bundle-info strong{
+  display:block;
+
+  color:#354052;
+
+  font-size:15px;
+  line-height:1.35;
+  font-weight:700;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.delete-bundle-info span{
+  display:block;
+
+  margin-top:4px;
+
+  color:#8A94A3;
+
+  font-size:12px;
+  line-height:1.35;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Delete button */
+
+.delete-bundle-card .deleteBundleBtn{
+  width:38px;
+  height:38px;
+
+  flex:0 0 38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-left:10px;
+
+  padding:0;
+
+  border:1px solid #F1DEDE;
+  border-radius:12px;
+
+  background:#FFF7F7;
+  color:#D47A7A;
+
+  font-size:15px;
+  line-height:1;
+
+  box-shadow:none;
+
+  transition:
+    transform .18s ease,
+    background .18s ease;
+}
+
+.delete-bundle-card .deleteBundleBtn:active{
+  transform:scale(.92);
+  background:#FFF0F0;
+}
+
+/* Empty state */
+
+.delete-empty-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  min-height:170px;
+
+  padding:24px 16px;
+
+  box-sizing:border-box;
+
+  background:#FFFFFF;
+
+  border:1px solid #E9EEF5;
+  border-radius:18px;
+
+  box-shadow:0 4px 16px rgba(50,70,100,.035);
+
+  text-align:center;
+}
+
+.delete-empty-icon{
+  width:52px;
+  height:52px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-bottom:10px;
+
+  border-radius:15px;
+
+  background:#F4F6FA;
+
+  font-size:22px;
+}
+
+.delete-empty-card strong{
+  color:#697586;
+
+  font-size:14px;
+  font-weight:650;
+}
+
+.delete-empty-card span{
+  margin-top:4px;
+
+  color:#A0A9B6;
+
+  font-size:11px;
+}
+
+/* Small phones */
+
+@media (max-width:380px){
+
+  .delete-bundle-page{
+    padding:12px;
+  }
+
+  .delete-bundle-header{
+    gap:10px;
+    margin-bottom:15px;
+  }
+
+  .delete-back-btn{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+  }
+
+  .delete-header-title h2{
+    font-size:17px;
+  }
+
+  .delete-header-title span{
+    font-size:10px;
+  }
+
+  .delete-bundle-card{
+    min-height:64px;
+    padding:10px 11px;
+    border-radius:15px;
+  }
+
+  .delete-bundle-icon{
+    width:44px;
+    height:44px;
+    flex-basis:44px;
+    margin-right:10px;
+    border-radius:13px;
+    font-size:19px;
+  }
+
+  .delete-bundle-info strong{
+    font-size:14px;
+  }
+
+  .delete-bundle-info span{
+    font-size:11px;
+  }
+
+  .delete-bundle-card .deleteBundleBtn{
+    width:35px;
+    height:35px;
+    flex-basis:35px;
+    margin-left:8px;
+    border-radius:11px;
+    font-size:14px;
+  }
+}
