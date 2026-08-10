@@ -10,37 +10,62 @@ import {
 import { registerSecondary } from "../firebase/auth.js";
 
 export async function createShopAccount(data) {
-  console.log("createShopAccount", data);
+  console.log("=== CREATE SHOP START ===");
+  console.log("shopId:", data.shopId);
+  console.log("adminUid:", data.adminUid);
+  console.log("shopName:", data.shopName);
 
-  const existingShop = await getShopByName(data.shopName);
+  try {
+    console.log("STEP 1: Checking shop name...");
 
-  if (existingShop) {
-    throw new Error("ဒီဆိုင်နာမည်ကို အသုံးပြုပြီးသားဖြစ်ပါတယ်");
+    const existingShop = await getShopByName(data.shopName);
+
+    if (existingShop) {
+      throw new Error("ဒီဆိုင်နာမည်ကို အသုံးပြုပြီးသားဖြစ်ပါတယ်");
+    }
+
+    const inviteCode = Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase();
+
+    console.log("STEP 2: Creating Firestore shop...");
+    console.log("Path:", `shops/${data.shopId}`);
+
+    await createShop(data.shopId, {
+      shopName: data.shopName,
+      ownerName: data.ownerName,
+      phone: data.phone,
+      adminUid: data.adminUid,
+      inviteCode,
+      active: true,
+      createdAt: Date.now()
+    });
+
+    console.log("STEP 2 OK: Shop created");
+
+    console.log("STEP 3: Creating admin profile...");
+
+    await createUserProfile(data.adminUid, {
+      shopId: data.shopId,
+      role: "admin",
+      name: data.ownerName,
+      phone: data.phone,
+      email: data.email
+    });
+
+    console.log("STEP 3 OK: Admin profile created");
+
+    console.log("=== CREATE SHOP SUCCESS ===");
+
+  } catch (err) {
+    console.error("=== CREATE SHOP FAILED ===");
+    console.error("Code:", err?.code);
+    console.error("Message:", err?.message);
+    console.error("Error:", err);
+
+    throw err;
   }
-
-  const inviteCode =
-  Math.random()
-    .toString(36)
-    .substring(2, 8)
-    .toUpperCase();
-
-  await createShop(data.shopId, {
-  shopName: data.shopName,
-  ownerName: data.ownerName,
-  phone: data.phone,
-  adminUid: data.adminUid,
-  inviteCode: inviteCode,
-  active: true,
-  createdAt: Date.now()
-});
-
-  await createUserProfile(data.adminUid, {
-    shopId: data.shopId,
-    role: "admin",
-    name: data.ownerName,
-    phone: data.phone,
-    email: data.email
-  });
 }
 
 export async function getShopInformation(uid) {
