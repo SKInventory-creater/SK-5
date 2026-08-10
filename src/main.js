@@ -911,24 +911,49 @@ list.innerHTML = "";
 staff.forEach(user => {
 
   list.innerHTML += `
-  <div class="staff-card">
+    <article class="staff-card">
 
-    <b>${user.name}</b><br>
+      <div class="staff-avatar">
+        ${(user.name || "S").charAt(0).toUpperCase()}
+      </div>
 
-    📧 ${user.email}<br>
+      <div class="staff-info">
 
-    📱 ${user.phone}<br>
+        <div class="staff-name-row">
+          <div class="staff-name-block">
+            <h4>${user.name || "Staff"}</h4>
+            <span class="staff-role">
+              ${user.role || "Staff"}
+            </span>
+          </div>
 
-    Role : ${user.role}<br><br>
+          <span class="staff-active">
+            အသုံးပြုနေသည်
+          </span>
+        </div>
 
-    <button
-      class="deleteStaffBtn"
-      data-id="${user.uid}">
-      🗑 Delete
-    </button>
+        <div class="staff-contact">
+          <div>
+            <span class="staff-contact-icon">📧</span>
+            <span>${user.email || "-"}</span>
+          </div>
 
-  </div>
-`;
+          <div>
+            <span class="staff-contact-icon">📱</span>
+            <span>${user.phone || "-"}</span>
+          </div>
+        </div>
+
+        <button
+          class="deleteStaffBtn staff-delete-btn"
+          data-id="${user.uid}">
+          🗑️ Staff ဖျက်ရန်
+        </button>
+
+      </div>
+
+    </article>
+  `;
 
 });
 
