@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // =========================
-    // Helper Functions
+    // Helpers
     // =========================
 
     function signedIn() {
@@ -17,17 +17,24 @@ service cloud.firestore {
       ).data;
     }
 
+    function hasProfile() {
+      return signedIn()
+        && exists(
+          /databases/$(database)/documents/users/$(request.auth.uid)
+        );
+    }
+
     function myShopId() {
       return myProfile().shopId;
     }
 
     function isAdmin() {
-      return signedIn()
+      return hasProfile()
         && myProfile().role == "admin";
     }
 
     function isStaff() {
-      return signedIn()
+      return hasProfile()
         && myProfile().role == "staff";
     }
 
@@ -38,46 +45,46 @@ service cloud.firestore {
 
     match /users/{userId} {
 
-      // ကိုယ့် profile ကိုပဲ ဖတ်နိုင်
-      allow read: if signedIn()
+      // ကိုယ့် profile
+      allow get: if signedIn()
         && request.auth.uid == userId;
 
-      // Admin က ကိုယ့် shop ထဲက Staff တွေကို ဖတ်နိုင်
-      allow read: if isAdmin()
+      // Admin က ကိုယ့် shop ထဲက staff profile ကိုဖတ်နိုင်
+      allow list: if isAdmin()
         && resource.data.shopId == myShopId()
         && resource.data.role == "staff";
 
-
-      // Admin profile create
+      // Admin အသစ်ရဲ့ profile
+      // UID = shopId = admin UID
       allow create: if signedIn()
         && request.auth.uid == userId
+        && request.resource.data.uid == userId
         && request.resource.data.role == "admin"
         && request.resource.data.shopId == userId;
 
-
-      // Staff profile create
+      // Admin က staff profile ဖန်တီးနိုင်
       allow create: if isAdmin()
+        && request.resource.data.uid == userId
         && request.resource.data.role == "staff"
         && request.resource.data.shopId == myShopId();
 
-
       // ကိုယ့် profile update
-      // role / shopId မပြောင်းနိုင်
+      // role / shopId / uid မပြောင်းနိုင်
       allow update: if signedIn()
         && request.auth.uid == userId
+        && request.resource.data.uid == resource.data.uid
         && request.resource.data.role == resource.data.role
         && request.resource.data.shopId == resource.data.shopId;
 
-
-      // Admin က ကိုယ့် shop ထဲက Staff ကို update
+      // Admin က ကိုယ့် shop ထဲက staff ကို update
       allow update: if isAdmin()
         && resource.data.role == "staff"
         && resource.data.shopId == myShopId()
         && request.resource.data.role == "staff"
-        && request.resource.data.shopId == myShopId();
+        && request.resource.data.shopId == myShopId()
+        && request.resource.data.uid == resource.data.uid;
 
-
-      // Client က user account delete မလုပ်နိုင်
+      // Client က user profile delete မလုပ်နိုင်
       allow delete: if false;
     }
 
@@ -88,27 +95,41 @@ service cloud.firestore {
 
     match /shops/{shopId} {
 
-      // ကိုယ့် shop ကိုပဲ ဖတ်နိုင်
-      allow read: if signedIn()
-        && myShopId() == shopId;
+      // ကိုယ့် shop
+      allow get: if signedIn()
+        && (
+          (
+            shopId == request.auth.uid
+            && resource.data.adminUid == request.auth.uid
+          )
+          ||
+          (
+            hasProfile()
+            && myShopId() == shopId
+          )
+        );
 
+      // Shop name / invite code query
+      // Authenticated user များသာ query လုပ်နိုင်
+      allow list: if signedIn();
 
       // Shop အသစ် create
       // shopId = admin UID
       allow create: if signedIn()
         && request.auth.uid == shopId
         && request.resource.data.adminUid == request.auth.uid
-        && request.resource.data.active == true;
+        && request.resource.data.active == true
+        && request.resource.data.shopName is string
+        && request.resource.data.ownerName is string
+        && request.resource.data.inviteCode is string;
 
-
-      // Shop Admin က ကိုယ့် shop ကိုပဲ update
+      // ကိုယ့် shop ကိုပဲ update
       allow update: if isAdmin()
         && myShopId() == shopId
         && resource.data.adminUid == request.auth.uid
         && request.resource.data.adminUid == resource.data.adminUid;
 
-
-      // Client က shop delete မလုပ်နိုင်
+      // Shop delete ကို client က မလုပ်နိုင်
       allow delete: if false;
     }
 
