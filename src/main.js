@@ -378,60 +378,52 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
   const pickPhotoBtn =
     document.getElementById("pickPhotoBtn");
 
-  pickPhotoBtn.onclick = async () => {
+  if (pickPhotoBtn) {
+    pickPhotoBtn.onclick = async () => {
+      try {
 
-    try {
+        const photo = await pickPhoto();
 
-      const photo = await pickPhoto();
+        selectedPhoto = photo;
 
-      selectedPhoto = photo;
+        const preview =
+          document.getElementById("photoPreview");
 
-      let preview = document.getElementById("photoPreview");
+        if (preview) {
+          preview.src = photo.webPath;
+          preview.style.display = "block";
+        }
 
-if (!preview) {
-  const photoBox = document.querySelector(".edit-photo");
+      } catch (err) {
 
-  if (photoBox) {
-    photoBox.innerHTML = `
-      <img
-        id="photoPreview"
-        src="${photo.webPath}"
-        class="item-photo-img"
-      >
-    `;
+        console.error(err);
+
+        alert(
+          err.message ||
+          JSON.stringify(err)
+        );
+
+      }
+    };
   }
-} else {
-  preview.src = photo.webPath;
-  preview.style.display = "block";
-}
 
-    } catch (err) {
+  const saveBtn =
+    document.getElementById("saveItemEditBtn");
 
-      console.error(err);
-
-      alert(
-        err.message ||
-        JSON.stringify(err)
-      );
-
-    }
-
-  };
-
-  document.getElementById("saveItemEditBtn").onclick =
-    async () => {
+  if (saveBtn) {
+    saveBtn.onclick = async () => {
 
       try {
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = "သိမ်းနေသည်...";
 
         let photoUrl = item.photo || "";
 
         if (selectedPhoto) {
 
           photoUrl =
-            await saveItemPhoto(
-              selectedPhoto,
-              item.itemId
-            );
+            await photoToBase64(selectedPhoto);
 
         }
 
@@ -509,40 +501,132 @@ if (!preview) {
           JSON.stringify(err)
         );
 
+      } finally {
+
+        saveBtn.disabled = false;
+        saveBtn.textContent = "သိမ်းမည်";
+
+      }
+
+    };
+  }
+
+  const nextItemBtn =
+    document.getElementById("nextItemBtn");
+
+  if (nextItemBtn) {
+
+    nextItemBtn.onclick = async () => {
+
+      try {
+
+        const items =
+          await getItems(bundle.id);
+
+        const nextIndex =
+          itemIndex + 1;
+
+        /*
+         * ရှိပြီးသားအထည်ရှိရင်
+         * အဲဒီအထည်ကို တန်းသွား
+         */
+
+        if (nextIndex < items.length) {
+
+          await showItemEdit(
+            bundle,
+            items[nextIndex],
+            nextIndex
+          );
+
+          return;
+        }
+
+        /*
+         * နောက်ထပ်အထည် ဖန်တီးနိုင်မနိုင် စစ်
+         */
+
+        const nextNumber =
+          items.length + 1;
+
+        if (nextNumber > Number(bundle.qty)) {
+
+          alert("နောက်ဆုံးအထည် ဖြစ်ပါတယ်");
+
+          return;
+        }
+
+        const qty =
+          Number(bundle.qty || 1);
+
+        const totalCost =
+          Number(bundle.cost || 0);
+
+        const unitCost =
+          Math.floor(totalCost / qty);
+
+        const remainder =
+          totalCost - (unitCost * qty);
+
+        const itemCost =
+          nextNumber === qty
+            ? unitCost + remainder
+            : unitCost;
+
+        const itemId =
+          bundle.bundleCode +
+          String(nextNumber).padStart(3, "0");
+
+        await addItem({
+
+          bundleId: bundle.id,
+
+          itemId,
+
+          photo: "",
+
+          cost: itemCost,
+
+          price: 0,
+
+          note: ""
+
+        });
+
+        const newItems =
+          await getItems(bundle.id);
+
+        const newItem =
+          newItems.find(
+            i => i.itemId === itemId
+          );
+
+        if (!newItem) {
+          throw new Error(
+            "နောက်အထည် ဖန်တီး၍ မရပါ"
+          );
+        }
+
+        await showItemEdit(
+          bundle,
+          newItem,
+          newItems.length - 1
+        );
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert(
+          err.message ||
+          JSON.stringify(err)
+        );
+
       }
 
     };
 
-  const nextItemBtn = document.getElementById("nextItemBtn");
-
-if (nextItemBtn) {
-  nextItemBtn.onclick = async () => {
-    try {
-      const items = await getItems(bundle.id);
-
-      const nextIndex = itemIndex + 1;
-
-      if (nextIndex >= items.length) {
-        alert("နောက်ဆုံးအထည် ဖြစ်ပါတယ်");
-        return;
-      }
-
-      await showItemEdit(
-        bundle,
-        items[nextIndex],
-        nextIndex
-      );
-
-    } catch (err) {
-      console.error(err);
-
-      alert(
-        err.message ||
-        JSON.stringify(err)
-      );
-    }
-  };
-}
+  }
 
 }
 
@@ -605,53 +689,65 @@ if (!item) {
   const preview =
     document.getElementById("photoPreview");
 
-     document.getElementById("pickPhotoBtn").onclick = async () => {
+      document.getElementById("pickPhotoBtn").onclick = async () => {
 
-    try {
+  try {
 
-      const photo = await pickPhoto();
+    const photo = await pickPhoto();
 
-      selectedPhoto = photo;
+    const photoBase64 =
+      await photoToBase64(photo);
 
-      preview.src = photo.webPath;
+    selectedPhoto = photoBase64;
 
-      preview.style.display = "block";
+    preview.src = photoBase64;
+    preview.style.display = "block";
 
-      document.getElementById("photoEmpty").style.display = "none";
+    document.getElementById("photoEmpty")
+      .style.display = "none";
 
-    } catch (err) {
+  } catch (err) {
 
-      console.error(err);
+    console.error(err);
 
-      alert(err.message || JSON.stringify(err));
+    alert(
+      err.message ||
+      JSON.stringify(err)
+    );
 
-    }
+  }
 
-  };
+};
 
       document.getElementById("cameraPhotoBtn").onclick = async () => {
 
-    try {
+  try {
 
-      const photo = await takePhoto();
+    const photo = await takePhoto();
 
-      selectedPhoto = photo;
+    const photoBase64 =
+      await photoToBase64(photo);
 
-      preview.src = photo.webPath;
+    selectedPhoto = photoBase64;
 
-      preview.style.display = "block";
+    preview.src = photoBase64;
+    preview.style.display = "block";
 
-      document.getElementById("photoEmpty").style.display = "none";
+    document.getElementById("photoEmpty")
+      .style.display = "none";
 
-    } catch (err) {
+  } catch (err) {
 
-      console.error(err);
+    console.error(err);
 
-      alert(err.message || JSON.stringify(err));
+    alert(
+      err.message ||
+      JSON.stringify(err)
+    );
 
-    }
+  }
 
-  };
+};
 
       document.getElementById("backBtn").onclick = () => {
 
