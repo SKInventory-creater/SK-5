@@ -6,40 +6,23 @@ import {
 
 import { storage } from "../firebase/config.js";
 
-export async function saveItemPhoto(photo, itemId) {
+export async function saveItemPhoto(photo, itemId, onProgress = null) {
   if (!photo) {
     throw new Error("Photo မရှိပါ");
   }
 
-  console.log("PHOTO: fetch start");
-
   const response = await fetch(photo.webPath);
 
   if (!response.ok) {
-    throw new Error(
-      "Photo ဖတ်မရပါ: HTTP " + response.status
-    );
+    throw new Error("Photo ဖတ်မရပါ");
   }
 
   const blob = await response.blob();
-
-  console.log(
-    "PHOTO SIZE:",
-    Math.round(blob.size / 1024),
-    "KB",
-    "TYPE:",
-    blob.type
-  );
 
   const fileName =
     `items/${itemId}_${Date.now()}.jpg`;
 
   const storageRef = ref(storage, fileName);
-
-  console.log(
-    "PHOTO UPLOAD START:",
-    fileName
-  );
 
   const uploadTask = uploadBytesResumable(
     storageRef,
@@ -49,58 +32,33 @@ export async function saveItemPhoto(photo, itemId) {
     }
   );
 
-  const downloadURL = await new Promise(
-    (resolve, reject) => {
+  await new Promise((resolve, reject) => {
 
-      uploadTask.on(
-        "state_changed",
+    uploadTask.on(
+      "state_changed",
 
-        (snapshot) => {
-          const progress =
+      (snapshot) => {
+        const progress =
+          Math.round(
             (snapshot.bytesTransferred /
-              snapshot.totalBytes) * 100;
-
-          console.log(
-            "PHOTO UPLOAD:",
-            Math.round(progress) + "%"
-          );
-        },
-
-        (error) => {
-          console.error(
-            "PHOTO UPLOAD ERROR:",
-            error
+              snapshot.totalBytes) * 100
           );
 
-          reject(error);
-        },
-
-        async () => {
-          try {
-
-            console.log(
-              "PHOTO UPLOAD FINISHED:",
-              fileName
-            );
-
-            const url =
-              await getDownloadURL(storageRef);
-
-            console.log(
-              "PHOTO URL READY:",
-              url
-            );
-
-            resolve(url);
-
-          } catch (error) {
-            reject(error);
-          }
+        if (onProgress) {
+          onProgress(progress);
         }
-      );
+      },
 
-    }
-  );
+      (error) => {
+        reject(error);
+      },
 
-  return downloadURL;
+      () => {
+        resolve();
+      }
+    );
+
+  });
+
+  return await getDownloadURL(storageRef);
 }
