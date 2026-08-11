@@ -3596,80 +3596,290 @@ flex:1;
   background:#E7EFFD;
 }
 
-/* ===== Items Card Final Layout ===== */
+/* =========================================================
+   ITEMS CARD — CODE / COST / PRICE / NOTE / STATUS
+   ========================================================= */
 
-.items-page .item-card{
-  align-items:flex-start;
-  gap:12px;
-  padding:12px;
-  margin-bottom:10px;
+.items-page .item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px;
+
+  margin-bottom: 10px;
+
+  box-sizing: border-box;
 }
 
-.items-page .item-info{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  min-width:0;
+
+/* ================= PHOTO ================= */
+
+.items-page .item-photo {
+  width: 68px;
+  height: 68px;
+
+  flex: 0 0 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: #EEF4FF;
+
+  overflow: hidden;
+
+  font-size: 30px;
 }
 
-.items-page .item-top-row{
-  align-items:flex-start;
-  gap:12px;
+.items-page .item-photo-img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
 }
 
-.items-page .item-top-row h3{
-  font-size:18px;
+
+/* ================= INFORMATION ================= */
+
+.items-page .item-info {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
 }
 
-.items-page .item-price-row{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  gap:8px;
-  flex:0 0 auto;
-  white-space:nowrap;
+
+/* ================= TOP ROW ================= */
+
+.items-page .item-main-row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(70px, 1.25fr)
+    minmax(75px, 1fr)
+    minmax(85px, 1fr);
+
+  align-items: center;
+
+  gap: 8px;
 }
 
-.items-page .item-price-row span{
-  font-size:12px;
+
+/* ITEM CODE */
+
+.items-page .item-code {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
 }
 
-.items-page .item-price-row strong{
-  font-size:15px;
+.items-page .item-code span,
+.items-page .item-money span {
+  font-size: 11px;
+
+  color: #9AA5B5;
+
+  white-space: nowrap;
 }
 
-.items-page .item-note{
-  margin-bottom:4px;
-  line-height:1.35;
+.items-page .item-code strong {
+  font-size: 16px;
+
+  font-weight: 750;
+
+  color: #3F4C5E;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.items-page .item-status{
-  margin-top:2px;
+
+/* MONEY */
+
+.items-page .item-money {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
 }
 
-.items-page .item-status-text{
-  min-height:24px;
-  padding:3px 10px;
+.items-page .item-money strong {
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #4B596B;
+
+  white-space: nowrap;
 }
 
-@media (max-width:380px){
-  .items-page .item-card{
-    padding:11px;
-    gap:10px;
+
+/* SALE PRICE */
+
+.items-page .item-sale-price {
+  text-align: right;
+}
+
+.items-page .item-sale-price strong {
+  color: #4F7FE8;
+
+  font-size: 15px;
+}
+
+
+/* ================= BOTTOM ROW ================= */
+
+.items-page .item-bottom-row {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+
+/* NOTE */
+
+.items-page .item-note {
+  flex: 1;
+
+  min-width: 0;
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.35;
+
+  color: #8D98A8;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* STATUS */
+
+.items-page .item-status {
+  flex: 0 0 auto;
+
+  margin: 0;
+}
+
+.items-page .item-status-text {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 26px;
+
+  padding: 4px 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 14px;
+
+  font-size: 12px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  background: #F3F5F8;
+
+  color: #8D98A8;
+}
+
+
+/* ================= STATUS COLORS ================= */
+
+.items-page .item-status-text[data-status="sold"] {
+  background: #EEF4FF;
+  color: #4F7FE8;
+}
+
+.items-page .item-status-text[data-status="unsold"] {
+  background: #EEF9F2;
+  color: #4E9B68;
+}
+
+.items-page .item-status-text[data-status="reserved"] {
+  background: #FFF5EA;
+  color: #D88A3D;
+}
+
+
+/* ================= SMALL SCREEN ================= */
+
+@media (max-width: 380px) {
+
+  .items-page .item-card {
+    gap: 9px;
+    padding: 10px;
   }
 
-  .items-page .item-photo{
-    width:58px;
-    height:58px;
-    flex-basis:58px;
+  .items-page .item-photo {
+    width: 58px;
+    height: 58px;
+
+    flex-basis: 58px;
+
+    border-radius: 15px;
   }
 
-  .items-page .item-price-row{
-    gap:6px;
+  .items-page .item-main-row {
+    grid-template-columns:
+      minmax(62px, 1.2fr)
+      minmax(68px, 1fr)
+      minmax(78px, 1fr);
+
+    gap: 5px;
   }
 
-  .items-page .item-price-row strong{
-    font-size:14px;
+  .items-page .item-code strong {
+    font-size: 14px;
+  }
+
+  .items-page .item-money strong {
+    font-size: 12px;
+  }
+
+  .items-page .item-sale-price strong {
+    font-size: 13px;
+  }
+
+  .items-page .item-note {
+    font-size: 12px;
+  }
+
+  .items-page .item-status-text {
+    padding: 3px 8px;
+
+    font-size: 11px;
   }
 }
 

@@ -159,73 +159,70 @@ export default function ItemsPage(bundle, items) {
                           : "🔵 ရောင်းပြီး";
 
                   return `
-                    <div class="item-card">
+                                          <div class="item-card">
 
-                      <!-- PHOTO -->
+                        <!-- PHOTO -->
+                        <div class="item-photo">
+                          ${
+                            item.photo
+                              ? `
+                                <img
+                                  src="${item.photo}"
+                                  class="item-photo-img"
+                                  alt="${item.itemId || "Item"}"
+                                >
+                              `
+                              : "📦"
+                          }
+                        </div>
 
-                      <div class="item-photo">
+                        <!-- ITEM CONTENT -->
+                        <div class="item-info">
 
-                        ${
-                          item.photo
-                            ? `
-                              <img
-                                src="${item.photo}"
-                                class="item-photo-img"
-                                alt="${item.itemId || "Item"}"
+                          <!-- TOP ROW -->
+                          <div class="item-main-row">
+
+                            <!-- ITEM CODE -->
+                            <div class="item-code">
+                              <span>ကုတ်</span>
+                              <strong>${item.itemId || "—"}</strong>
+                            </div>
+
+                            <!-- COST -->
+                            <div class="item-money">
+                              <span>အရင်း</span>
+                              <strong>
+                                ${Number(item.cost || 0).toLocaleString()} ကျပ်
+                              </strong>
+                            </div>
+
+                            <!-- PRICE -->
+                            <div class="item-money item-sale-price">
+                              <span>ရောင်းစျေး</span>
+                              <strong>
+                                ${Number(item.price || 0).toLocaleString()} ကျပ်
+                              </strong>
+                            </div>
+
+                          </div>
+
+                          <!-- BOTTOM ROW -->
+                          <div class="item-bottom-row">
+
+                            <!-- NOTE -->
+                            <p class="item-note">
+                              ${item.note || "မှတ်ချက် မရှိ"}
+                            </p>
+
+                            <!-- STATUS -->
+                            <div class="item-status">
+                              <span
+                                class="item-status-text"
+                                data-status="${status}"
                               >
-                            `
-                            : "📦"
-                        }
-
-                      </div>
-
-
-                      <!-- ITEM INFORMATION -->
-
-                      <div class="item-info">
-
-                        <!-- TOP -->
-
-                        <div class="item-top-row">
-
-                          <h3>
-                            ${item.itemId || ""}
-                          </h3>
-
-                          <div class="item-price-row">
-
-                            <span>
-                              အရင်း
-                              ${Number(item.cost || 0).toLocaleString()}
-                              ကျပ်
-                            </span>
-
-                            <strong>
-                              ${Number(item.price || 0).toLocaleString()}
-                              ကျပ်
-                            </strong>
-
-                          </div>
-
-                        </div>
-
-
-                        <!-- BOTTOM -->
-
-                        <div class="item-bottom-row">
-
-                          <p class="item-note">
-                            ${item.note || "မှတ်ချက် မရှိ"}
-                          </p>
-
-                          <div class="item-status">
-
-                            <span
-                              class="item-status-text"
-                              data-status="${status}"
-                            >
-                              ${statusText}
-                            </span>
+                                ${statusText}
+                              </span>
+                            </div>
 
                           </div>
 
@@ -233,7 +230,6 @@ export default function ItemsPage(bundle, items) {
 
                       </div>
 
-                    </div>
                   `;
                 })
                 .join("")
