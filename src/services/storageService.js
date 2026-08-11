@@ -22,17 +22,17 @@ export async function saveItemPhoto(photo, itemId) {
 
   const storageRef = ref(storage, fileName);
 
-  alert("Upload စမယ်");
+  console.log("PHOTO UPLOAD START:", fileName);
 
   await uploadBytes(storageRef, blob, {
     contentType: "image/jpeg"
   });
 
-  alert("Upload ပြီးပြီ");
+  console.log("PHOTO UPLOAD FINISHED:", fileName);
 
   const downloadURL = await getDownloadURL(storageRef);
 
-  alert("URL ရပြီ");
+  console.log("PHOTO URL READY:", downloadURL);
 
   return downloadURL;
 }
