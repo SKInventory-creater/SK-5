@@ -9,11 +9,12 @@ export async function saveItemPhoto(photo, itemId) {
   const response = await fetch(photo.webPath);
   const blob = await response.blob();
 
-  console.log(
-    "PHOTO SIZE:",
-    Math.round(blob.size / 1024),
-    "KB",
-    "TYPE:",
+  alert(
+    "Photo ရပြီ\n" +
+    "Size: " +
+    Math.round(blob.size / 1024) +
+    " KB\n" +
+    "Type: " +
     blob.type
   );
 
@@ -21,17 +22,17 @@ export async function saveItemPhoto(photo, itemId) {
 
   const storageRef = ref(storage, fileName);
 
-  console.log("PHOTO UPLOAD START:", fileName);
+  alert("Upload စမယ်");
 
   await uploadBytes(storageRef, blob, {
     contentType: "image/jpeg"
   });
 
-  console.log("PHOTO UPLOAD FINISHED:", fileName);
+  alert("Upload ပြီးပြီ");
 
   const downloadURL = await getDownloadURL(storageRef);
 
-  console.log("PHOTO URL READY:", downloadURL);
+  alert("URL ရပြီ");
 
   return downloadURL;
 }
