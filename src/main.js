@@ -670,8 +670,14 @@ saveBtn.onclick = async () => {
       saveBtn.disabled = true;
       saveBtn.textContent = "ပုံတင်နေသည်...";
 
-      photoUrl =
-  await saveItemPhoto(selectedPhoto, item.itemId);
+      photoUrl = await saveItemPhoto(
+  selectedPhoto,
+  item.itemId,
+  (progress) => {
+    saveBtn.textContent =
+      `ပုံတင်နေသည်... ${progress}%`;
+  }
+);
 }
 
     const status =
