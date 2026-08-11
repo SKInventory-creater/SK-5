@@ -1,4 +1,3 @@
-import { addItem } from "./itemService.js";
 import { initDatabase } from "../database/init.js";
 import { getCurrentUser } from "../firebase/auth.js";
 
@@ -89,33 +88,6 @@ export async function addBundle(bundle) {
       "Cloud bundle sync failed:",
       err
     );
-  }
-
-  // =========================================
-  // 3. GENERATE ITEMS
-  // =========================================
-
-  const unitCost = Math.floor(cost / qty);
-  const remainder = cost - (unitCost * qty);
-
-  for (let i = 1; i <= qty; i++) {
-    await addItem({
-      bundleId: localBundleId,
-
-      itemId:
-        bundle.bundleCode +
-        String(i).padStart(3, "0"),
-
-      photo: "",
-
-      cost:
-        i === qty
-          ? unitCost + remainder
-          : unitCost,
-
-      price: 0,
-      note: ""
-    });
   }
 
   return {

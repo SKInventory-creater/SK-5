@@ -10,7 +10,7 @@ import ItemsPage from "./pages/ItemsPage.js";
 import { getBundles } from "./services/bundleService.js";
 import AddItemPage from "./pages/AddItemPage.js";
 import ItemEditPage from "./pages/ItemEditPage.js";
-import { getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
+import { addItem, getItems, updateItem, getTotalProfit, searchItems } from "./services/itemService.js";
 import ReportsPage from "./pages/ReportsPage.js";
 import DailyReportPage from "./pages/DailyReportPage.js";
 import { calculateReportStats, calculateDailyReport, calculateMonthlyReport } from "./services/reportService.js";
@@ -549,14 +549,50 @@ async function showItemForm(bundle, editItem = null) {
 
   const items = await getItems(bundle.id);
 
-  const item =
-    editItem ||
-    items.find(i => Number(i.price) === 0);
+let item = editItem || items.find(i => Number(i.price) === 0);
 
-  if (!item) {
+if (!item) {
+  const nextNumber = items.length + 1;
+
+  if (nextNumber > Number(bundle.qty)) {
     alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
     return showItems(bundle);
   }
+
+  const unitCost =
+    Math.floor(Number(bundle.cost || 0) / Number(bundle.qty || 1));
+
+  const remainder =
+    Number(bundle.cost || 0) -
+    (unitCost * Number(bundle.qty || 1));
+
+  const itemCost =
+    nextNumber === Number(bundle.qty)
+      ? unitCost + remainder
+      : unitCost;
+
+  const itemId =
+    bundle.bundleCode +
+    String(nextNumber).padStart(3, "0");
+
+  await addItem({
+    bundleId: bundle.id,
+    itemId,
+    photo: "",
+    cost: itemCost,
+    price: 0,
+    note: ""
+  });
+
+  const updatedItems = await getItems(bundle.id);
+
+  item =
+    updatedItems.find(i => i.itemId === itemId);
+
+  if (!item) {
+    throw new Error("အထည်အသစ် ဖန်တီး၍ မရပါ");
+  }
+}
 
   const isEdit = editItem !== null;
 
