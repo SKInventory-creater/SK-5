@@ -689,64 +689,46 @@ if (!item) {
   const preview =
     document.getElementById("photoPreview");
 
-      document.getElementById("pickPhotoBtn").onclick = async () => {
-
+    document.getElementById("pickPhotoBtn").onclick = async () => {
   try {
-
     const photo = await pickPhoto();
 
-    const photoBase64 =
-      await photoToBase64(photo);
+    selectedPhoto = photo;
 
-    selectedPhoto = photoBase64;
-
-    preview.src = photoBase64;
+    preview.src = photo.webPath;
     preview.style.display = "block";
 
-    document.getElementById("photoEmpty")
-      .style.display = "none";
+    document.getElementById("photoEmpty").style.display = "none";
 
   } catch (err) {
-
     console.error(err);
 
     alert(
       err.message ||
       JSON.stringify(err)
     );
-
   }
-
 };
 
-      document.getElementById("cameraPhotoBtn").onclick = async () => {
-
+    document.getElementById("cameraPhotoBtn").onclick = async () => {
   try {
-
     const photo = await takePhoto();
 
-    const photoBase64 =
-      await photoToBase64(photo);
+    selectedPhoto = photo;
 
-    selectedPhoto = photoBase64;
-
-    preview.src = photoBase64;
+    preview.src = photo.webPath;
     preview.style.display = "block";
 
-    document.getElementById("photoEmpty")
-      .style.display = "none";
+    document.getElementById("photoEmpty").style.display = "none";
 
   } catch (err) {
-
     console.error(err);
 
     alert(
       err.message ||
       JSON.stringify(err)
     );
-
   }
-
 };
 
       document.getElementById("backBtn").onclick = () => {

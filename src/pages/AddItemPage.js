@@ -22,30 +22,34 @@ export default function AddItemPage(bundle, item) {
 
             <div class="photo-box">
 
-        <div class="photo-preview">
+        <div class="photo-preview" id="photoPreviewBox">
 
-          <img
-            id="photoPreview"
-            src="${item.photo || ""}"
-            alt="အထည်ပုံ"
-            style="
-              width:100%;
-              height:100%;
-              object-fit:cover;
-              display:${item.photo ? "block" : "none"};
-            "
-          >
+  <img
+    id="photoPreview"
+    src="${item.photo || ""}"
+    alt="အထည်ပုံ"
+    style="
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:${item.photo ? "block" : "none"};
+    "
+  >
 
-          <span
-            id="photoEmpty"
-            style="
-              display:${item.photo ? "none" : "flex"};
-            "
-          >
-            ပုံမရှိသေး
-          </span>
+  <span
+    id="photoEmpty"
+    style="
+      display:${item.photo ? "none" : "flex"};
+      width:100%;
+      height:100%;
+      align-items:center;
+      justify-content:center;
+    "
+  >
+    📷 ပုံမရှိသေးပါ
+  </span>
 
-        </div>
+</div>
 
         <div class="photo-buttons">
 
