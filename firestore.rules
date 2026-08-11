@@ -133,6 +133,54 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+// =========================
+// BUNDLES
+// =========================
+
+match /bundles/{bundleId} {
+
+  allow read: if signedIn()
+    && hasProfile()
+    && resource.data.shopId == myShopId();
+
+  allow create: if signedIn()
+    && hasProfile()
+    && request.resource.data.shopId == myShopId();
+
+  allow update: if signedIn()
+    && hasProfile()
+    && resource.data.shopId == myShopId()
+    && request.resource.data.shopId == myShopId();
+
+  allow delete: if signedIn()
+    && isAdmin()
+    && resource.data.shopId == myShopId();
+}
+
+
+// =========================
+// ITEMS
+// =========================
+
+match /items/{itemId} {
+
+  allow read: if signedIn()
+    && hasProfile()
+    && resource.data.shopId == myShopId();
+
+  allow create: if signedIn()
+    && hasProfile()
+    && request.resource.data.shopId == myShopId();
+
+  allow update: if signedIn()
+    && hasProfile()
+    && resource.data.shopId == myShopId()
+    && request.resource.data.shopId == myShopId();
+
+  allow delete: if signedIn()
+    && isAdmin()
+    && resource.data.shopId == myShopId();
+}
 
     // =========================
     // BACKUPS

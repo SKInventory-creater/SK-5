@@ -46,28 +46,29 @@ export async function restoreLocalData(data) {
     );
   }
 
-  // Items ပြန်ထည့်
-  for (const item of data.items || []) {
-    await db.run(
-      `
-      INSERT INTO items
-      (id, bundleId, itemId, photo, cost, price,
-       unsold, removed, note, soldAt, createdAt)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
-      [
-        item.id,
-        item.bundleId,
-        item.itemId,
-        item.photo,
-        item.cost,
-        item.price,
-        item.unsold,
-        item.removed,
-        item.note,
-        item.soldAt,
-        item.createdAt
-      ]
-    );
-  }
+      // Items ပြန်ထည့်
+    for (const item of data.items || []) {
+      await db.run(
+        `
+        INSERT INTO items
+        (id, shopId, bundleId, itemId, photo, cost, price,
+         unsold, removed, note, soldAt, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          item.id,
+          item.shopId,
+          item.bundleId,
+          item.itemId,
+          item.photo || "",
+          item.cost || 0,
+          item.price || 0,
+          item.unsold ?? 1,
+          item.removed ?? 0,
+          item.note || "",
+          item.soldAt || null,
+          item.createdAt || Date.now()
+        ]
+      );
+    }
 }

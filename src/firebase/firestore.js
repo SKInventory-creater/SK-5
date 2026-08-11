@@ -174,3 +174,174 @@ export async function getShopByName(shopName) {
     ...snap.docs[0].data()
   };
 }
+
+// =========================
+// BUNDLES
+// =========================
+
+export async function createBundle(bundleId, data) {
+  const bundleRef = doc(db, "bundles", bundleId);
+
+  await setDoc(bundleRef, {
+    shopId: data.shopId,
+    bundleId,
+    bundleCode: data.bundleCode,
+    bundleName: data.bundleName,
+    qty: Number(data.qty || 0),
+    cost: Number(data.cost || 0),
+    createdAt: data.createdAt || Date.now()
+  });
+
+  const snap = await getDoc(bundleRef);
+
+  if (!snap.exists()) {
+    throw new Error(
+      "Bundle Firestore ထဲ မတွေ့ပါ\n\n" +
+      "Path: bundles/" + bundleId
+    );
+  }
+
+  console.log(
+    "BUNDLE CREATED:",
+    "bundles/" + bundleId
+  );
+
+  return {
+    id: snap.id,
+    ...snap.data()
+  };
+}
+
+
+export async function getBundlesByShop(shopId) {
+  const q = query(
+    collection(db, "bundles"),
+    where("shopId", "==", shopId)
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map(item => ({
+    id: item.id,
+    ...item.data()
+  }));
+}
+
+
+export async function deleteBundleCloud(bundleId) {
+  await deleteDoc(
+    doc(db, "bundles", bundleId)
+  );
+}
+
+
+// =========================
+// ITEMS
+// =========================
+
+export async function createItem(itemId, data) {
+  const itemRef = doc(db, "items", itemId);
+
+  await setDoc(itemRef, {
+    shopId: data.shopId,
+    bundleId: data.bundleId,
+    itemId,
+    photo: data.photo || "",
+    cost: Number(data.cost || 0),
+    price: Number(data.price || 0),
+    unsold: Number(data.unsold ?? 1),
+    removed: Number(data.removed ?? 0),
+    note: data.note || "",
+    soldAt: data.soldAt || null,
+    createdAt: data.createdAt || Date.now()
+  });
+
+  const snap = await getDoc(itemRef);
+
+  if (!snap.exists()) {
+    throw new Error(
+      "Item Firestore ထဲ မတွေ့ပါ\n\n" +
+      "Path: items/" + itemId
+    );
+  }
+
+  console.log(
+    "ITEM CREATED:",
+    "items/" + itemId
+  );
+
+  return {
+    id: snap.id,
+    ...snap.data()
+  };
+}
+
+
+export async function getItemsByShop(shopId) {
+  const q = query(
+    collection(db, "items"),
+    where("shopId", "==", shopId)
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map(item => ({
+    id: item.id,
+    ...item.data()
+  }));
+}
+
+
+export async function getItemsByBundle(bundleId, shopId) {
+  const q = query(
+    collection(db, "items"),
+    where("shopId", "==", shopId),
+    where("bundleId", "==", bundleId)
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map(item => ({
+    id: item.id,
+    ...item.data()
+  }));
+}
+
+
+export async function updateItemCloud(itemId, data) {
+  const itemRef = doc(db, "items", itemId);
+
+  await setDoc(
+    itemRef,
+    {
+      shopId: data.shopId,
+      bundleId: data.bundleId,
+      itemId,
+      photo: data.photo || "",
+      cost: Number(data.cost || 0),
+      price: Number(data.price || 0),
+      unsold: Number(data.unsold ?? 1),
+      removed: Number(data.removed ?? 0),
+      note: data.note || "",
+      soldAt: data.soldAt || null,
+      createdAt: data.createdAt || Date.now()
+    },
+    { merge: true }
+  );
+
+  const snap = await getDoc(itemRef);
+
+  return snap.exists()
+    ? {
+        id: snap.id,
+        ...snap.data()
+      }
+    : null;
+}
+
+
+export async function deleteItemCloud(itemId) {
+  await deleteDoc(
+    doc(db, "items", itemId)
+  );
+}

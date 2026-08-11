@@ -1,53 +1,141 @@
 import { initDatabase } from "../database/init.js";
 import { getCurrentUser } from "../firebase/auth.js";
-import { getUserProfile } from "../firebase/firestore.js";
+import {
+  getUserProfile,
+  createItem
+} from "../firebase/firestore.js";
 
 export async function addItem(item) {
   const db = await initDatabase();
 
-  await db.run(
-    `
-    INSERT INTO items
-    (
-      bundleId,
-      itemId,
-      photo,
-      cost,
-      price,
-      unsold,
-      removed,
-      note,
-      createdAt
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `,
-    [
-      item.bundleId,
-      item.itemId,
-      item.photo,
-      item.cost,
-      item.price,
-      1,
-      0,
-      item.note,
-      Date.now()
-    ]
+  const user = getCurrentUser();
+
+  if (!user) {
+    throw new Error("User is not logged in");
+  }
+
+  const profile = await getUserProfile(user.uid);
+
+  if (!profile?.shopId) {
+    throw new Error("Shop Profile မတွေ့ပါ");
+  }
+
+  const createdAt = Date.now();
+
+const result = await db.run(
+  `
+  INSERT INTO items
+  (
+    shopId,
+    bundleId,
+    itemId,
+    photo,
+    cost,
+    price,
+    unsold,
+    removed,
+    note,
+    createdAt
+  )
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `,
+  [
+    profile.shopId,
+    item.bundleId,
+    item.itemId,
+    item.photo || "",
+    Number(item.cost || 0),
+    Number(item.price || 0),
+    1,
+    0,
+    item.note || "",
+    createdAt
+  ]
+);
+
+const localItemId = result.changes.lastId;
+
+// Firestore Item ID
+const cloudItemId =
+  `${profile.shopId}_${item.itemId}`;
+
+try {
+  await createItem(cloudItemId, {
+    shopId: profile.shopId,
+    bundleId: item.cloudBundleId || "",
+    itemId: item.itemId,
+    photo: item.photo || "",
+    cost: Number(item.cost || 0),
+    price: Number(item.price || 0),
+    unsold: 1,
+    removed: 0,
+    note: item.note || "",
+    soldAt: null,
+    createdAt
+  });
+
+  console.log(
+    "CLOUD ITEM CREATED:",
+    cloudItemId
   );
+
+} catch (err) {
+  // Internet မရှိရင် Local data ကို မဖျက်ပါ
+  console.warn(
+    "Cloud item sync failed:",
+    err
+  );
+}
+
+return {
+  id: localItemId,
+  shopId: profile.shopId,
+  bundleId: item.bundleId,
+  itemId: item.itemId,
+  photo: item.photo || "",
+  cost: Number(item.cost || 0),
+  price: Number(item.price || 0),
+  unsold: 1,
+  removed: 0,
+  note: item.note || "",
+  soldAt: null,
+  createdAt
+};
 }
 
 export async function generateItems(bundle) {
   const db = await initDatabase();
 
-  for (let i = 1; i <= Number(bundle.qty); i++) {
+  if (!bundle?.shopId) {
+    throw new Error("Bundle shopId မတွေ့ပါ");
+  }
+
+  const qty = Number(bundle.qty || 0);
+
+  if (qty <= 0) {
+    throw new Error("Bundle အရေအတွက် မမှန်ပါ");
+  }
+
+  const unitCost = Math.floor(Number(bundle.cost || 0) / qty);
+  const remainder =
+    Number(bundle.cost || 0) - (unitCost * qty);
+
+  for (let i = 1; i <= qty; i++) {
 
     const itemId =
       bundle.bundleCode +
       String(i).padStart(3, "0");
 
+    const itemCost =
+      i === qty
+        ? unitCost + remainder
+        : unitCost;
+
     await db.run(
       `
       INSERT INTO items
       (
+        shopId,
         bundleId,
         itemId,
         photo,
@@ -58,13 +146,14 @@ export async function generateItems(bundle) {
         note,
         createdAt
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
+        bundle.shopId,
         bundle.id,
         itemId,
         "",
-        0,
+        itemCost,
         0,
         1,
         0,
@@ -72,7 +161,6 @@ export async function generateItems(bundle) {
         Date.now()
       ]
     );
-
   }
 }
 
