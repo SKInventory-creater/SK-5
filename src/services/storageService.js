@@ -1,4 +1,9 @@
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL
+} from "firebase/storage";
+
 import { storage } from "../firebase/config.js";
 
 export async function saveItemPhoto(photo, itemId) {
@@ -6,33 +11,96 @@ export async function saveItemPhoto(photo, itemId) {
     throw new Error("Photo မရှိပါ");
   }
 
+  console.log("PHOTO: fetch start");
+
   const response = await fetch(photo.webPath);
+
+  if (!response.ok) {
+    throw new Error(
+      "Photo ဖတ်မရပါ: HTTP " + response.status
+    );
+  }
+
   const blob = await response.blob();
 
-  alert(
-    "Photo ရပြီ\n" +
-    "Size: " +
-    Math.round(blob.size / 1024) +
-    " KB\n" +
-    "Type: " +
+  console.log(
+    "PHOTO SIZE:",
+    Math.round(blob.size / 1024),
+    "KB",
+    "TYPE:",
     blob.type
   );
 
-  const fileName = `items/${itemId}_${Date.now()}.jpg`;
+  const fileName =
+    `items/${itemId}_${Date.now()}.jpg`;
 
   const storageRef = ref(storage, fileName);
 
-  console.log("PHOTO UPLOAD START:", fileName);
+  console.log(
+    "PHOTO UPLOAD START:",
+    fileName
+  );
 
-  await uploadBytes(storageRef, blob, {
-    contentType: "image/jpeg"
-  });
+  const uploadTask = uploadBytesResumable(
+    storageRef,
+    blob,
+    {
+      contentType: "image/jpeg"
+    }
+  );
 
-  console.log("PHOTO UPLOAD FINISHED:", fileName);
+  const downloadURL = await new Promise(
+    (resolve, reject) => {
 
-  const downloadURL = await getDownloadURL(storageRef);
+      uploadTask.on(
+        "state_changed",
 
-  console.log("PHOTO URL READY:", downloadURL);
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred /
+              snapshot.totalBytes) * 100;
+
+          console.log(
+            "PHOTO UPLOAD:",
+            Math.round(progress) + "%"
+          );
+        },
+
+        (error) => {
+          console.error(
+            "PHOTO UPLOAD ERROR:",
+            error
+          );
+
+          reject(error);
+        },
+
+        async () => {
+          try {
+
+            console.log(
+              "PHOTO UPLOAD FINISHED:",
+              fileName
+            );
+
+            const url =
+              await getDownloadURL(storageRef);
+
+            console.log(
+              "PHOTO URL READY:",
+              url
+            );
+
+            resolve(url);
+
+          } catch (error) {
+            reject(error);
+          }
+        }
+      );
+
+    }
+  );
 
   return downloadURL;
 }
