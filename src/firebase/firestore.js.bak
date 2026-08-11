@@ -1,0 +1,152 @@
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
+} from "firebase/firestore";
+
+import { app } from "./config.js";
+import { deleteDoc } from "firebase/firestore";
+
+export const db = getFirestore(app);
+
+export async function createUserProfile(uid, data) {
+  const userRef = doc(db, "users", uid);
+
+  console.log("=== CREATE USER PROFILE ===");
+  console.log("UID:", uid);
+  console.log("Path:", "users/" + uid);
+
+  try {
+    await setDoc(userRef, {
+      uid,
+      shopId: data.shopId,
+      role: data.role,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      active: true,
+      createdAt: Date.now()
+    });
+
+    console.log(
+      "USER PROFILE setDoc OK:",
+      "users/" + uid
+    );
+
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+      throw new Error(
+        "User Profile create ပြီးသော်လည်း မတွေ့ပါ"
+      );
+    }
+
+    console.log(
+      "USER PROFILE CREATED:",
+      snap.data()
+    );
+
+    return snap.data();
+
+  } catch (err) {
+    console.error("USER PROFILE CREATE FAILED");
+    console.error("code:", err?.code);
+    console.error("message:", err?.message);
+
+    throw err;
+  }
+}
+
+export async function getUserProfile(uid) {
+  console.log("=== GET USER PROFILE ===");
+  console.log("UID:", uid);
+  console.log("Path:", "users/" + uid);
+
+  try {
+    const userRef = doc(db, "users", uid);
+    const snap = await getDoc(userRef);
+
+    console.log("Profile exists:", snap.exists());
+
+    if (snap.exists()) {
+      console.log("Profile data:", snap.data());
+      return snap.data();
+    }
+
+    console.error("USER PROFILE NOT FOUND:", "users/" + uid);
+    return null;
+
+  } catch (err) {
+    console.error("GET USER PROFILE FAILED");
+    console.error("code:", err?.code);
+    console.error("message:", err?.message);
+    throw err;
+  }
+}
+
+export async function getShopByInviteCode(inviteCode) {
+
+  const q = query(
+    collection(db, "shops"),
+    where("inviteCode", "==", inviteCode)
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    return null;
+  }
+
+  return {
+    id: snap.docs[0].id,
+    ...snap.docs[0].data()
+  };
+
+}
+
+export async function getStaffList(shopId) {
+
+  const q = query(
+    collection(db, "users"),
+    where("shopId", "==", shopId),
+    where("role", "==", "staff")
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map(doc => ({
+    uid: doc.id,
+    ...doc.data()
+  }));
+
+}
+
+export async function deleteStaff(uid) {
+  await deleteDoc(
+    doc(db, "users", uid)
+  );
+}
+
+export async function getShopByName(shopName) {
+
+  const q = query(
+    collection(db, "shops"),
+    where("shopName", "==", shopName.trim())
+  );
+
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    return null;
+  }
+
+  return {
+    id: snap.docs[0].id,
+    ...snap.docs[0].data()
+  };
+}

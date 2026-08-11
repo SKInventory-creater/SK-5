@@ -166,11 +166,22 @@ function showLogin() {
 
     const user = currentUser();
 
-    const profile = await currentUserProfile();
+console.log("=== LOGIN USER ===");
+console.log("Auth UID:", user?.uid);
+console.log("Email:", user?.email);
 
-    if (!profile) {
-      throw new Error("User Profile မတွေ့ပါ");
-    }
+const profile = await currentUserProfile();
+
+console.log("=== LOGIN PROFILE RESULT ===");
+console.log("Profile:", profile);
+
+if (!profile) {
+  throw new Error(
+    "User Profile မတွေ့ပါ\n\n" +
+    "UID: " + (user?.uid || "မရှိပါ") + "\n" +
+    "Path: users/" + (user?.uid || "မရှိပါ")
+  );
+}
 
     // ===== Auto Restore =====
     try {
@@ -264,14 +275,16 @@ function showRegister() {
 
     const uid = credential.user.uid;
 
-    await createShopAccount({
-      shopId: uid,
-      adminUid: uid,
-      shopName,
-      ownerName,
-      phone,
-      email
-    });
+    const profile = await createShopAccount({
+  shopId: uid,
+  adminUid: uid,
+  shopName,
+  ownerName,
+  phone,
+  email
+});
+
+await showDashboard(profile);
 
     // Create အောင်မြင်ပြီးတာနဲ့ Dashboard တန်းဝင်
     btn.textContent = "ပြီးပါပြီ...";
