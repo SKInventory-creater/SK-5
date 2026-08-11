@@ -26,6 +26,7 @@ import ShopInformationPage from "./pages/ShopInformationPage.js";
 import { getShopInformation } from "./services/shopService.js";
 import StaffManagementPage from "./pages/StaffManagementPage.js";
 import StaffRegisterPage from "./pages/StaffRegisterPage.js";
+import { photoToBase64 } from "./services/localPhotoService.js";
 
 import { loginUser, registerUser, logoutUser, currentUser, currentUserProfile, createStaffAccount } from "./services/authService.js";
 
@@ -667,17 +668,12 @@ saveBtn.onclick = async () => {
 
     if (selectedPhoto) {
 
-      saveBtn.disabled = true;
-      saveBtn.textContent = "ပုံတင်နေသည်...";
+  saveBtn.disabled = true;
+  saveBtn.textContent = "ပုံသိမ်းနေသည်...";
 
-      photoUrl = await saveItemPhoto(
-  selectedPhoto,
-  item.itemId,
-  (progress) => {
-    saveBtn.textContent =
-      `ပုံတင်နေသည်... ${progress}%`;
-  }
-);
+  photoUrl = await photoToBase64(selectedPhoto);
+
+  saveBtn.textContent = "ပုံသိမ်းနေသည်... 100%";
 }
 
     const status =
