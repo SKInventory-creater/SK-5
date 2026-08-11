@@ -68,11 +68,6 @@ export async function getShop(shopId) {
 export async function createUserProfile(uid, data) {
   const userRef = doc(db, "users", uid);
 
-  console.log(
-    "CREATE USER PROFILE:",
-    "users/" + uid
-  );
-
   await setDoc(userRef, {
     uid,
     shopId: data.shopId,
@@ -100,7 +95,6 @@ export async function createUserProfile(uid, data) {
 
   return snap.data();
 }
-
 
 export async function getUserProfile(uid) {
   const snap = await getDoc(

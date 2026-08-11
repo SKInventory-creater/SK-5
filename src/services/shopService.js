@@ -16,8 +16,6 @@ export async function createShopAccount(data) {
 
   try {
     // 1. Shop name စစ်
-    console.log("STEP 1: getShopByName");
-
     const existingShop = await getShopByName(data.shopName);
 
     if (existingShop) {
@@ -29,8 +27,29 @@ export async function createShopAccount(data) {
       .substring(2, 8)
       .toUpperCase();
 
-    // 2. Shop create
-    console.log("STEP 2: createShop");
+    // =====================================
+    // 2. USER PROFILE ကို အရင်ဖန်တီး
+    // =====================================
+
+    console.log("STEP 2: createUserProfile");
+    console.log("users/" + data.adminUid);
+
+    const profile = await createUserProfile(data.adminUid, {
+      shopId: data.shopId,
+      role: "admin",
+      name: data.ownerName,
+      phone: data.phone,
+      email: data.email
+    });
+
+    console.log("STEP 2 OK: User profile created");
+    console.log("PROFILE:", profile);
+
+    // =====================================
+    // 3. SHOP ကို ဖန်တီး
+    // =====================================
+
+    console.log("STEP 3: createShop");
 
     await createShop(data.shopId, {
       shopName: data.shopName,
@@ -42,37 +61,25 @@ export async function createShopAccount(data) {
       createdAt: Date.now()
     });
 
-    console.log("STEP 2 OK: Shop created");
+    console.log("STEP 3 OK: Shop created");
 
-    // 3. User profile create
-    console.log("STEP 3: createUserProfile");
-    console.log("users/" + data.adminUid);
+    // =====================================
+    // 4. Profile ကို ပြန်စစ်
+    // =====================================
 
-    await createUserProfile(data.adminUid, {
-      shopId: data.shopId,
-      role: "admin",
-      name: data.ownerName,
-      phone: data.phone,
-      email: data.email
-    });
+    const verifyProfile =
+      await getUserProfile(data.adminUid);
 
-    console.log("STEP 3 OK: User profile created");
-
-    // 4. Verify profile
-    console.log("STEP 4: verify user profile");
-
-    const profile = await getUserProfile(data.adminUid);
-
-    if (!profile) {
+    if (!verifyProfile) {
       throw new Error(
-        "User Profile Firestore ထဲ မတွေ့ပါ\n\n" +
+        "User Profile မတွေ့ပါ\n\n" +
         "Path: users/" + data.adminUid
       );
     }
 
     console.log("=== CREATE SHOP SUCCESS ===");
 
-    return profile;
+    return verifyProfile;
 
   } catch (err) {
     console.error("=== CREATE SHOP FAILED ===");
