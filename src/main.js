@@ -38,19 +38,40 @@ import { App } from "@capacitor/app";
 async function autoBackup() {
   const user = currentUser();
 
-  if (!user) return;
+  if (!user) {
+    console.error("Auto Backup failed: User မရှိပါ");
+    return false;
+  }
 
   try {
     const data = await exportLocalData();
+
+    console.log("Backup data:", {
+      bundles: data.bundles?.length || 0,
+      items: data.items?.length || 0,
+      uid: user.uid
+    });
 
     await uploadBackup(user.uid, data);
 
     console.log("Auto Backup OK");
 
+    return true;
+
   } catch (err) {
 
     console.error("Auto Backup failed:", err);
+    console.error("Backup error code:", err?.code);
+    console.error("Backup error message:", err?.message);
 
+    alert(
+      "Backup မအောင်မြင်ပါ\n\n" +
+      "CODE: " + (err?.code || "-") +
+      "\n" +
+      "MESSAGE: " + (err?.message || err)
+    );
+
+    return false;
   }
 }
 
