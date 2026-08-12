@@ -514,6 +514,18 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
   const nextItemBtn =
     document.getElementById("nextItemBtn");
 
+  const itemsForNextButton = await getItems(bundle.id);
+
+const nextItemIndex = itemIndex + 1;
+
+if (
+  nextItemBtn &&
+  nextItemIndex < itemsForNextButton.length
+) {
+  nextItemBtn.textContent =
+    `နောက်တစ်ထည် → ${itemsForNextButton[nextItemIndex].itemId}`;
+}
+
   if (nextItemBtn) {
 
     nextItemBtn.onclick = async () => {
@@ -634,55 +646,73 @@ async function showItemForm(bundle, editItem = null) {
 
   const items = await getItems(bundle.id);
 
-let item = editItem || items.find(i => Number(i.price) === 0);
+  let item = editItem;
 
-if (!item) {
-  const nextNumber = items.length + 1;
-
-  if (nextNumber > Number(bundle.qty)) {
-    alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
-    return showItems(bundle);
-  }
-
-  const unitCost =
-    Math.floor(Number(bundle.cost || 0) / Number(bundle.qty || 1));
-
-  const remainder =
-    Number(bundle.cost || 0) -
-    (unitCost * Number(bundle.qty || 1));
-
-  const itemCost =
-    nextNumber === Number(bundle.qty)
-      ? unitCost + remainder
-      : unitCost;
-
-  const itemId =
-    bundle.bundleCode +
-    String(nextNumber).padStart(3, "0");
-
-  await addItem({
-    bundleId: bundle.id,
-    itemId,
-    photo: "",
-    cost: itemCost,
-    price: 0,
-    note: ""
-  });
-
-  const updatedItems = await getItems(bundle.id);
-
-  item =
-    updatedItems.find(i => i.itemId === itemId);
-
+  // Edit existing item
   if (!item) {
-    throw new Error("အထည်အသစ် ဖန်တီး၍ မရပါ");
-  }
-}
 
-  const isEdit = editItem !== null;
+    const nextNumber = items.length + 1;
+
+    if (nextNumber > Number(bundle.qty)) {
+      alert("ဒီဘေထုတ်မှာ အထည်အားလုံး ထည့်ပြီးပါပြီ");
+      return showItems(bundle);
+    }
+
+    const unitCost =
+      Math.floor(
+        Number(bundle.cost || 0) /
+        Number(bundle.qty || 1)
+      );
+
+    const remainder =
+      Number(bundle.cost || 0) -
+      (
+        unitCost *
+        Number(bundle.qty || 1)
+      );
+
+    const itemCost =
+      nextNumber === Number(bundle.qty)
+        ? unitCost + remainder
+        : unitCost;
+
+    const itemId =
+      bundle.bundleCode +
+      String(nextNumber).padStart(3, "0");
+
+    await addItem({
+      bundleId: bundle.id,
+      itemId,
+      photo: "",
+      cost: itemCost,
+      price: 0,
+      note: ""
+    });
+
+    const updatedItems =
+      await getItems(bundle.id);
+
+    item =
+      updatedItems.find(
+        i => i.itemId === itemId
+      );
+
+    if (!item) {
+      throw new Error(
+        "အထည်အသစ် ဖန်တီး၍ မရပါ"
+      );
+    }
+  }
+
+  const isEdit =
+    editItem !== null;
 
   document.querySelector("#app").innerHTML =
-    AddItemPage(bundle, item, isEdit);
+    AddItemPage(
+      bundle,
+      item,
+      isEdit
+    );
 
   let selectedPhoto = null;
 
@@ -987,13 +1017,13 @@ bundleButtons.forEach(button => {
   button.onclick = async () => {
     const bundles = await getBundles();
 
-    const bundle = bundles.find(
-      b => b.id == button.dataset.id
-    );
+       const bundle = bundles.find(
+         b => b.id == button.dataset.id
+       );
 
-    if (bundle) {
-      alert(bundle.bundleName);
-      navigateTo(() => showItems(bundle));
+       if (bundle) {
+         navigateTo(() =>
+ showItems(bundle));
     }
   };
 });

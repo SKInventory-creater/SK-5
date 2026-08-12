@@ -7,7 +7,7 @@ export default function ItemEditPage(item) {
 
       <div class="bundle-header-info">
         <h2>အထည်ပြင်ဆင်ရန်</h2>
-        <p>${item.itemId}</p>
+<p class="current-item-id">လက်ရှိအထည် — ${item.itemId}</p>
       </div>
     </header>
 
@@ -55,10 +55,11 @@ export default function ItemEditPage(item) {
       </label>
 
       <input
-        id="itemPrice"
-        type="number"
-        value="${Number(item.price || 0)}"
-      >
+  id="itemPrice"
+  type="number"
+  value="${item.price ? Number(item.price) : ""}"
+  placeholder="ရောင်းဈေးထည့်ပါ"
+>
 
       <label>
         အခြေအနေ
