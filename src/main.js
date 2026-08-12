@@ -39,35 +39,27 @@ async function autoBackup() {
   const user = currentUser();
 
   if (!user) {
-    console.warn("Auto Backup skipped: user not logged in");
-    return;
+    console.warn("AUTO BACKUP SKIPPED: No logged-in user");
+    return false;
   }
 
   try {
-    console.log("=== AUTO BACKUP START ===");
-    console.log("UID:", user.uid);
-
     const data = await exportLocalData();
 
-    console.log("Bundles:", data.bundles?.length || 0);
-    console.log("Items:", data.items?.length || 0);
+    console.log("AUTO BACKUP DATA:", {
+      uid: user.uid,
+      bundles: data.bundles?.length || 0,
+      items: data.items?.length || 0
+    });
 
     await uploadBackup(user.uid, data);
 
-    console.log("=== AUTO BACKUP OK ===");
+    console.log("AUTO BACKUP OK");
+    return true;
 
   } catch (err) {
-
-    console.error("=== AUTO BACKUP FAILED ===");
-    console.error("CODE:", err?.code);
-    console.error("MESSAGE:", err?.message);
-    console.error(err);
-
-    alert(
-      "Auto Backup မအောင်မြင်ပါ\n\n" +
-      "CODE: " + (err?.code || "-") +
-      "\n\nMESSAGE: " + (err?.message || err)
-    );
+    console.error("AUTO BACKUP FAILED:", err);
+    return false;
   }
 }
 
