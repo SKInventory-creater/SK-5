@@ -183,14 +183,21 @@ match /items/{itemId} {
 }
 
     // =========================
-    // BACKUPS
-    // =========================
+// BACKUPS
+// =========================
 
-    match /backups/{userId} {
+match /backups/{userId} {
 
-      allow read, write: if signedIn()
-        && request.auth.uid == userId;
-    }
+  // Backup metadata
+  allow read, write: if signedIn()
+    && request.auth.uid == userId;
+
+  // Backup chunks
+  match /chunks/{chunkId} {
+    allow read, write: if signedIn()
+      && request.auth.uid == userId;
+  }
+}
 
 
     // =========================

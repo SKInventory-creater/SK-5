@@ -1,5 +1,98 @@
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  getDocs,
+  deleteDoc
+} from "firebase/firestore";
+
 import { db } from "./config.js";
+
+const MAX_CHUNK_BYTES = 700 * 1024;
+
+function getByteSize(value) {
+  return new TextEncoder().encode(
+    JSON.stringify(value)
+  ).length;
+}
+
+function splitIntoChunks(records, type) {
+  const chunks = [];
+  let current = [];
+  let currentSize = 0;
+
+  for (const record of records) {
+    const testChunk = {
+      type,
+      version: 2,
+      data: [...current, record]
+    };
+
+    const recordSize = getByteSize(testChunk);
+
+    if (recordSize > MAX_CHUNK_BYTES) {
+      if (current.length > 0) {
+        chunks.push(current);
+        current = [];
+        currentSize = 0;
+      }
+
+      const singleSize = getByteSize({
+        type,
+        version: 2,
+        data: [record]
+      });
+
+      if (singleSize > MAX_CHUNK_BYTES) {
+        throw new Error(
+          `${type} ထဲက record တစ်ခုတည်းက အရမ်းကြီးနေပါတယ် (${Math.round(singleSize / 1024)} KB)`
+        );
+      }
+
+      chunks.push([record]);
+      continue;
+    }
+
+    if (
+      current.length > 0 &&
+      currentSize + getByteSize(record) > MAX_CHUNK_BYTES
+    ) {
+      chunks.push(current);
+      current = [];
+      currentSize = 0;
+    }
+
+    current.push(record);
+    currentSize += getByteSize(record);
+  }
+
+  if (current.length > 0) {
+    chunks.push(current);
+  }
+
+  return chunks;
+}
+
+async function deleteOldChunks(uid) {
+  const chunksRef = collection(
+    db,
+    "backups",
+    uid,
+    "chunks"
+  );
+
+  const snapshot = await getDocs(chunksRef);
+
+  for (const item of snapshot.docs) {
+    await deleteDoc(item.ref);
+  }
+
+  console.log(
+    "OLD BACKUP CHUNKS DELETED:",
+    snapshot.size
+  );
+}
 
 export async function uploadBackup(uid, data) {
   if (!uid) {
@@ -18,52 +111,137 @@ export async function uploadBackup(uid, data) {
     ? data.items
     : [];
 
-  const backupData = {
-    version: 1,
-    updatedAt: Date.now(),
-    bundles,
-    items
-  };
-
-  // Firestore document size ကို ကြိုစစ်
-  const sizeKB =
-    new TextEncoder().encode(
-      JSON.stringify(backupData)
-    ).length / 1024;
-
+  console.log("================================");
   console.log("BACKUP START");
   console.log("UID:", uid);
   console.log("Bundles:", bundles.length);
   console.log("Items:", items.length);
-  console.log("Backup size:", sizeKB.toFixed(2), "KB");
+  console.log("================================");
 
-  if (sizeKB > 900) {
-    throw new Error(
-      `Backup data ကြီးလွန်းပါသည် (${sizeKB.toFixed(2)} KB)`
-    );
-  }
+  const bundleChunks = splitIntoChunks(
+    bundles,
+    "bundles"
+  );
+
+  const itemChunks = splitIntoChunks(
+    items,
+    "items"
+  );
+
+  console.log(
+    "Bundle chunks:",
+    bundleChunks.length
+  );
+
+  console.log(
+    "Item chunks:",
+    itemChunks.length
+  );
 
   try {
-    await setDoc(
-      doc(db, "backups", uid),
-      backupData,
-      { merge: true }
+    // အဟောင်း chunk တွေရှင်း
+    await deleteOldChunks(uid);
+
+    const chunksRef = collection(
+      db,
+      "backups",
+      uid,
+      "chunks"
     );
 
+    let chunkIndex = 0;
+
+    // =========================
+    // BUNDLES
+    // =========================
+
+    for (const chunk of bundleChunks) {
+      const chunkId =
+        `bundles_${String(chunkIndex).padStart(4, "0")}`;
+
+      await setDoc(
+        doc(chunksRef, chunkId),
+        {
+          type: "bundles",
+          version: 2,
+          index: chunkIndex,
+          data: chunk
+        }
+      );
+
+      console.log(
+        "BUNDLE CHUNK OK:",
+        chunkId,
+        chunk.length
+      );
+
+      chunkIndex++;
+    }
+
+    // =========================
+    // ITEMS
+    // =========================
+
+    chunkIndex = 0;
+
+    for (const chunk of itemChunks) {
+      const chunkId =
+        `items_${String(chunkIndex).padStart(4, "0")}`;
+
+      await setDoc(
+        doc(chunksRef, chunkId),
+        {
+          type: "items",
+          version: 2,
+          index: chunkIndex,
+          data: chunk
+        }
+      );
+
+      console.log(
+        "ITEM CHUNK OK:",
+        chunkId,
+        chunk.length
+      );
+
+      chunkIndex++;
+    }
+
+    // =========================
+    // META
+    // =========================
+
+    await setDoc(
+      doc(db, "backups", uid),
+      {
+        version: 2,
+        updatedAt: Date.now(),
+        bundleCount: bundles.length,
+        itemCount: items.length,
+        bundleChunks: bundleChunks.length,
+        itemChunks: itemChunks.length
+      }
+    );
+
+    console.log("BACKUP META OK");
     console.log("BACKUP FIRESTORE OK");
 
     return {
       success: true,
       bundles: bundles.length,
       items: items.length,
-      sizeKB
+      bundleChunks: bundleChunks.length,
+      itemChunks: itemChunks.length
     };
 
   } catch (err) {
-    console.error("BACKUP FIRESTORE FAILED:", err);
+    console.error(
+      "BACKUP FIRESTORE FAILED:",
+      err
+    );
 
     throw new Error(
-      `Backup မအောင်မြင်ပါ\n\nCODE: ${err.code || "-"}\nMESSAGE: ${err.message || err}`
+      `Backup မအောင်မြင်ပါ\n\nCODE: ${err.code || "-"}\nMESSAGE: ${err.message || err.message || err}`
     );
   }
 }
@@ -73,36 +251,96 @@ export async function downloadBackup(uid) {
     throw new Error("Restore UID မတွေ့ပါ");
   }
 
+  console.log("================================");
   console.log("RESTORE START");
   console.log("UID:", uid);
+  console.log("================================");
 
   try {
-    const snap = await getDoc(
+    const metaSnap = await getDoc(
       doc(db, "backups", uid)
     );
 
-    if (!snap.exists()) {
+    if (!metaSnap.exists()) {
       throw new Error("Backup မတွေ့ပါ");
     }
 
-    const data = snap.data();
+    const meta = metaSnap.data();
+
+    // =========================
+    // NEW CHUNK BACKUP
+    // =========================
+
+    if (meta.version >= 2) {
+      const chunksRef = collection(
+        db,
+        "backups",
+        uid,
+        "chunks"
+      );
+
+      const snapshot = await getDocs(chunksRef);
+
+      const bundles = [];
+      const items = [];
+
+      for (const snap of snapshot.docs) {
+        const chunk = snap.data();
+
+        if (!Array.isArray(chunk.data)) {
+          continue;
+        }
+
+        if (chunk.type === "bundles") {
+          bundles.push(...chunk.data);
+        }
+
+        if (chunk.type === "items") {
+          items.push(...chunk.data);
+        }
+      }
+
+      console.log(
+        "RESTORE BUNDLES:",
+        bundles.length
+      );
+
+      console.log(
+        "RESTORE ITEMS:",
+        items.length
+      );
+
+      return {
+        version: meta.version || 2,
+        updatedAt: meta.updatedAt || null,
+        bundles,
+        items
+      };
+    }
+
+    // =========================
+    // OLD BACKUP COMPATIBILITY
+    // =========================
 
     return {
-      version: data.version || 1,
-      updatedAt: data.updatedAt || null,
-      bundles: Array.isArray(data.bundles)
-        ? data.bundles
+      version: meta.version || 1,
+      updatedAt: meta.updatedAt || null,
+      bundles: Array.isArray(meta.bundles)
+        ? meta.bundles
         : [],
-      items: Array.isArray(data.items)
-        ? data.items
+      items: Array.isArray(meta.items)
+        ? meta.items
         : []
     };
 
   } catch (err) {
-    console.error("RESTORE FIRESTORE FAILED:", err);
+    console.error(
+      "RESTORE FIRESTORE FAILED:",
+      err
+    );
 
     throw new Error(
-      `Backup ပြန်ယူ၍မရပါ\n\nCODE: ${err.code || "-"}\nMESSAGE: ${err.message || err}`
+      `Backup ပြန်ယူ၍မရပါ\n\nCODE: ${err.code || "-"}\nMESSAGE: ${err.message || err.message || err}`
     );
   }
 }
