@@ -108,12 +108,26 @@ function setupPullToRefresh() {
       app.style.transform = "translateY(20px)";
 
       try {
-        const currentPage =
-          pageHistory[pageHistory.length - 1];
+        if (currentPageName === "dashboard") {
+	  await showDashboard();
+	} else if (currentPageName === "items" && currentBundle) {
+	  await showItems(currentBundle);
+	} else if (currentPageName === "editItem" && currentBundle && currentItem) {
+	  await showItemEdit(currentBundle, currentItem);
+	} else if (currentPageName === "addItem" && currentBundle) {
+	  await showItemForm(currentBundle);
+	} else if (currentPageName === "settings") {
+	  await showSettings();
+	} else if (currentPageName === "shopInformation") {
+	  await showShopInformation();
+	} else if (currentPageName === "reports") {
+	  await showReports();
+	} else if (currentPageName === "dailyReport") {
+	  await showDailyReport();
+	} else if (currentPageName === "monthlyReport") {
+	  await showMonthlyReport();
+	}
 
-        if (currentPage) {
-          await currentPage();
-        }
       } catch (err) {
         console.error("Pull refresh failed:", err);
       }
@@ -127,38 +141,11 @@ function setupPullToRefresh() {
   };
 }
 
-const pageHistory = [];
-
    let currentPageName = "dashboard";
    let currentBundle = null;
    let currentItem = null;
 
-function navigateTo(pageFunction) {
-  pageHistory.push(pageFunction);
-  console.log("NAVIGATE:", pageHistory.length);
-  pageFunction();
 
-  setTimeout(() => {
-    setupPullToRefresh();
-  }, 0);
-}
-
-function goBackPage() {
-  console.log("BACK BEFORE:", pageHistory.length);
-
-  if (pageHistory.length > 1) {
-    pageHistory.pop();
-
-    const previousPage =
-      pageHistory[pageHistory.length - 1];
-
-    console.log("BACK AFTER:", pageHistory.length);
-
-    previousPage();
-  } else {
-    showDashboard();
-  }
-}
 
 function showLogin() {
   document.querySelector("#app").innerHTML = LoginPage();
@@ -1049,8 +1036,7 @@ bundleButtons.forEach(button => {
        );
 
        if (bundle) {
-         navigateTo(() =>
- showItems(bundle));
+         showItems(bundle);
     }
   };
 });
@@ -1061,15 +1047,15 @@ async function showSettingsMenu() {
   document.querySelector("#app").innerHTML = SettingsMenuPage();
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
+    showDashboard();
   };
 
   document.getElementById("addBundleBtn").onclick = () => {
-    navigateTo(showAddBundle);
+    showAddBundle();
   };
 
   document.getElementById("deleteBundlesBtn").onclick = () => {
-    navigateTo(showDeleteBundles);
+    showDeleteBundles();
   };
 
   document.getElementById("logoutBtn").onclick = async () => {
@@ -1078,7 +1064,7 @@ async function showSettingsMenu() {
   };
 
   document.getElementById("staffManagementBtn").onclick = () => {
-    navigateTo(showStaffManagement);
+    showStaffManagement();
   };
 }
 
@@ -1179,7 +1165,7 @@ showStaffManagement();
 });
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
+    showSettings();
   };
 
 }
@@ -1190,7 +1176,7 @@ async function showStaffRegister() {
     StaffRegisterPage();
 
   document.getElementById("backLoginBtn").onclick = () => {
-    navigateTo(showLogin);
+    showLogin();
   };
 
   document.getElementById("staffRegisterBtn").onclick = async () => {
@@ -1292,7 +1278,7 @@ async function showSettings() {
   if (profile.role === "admin") {
 
   document.getElementById("staffManagementBtn").onclick = () => {
-    navigateTo(showStaffManagement);
+    showStaffManagement();
   };
 
 } else {
@@ -1306,7 +1292,7 @@ async function showSettings() {
 };
 
   document.getElementById("shopInfoBtn").onclick = () => {
-    navigateTo(showShopInformation);
+    showShopInformation();
 };
 
   document.getElementById("backupBtn").onclick = async () => {
@@ -1387,7 +1373,7 @@ async function showDeleteBundles() {
     DeleteBundlePage(bundles);
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
+    showDashboard();
   };
 
   document.querySelectorAll(".deleteBundleBtn").forEach(btn => {
@@ -1423,6 +1409,9 @@ async function showDeleteBundles() {
 }
 
 async function showReports() {
+  currentPageName = "reports";
+  currentBundle = null;
+  currentItem = null;
 
   const bundles = await getBundles();
 
@@ -1438,22 +1427,23 @@ async function showReports() {
     ReportsPage(stats);
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
+    showDashboard();
   };
 
   document.getElementById("dailyReportBtn").onclick = () => {
-  navigateTo(showDailyReport);
-};
+    showDailyReport();
+  };
 
-document.getElementById("monthlyReportBtn").onclick = () => {
-  navigateTo(showMonthlyReport);
-};
-
+  document.getElementById("monthlyReportBtn").onclick = () => {
+    showMonthlyReport();
+  };
 }
 
 async function showDailyReport(selectedDate = new Date().toISOString().slice(0, 10)) {
   try {
-
+     currentPageName = "dailyReport";
+     currentBundle = null;
+     currentItem = null;
   const bundles = await getBundles();
 
   const items = [];
@@ -1539,7 +1529,7 @@ const list =
   `).join("");
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
+    showReports();
   };
 
   const reportDate = document.getElementById("reportDate");
@@ -1560,7 +1550,9 @@ reportDate.onchange = () => {
 async function showMonthlyReport(
   selectedMonth = new Date().toISOString().slice(0, 7)
 ) {
-
+    currentPageName = "monthlyReport";
+    currentBundle = null;
+    currentItem = null;
   const bundles = await getBundles();
 
   const items = [];
@@ -1632,7 +1624,7 @@ async function showMonthlyReport(
     `).join("");
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage()
+    showReports();
   };
 
   const reportMonth =
@@ -1659,6 +1651,15 @@ App.addListener("backButton", async () => {
       if (exitApp) {
         App.exitApp();
       }
+      break;
+
+    case "dailyReport":
+    case "monthlyReport":
+      await showReports();
+      break;
+
+    case "reports":
+      await showDashboard();
       break;
 
     case "items":
@@ -1707,15 +1708,9 @@ setTimeout(() => {
 
     if (user) {
 
-  pageHistory.length = 0;
-
-  pageHistory.push(() => showDashboard());
-
   await showDashboard();
 
 } else {
-
-  pageHistory.length = 0;
 
   showLogin();
 
