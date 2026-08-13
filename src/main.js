@@ -1069,6 +1069,9 @@ async function showSettingsMenu() {
 }
 
 async function showStaffManagement() {
+  currentPageName = "staffManagement";
+  currentBundle = null;
+  currentItem = null;
 
   document.querySelector("#app").innerHTML =
     StaffManagementPage();
@@ -1683,6 +1686,10 @@ App.addListener("backButton", async () => {
       } else {
         await showDashboard();
       }
+      break;
+
+    case "staffManagement":
+      await showSettings();
       break;
 
     case "settings":
