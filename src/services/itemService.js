@@ -2,7 +2,8 @@ import { initDatabase } from "../database/init.js";
 import { getCurrentUser } from "../firebase/auth.js";
 import {
   getUserProfile,
-  createItem
+  createItem,
+  updateItemCloud
 } from "../firebase/firestore.js";
 
 export async function addItem(item) {
@@ -183,6 +184,19 @@ export async function getItems(bundleId) {
 export async function updateItem(item) {
   const db = await initDatabase();
 
+  const user = getCurrentUser();
+
+  if (!user) {
+    throw new Error("User is not logged in");
+  }
+
+  const profile = await getUserProfile(user.uid);
+
+  if (!profile?.shopId) {
+    throw new Error("Shop Profile မတွေ့ပါ");
+  }
+
+  // Local SQLite update
   await db.run(
     `
     UPDATE items
@@ -198,17 +212,37 @@ export async function updateItem(item) {
     WHERE id=?
     `,
     [
-      item.photo,
-      item.cost,
-      item.price,
-      item.unsold,
-      item.removed,
-      item.note,
-      item.soldAt,
-      item.createdAt,
+      item.photo || "",
+      Number(item.cost || 0),
+      Number(item.price || 0),
+      Number(item.unsold ?? 1),
+      Number(item.removed ?? 0),
+      item.note || "",
+      item.soldAt || null,
+      item.createdAt || Date.now(),
       item.id
     ]
   );
+
+  // Firestore update
+  const cloudItemId =
+    `${profile.shopId}_${item.itemId}`;
+
+  await updateItemCloud(cloudItemId, {
+    shopId: profile.shopId,
+    bundleId: item.bundleId,
+    itemId: item.itemId,
+    photo: item.photo || "",
+    cost: Number(item.cost || 0),
+    price: Number(item.price || 0),
+    unsold: Number(item.unsold ?? 1),
+    removed: Number(item.removed ?? 0),
+    note: item.note || "",
+    soldAt: item.soldAt || null,
+    createdAt: item.createdAt || Date.now()
+  });
+
+  return true;
 }
 
 export async function getTotalProfit() {

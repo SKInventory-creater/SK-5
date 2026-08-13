@@ -39,28 +39,22 @@ async function autoBackup() {
   const user = currentUser();
 
   if (!user) {
-    console.warn("AUTO BACKUP SKIPPED: No logged-in user");
-    return false;
+    throw new Error("Backup မလုပ်နိုင်ပါ။ Login ဝင်ထားခြင်းမရှိပါ");
   }
 
-  try {
-    const data = await exportLocalData();
+  const data = await exportLocalData();
 
-    console.log("AUTO BACKUP DATA:", {
-      uid: user.uid,
-      bundles: data.bundles?.length || 0,
-      items: data.items?.length || 0
-    });
+  console.log("AUTO BACKUP DATA:", {
+    uid: user.uid,
+    bundles: data.bundles?.length || 0,
+    items: data.items?.length || 0
+  });
 
-    await uploadBackup(user.uid, data);
+  await uploadBackup(user.uid, data);
 
-    console.log("AUTO BACKUP OK");
-    return true;
+  console.log("AUTO BACKUP OK");
 
-  } catch (err) {
-    console.error("AUTO BACKUP FAILED:", err);
-    return false;
-  }
+  return true;
 }
 
 let pullStartY = 0;
@@ -464,8 +458,10 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
         }
 
         await updateItem({
-
-          id: item.id,
+ 	 id: item.id,
+ 	 shopId: item.shopId,
+ 	 bundleId: item.bundleId,
+ 	 itemId: item.itemId,
 
           photo: photoUrl,
 
@@ -610,6 +606,8 @@ if (
           note: ""
 
         });
+
+	await autoBackup();
 
         const newItems =
           await getItems(bundle.id);
