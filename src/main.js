@@ -129,6 +129,10 @@ function setupPullToRefresh() {
 
 const pageHistory = [];
 
+   let currentPageName = "dashboard";
+   let currentBundle = null;
+   let currentItem = null;
+
 function navigateTo(pageFunction) {
   pageHistory.push(pageFunction);
   console.log("NAVIGATE:", pageHistory.length);
@@ -318,6 +322,10 @@ await showDashboard(profile);
 
 async function showItems(bundle) {
 
+  currentPageName = "items";
+  currentBundle = bundle;
+  currentItem = null;
+
   const items = await getItems(bundle.id);
 
   document.querySelector("#app").innerHTML =
@@ -372,6 +380,10 @@ filterItems();
 }
 
 async function showItemEdit(bundle, item, itemIndex = -1) {
+
+  currentPageName = "editItem";
+  currentBundle = bundle;
+  currentItem = item;
 
   document.querySelector("#app").innerHTML =
     ItemEditPage(item);
@@ -651,6 +663,10 @@ if (
 
 async function showItemForm(bundle, editItem = null) {
 
+  currentPageName = "addItem";
+  currentBundle = bundle;
+  currentItem = null;
+
   const items = await getItems(bundle.id);
 
   let item = editItem;
@@ -906,6 +922,10 @@ if (await bundleCodeExists(bundleCode)) {
 }
 
 async function showDashboard(profile = null) {
+
+  currentPageName = "dashboard";
+  currentBundle = null;
+  currentItem = null;
 
   document.querySelector("#app").innerHTML = await DashboardPage();
 
@@ -1218,6 +1238,10 @@ showLogin();
 
 async function showShopInformation() {
 
+  currentPageName = "shopInformation";
+  currentBundle = null;
+  currentItem = null;
+
   const user = currentUser();
 
   if (!user) {
@@ -1255,6 +1279,10 @@ async function showShopInformation() {
 }
 
 async function showSettings() {
+
+  currentPageName = "settings";
+  currentBundle = null;
+  currentItem = null;
 
   document.querySelector("#app").innerHTML =
     SettingsPage();
@@ -1620,8 +1648,57 @@ async function showMonthlyReport(
 
 document.querySelector("#app").innerHTML = SplashPage();
 
-App.addListener("backButton", () => {
-  goBackPage();
+App.addListener("backButton", async () => {
+  console.log("ANDROID BACK:", currentPageName);
+
+  switch (currentPageName) {
+
+    case "dashboard":
+      // Dashboard ရောက်နေပြီဆို App မပိတ်သေးဘဲ ထွက်မေး
+      const exitApp = confirm("App မှ ထွက်မှာ သေချာပါသလား?");
+      if (exitApp) {
+        App.exitApp();
+      }
+      break;
+
+    case "items":
+      // Items → Dashboard
+      await showDashboard();
+      break;
+
+    case "addItem":
+      // Add Item → Items
+      if (currentBundle) {
+        await showItems(currentBundle);
+      } else {
+        await showDashboard();
+      }
+      break;
+
+    case "editItem":
+      // Edit Item → Items
+      if (currentBundle) {
+        await showItems(currentBundle);
+      } else {
+        await showDashboard();
+      }
+      break;
+
+    case "settings":
+      // Settings → Dashboard
+      await showDashboard();
+      break;
+
+    case "shopInformation":
+      // Shop Information → Settings
+      await showSettings();
+      break;
+
+    default:
+      // မသိတဲ့ page ဖြစ်ရင် Dashboard
+      await showDashboard();
+      break;
+  }
 });
 
 setTimeout(() => {
