@@ -324,19 +324,17 @@ async function showItems(bundle) {
     ItemsPage(bundle, items);
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
-  };
-
-  document.getElementById("addItemBtn").onclick = () => {
-  navigateTo(() => showItemForm(bundle));
+  showDashboard();
 };
 
-  document.querySelectorAll(".item-card").forEach((card, index) => {
+document.getElementById("addItemBtn").onclick = () => {
+  showItemForm(bundle);
+};
 
+document.querySelectorAll(".item-card").forEach((card, index) => {
   card.onclick = () => {
-  navigateTo(() => showItemEdit(bundle, items[index], index));
-};
-
+    showItemEdit(bundle, items[index], index);
+  };
 });
 
   const searchInput = document.getElementById("searchItem");
@@ -379,8 +377,8 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
     ItemEditPage(item);
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
-  };
+  showItems(bundle);
+};
 
   let selectedPhoto = null;
 
@@ -855,7 +853,7 @@ function showAddBundle() {
   const cancelBundleBtn = document.getElementById("cancelBundleBtn");
 
   cancelBundleBtn.onclick = () => {
-   goBackPage();
+   showDashboard();
   };
 
   const saveBundleBtn = document.getElementById("saveBundleBtn");
@@ -957,7 +955,7 @@ searchInput.oninput = async () => {
 
     if (!bundle) return;
 
-    navigateTo(() => showItemForm(bundle, item));
+    showItemForm(bundle, item);
 
   };
 
@@ -1005,19 +1003,19 @@ if (profile.role === "staff") {
 }
 
 document.getElementById("addBundleMenu").onclick = () => {
-  navigateTo(showAddBundle);
+  showAddBundle();
 };
 
 document.getElementById("deleteBundleMenu").onclick = () => {
-  navigateTo(showDeleteBundles);
+  showDeleteBundles();
 };
 
 document.getElementById("settingsMenu").onclick = () => {
-  navigateTo(showSettings);
+  showSettings();
 };
 
   document.getElementById("reportsBtn").onclick = () => {
-    navigateTo(showReports);
+    showReports();
   };
 
   const bundleButtons = document.querySelectorAll(".open-bundle-btn");
@@ -1233,8 +1231,8 @@ async function showShopInformation() {
     ShopInformationPage(info);
 
   document.getElementById("backBtn").onclick = () => {
-    navigateTo(showSettings);
-  };
+  showSettings();
+};
 
   const copyBtn =
     document.getElementById("copyInviteBtn");
@@ -1276,8 +1274,8 @@ async function showSettings() {
 }
 
   document.getElementById("backBtn").onclick = () => {
-    goBackPage();
-  };
+  showDashboard();
+};
 
   document.getElementById("shopInfoBtn").onclick = () => {
     navigateTo(showShopInformation);
