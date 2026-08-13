@@ -182,22 +182,27 @@ match /items/{itemId} {
     && resource.data.shopId == myShopId();
 }
 
+        // =========================
+    // BACKUPS
     // =========================
-// BACKUPS
-// =========================
 
-match /backups/{userId} {
+    match /backups/{userId} {
 
-  // Backup metadata
-  allow read, write: if signedIn()
-    && request.auth.uid == userId;
+      allow read, write: if signedIn()
+        && request.auth.uid == userId;
 
-  // Backup chunks
-  match /chunks/{chunkId} {
-    allow read, write: if signedIn()
-      && request.auth.uid == userId;
-  }
-}
+      match /versions/{backupId} {
+
+        allow read, write: if signedIn()
+          && request.auth.uid == userId;
+
+        match /chunks/{chunkId} {
+
+          allow read, write: if signedIn()
+            && request.auth.uid == userId;
+        }
+      }
+    }
 
 
     // =========================
