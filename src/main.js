@@ -382,16 +382,23 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
     pickPhotoBtn.onclick = async () => {
       try {
 
-        const photo = await pickPhoto();
+                const photo = await pickPhoto();
 
         selectedPhoto = photo;
 
         const preview =
           document.getElementById("photoPreview");
 
+        const photoEmpty =
+          document.getElementById("photoEmpty");
+
         if (preview) {
           preview.src = photo.webPath;
           preview.style.display = "block";
+        }
+
+        if (photoEmpty) {
+          photoEmpty.style.display = "none";
         }
 
       } catch (err) {

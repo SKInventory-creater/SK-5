@@ -14,15 +14,32 @@ export default function ItemEditPage(item) {
     <section class="item-edit-form">
 
       <div class="edit-photo">
-        ${
-          item.photo
-            ? `<img
-                id="photoPreview"
-                src="${item.photo}"
-                class="item-photo-img"
-              >`
-            : `<div id="photoEmpty">📦</div>`
-        }
+
+  <img
+    id="photoPreview"
+    src="${item.photo || ""}"
+    class="item-photo-img"
+    style="
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:${item.photo ? "block" : "none"};
+    "
+  >
+
+  <div
+    id="photoEmpty"
+    style="
+      display:${item.photo ? "none" : "flex"};
+      width:100%;
+      height:100%;
+      align-items:center;
+      justify-content:center;
+    "
+  >
+    📦
+  </div>
+
       </div>
 
       <button id="pickPhotoBtn">
