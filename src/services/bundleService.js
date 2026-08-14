@@ -92,6 +92,7 @@ export async function addBundle(bundle) {
 
   return {
     id: localBundleId,
+      cloudBundleId,
     shopId: profile.shopId,
     bundleCode: bundle.bundleCode,
     bundleName: bundle.bundleName,

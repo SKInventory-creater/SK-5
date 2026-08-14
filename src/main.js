@@ -594,6 +594,7 @@ if (
         await addItem({
 
           bundleId: bundle.id,
+            cloudBundleId: bundle.cloudBundleId,
 
           itemId,
 
@@ -690,6 +691,7 @@ async function showItemForm(bundle, editItem = null) {
 
     await addItem({
       bundleId: bundle.id,
+        cloudBundleId: bundle.cloudBundleId,
       itemId,
       photo: "",
       cost: itemCost,
