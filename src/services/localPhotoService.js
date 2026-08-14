@@ -16,8 +16,8 @@ export async function photoToBase64(photo) {
 
     img.onload = () => {
       try {
-        const MAX_SIZE = 800;
-        const QUALITY = 0.5;
+        const MAX_SIZE = 280;
+        const QUALITY = 0.3;
 
         let width = img.naturalWidth;
         let height = img.naturalHeight;
