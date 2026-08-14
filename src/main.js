@@ -800,6 +800,8 @@ saveBtn.onclick = async () => {
 await updateItem({
 
   id: item.id,
+  itemId: item.itemId,
+  bundleId: item.bundleId,
   photo: photoUrl,
 
   cost: Number(document.getElementById("itemCost").value || item.cost),
