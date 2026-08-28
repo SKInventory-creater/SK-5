@@ -6,6 +6,7 @@ import {
 } from "../firebase/auth.js";
 
 import { getUserProfile, createUserProfile, getShopByInviteCode } from "../firebase/firestore.js";
+import { registerSecondary } from "../firebase/auth.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -44,17 +45,25 @@ export async function currentUserProfile() {
 }
 
 export async function createStaffAccount(data) {
+  if (!data.email || !data.password) {
+    throw new Error("Email နှင့် Password ထည့်ပါ");
+  }
+
+  if (!data.inviteCode) {
+    throw new Error("Invitation Code ထည့်ပါ");
+  }
+
+  if (!data.name) {
+    throw new Error("Name ထည့်ပါ");
+  }
 
   const shop = await getShopByInviteCode(data.inviteCode);
 
-	console.log(shop);
-	alert(JSON.stringify(shop));
+  if (!shop) {
+    throw new Error("Invitation Code မှားနေပါသည်");
+  }
 
-    if (!shop) {
-  throw new Error("Invitation Code မှားနေပါသည်");
-}
-
-  const credential = await register(
+  const credential = await registerSecondary(
     data.email,
     data.password
   );
@@ -71,5 +80,4 @@ export async function createStaffAccount(data) {
   );
 
   return credential.user;
-
 }
