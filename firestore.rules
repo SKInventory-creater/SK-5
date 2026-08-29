@@ -182,7 +182,33 @@ match /items/{itemId} {
     && resource.data.shopId == myShopId();
 }
 
-        // =========================
+// =========================
+// SHOP INVITES
+// =========================
+
+match /shopInvites/{inviteCode} {
+
+  // Staff Register မှာ Login မဝင်ခင်
+  // Invitation Code နဲ့ shop ကိုရှာနိုင်ရန်
+  allow get: if true;
+
+  // Query/List မလုပ်နိုင်
+  allow list: if false;
+
+  // Admin က invite code document ဖန်တီးနိုင်
+  allow create: if isAdmin()
+    && request.resource.data.shopId == myShopId();
+
+  // Admin က ကိုယ့် shop invite ကို update လုပ်နိုင်
+  allow update: if isAdmin()
+    && resource.data.shopId == myShopId()
+    && request.resource.data.shopId == myShopId();
+
+  // Client က delete မလုပ်နိုင်
+  allow delete: if false;
+}
+ 
+    // =========================
     // BACKUPS
     // =========================
 

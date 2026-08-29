@@ -33,6 +33,14 @@ export async function createShop(shopId, data) {
   });
 
   const snap = await getDoc(shopRef);
+  const inviteRef = doc(db, "shopInvites", data.inviteCode);
+
+  await setDoc(inviteRef, {
+    shopId,
+    shopName: data.shopName,
+    inviteCode: data.inviteCode,
+    active: data.active
+  });
 
   if (!snap.exists()) {
     throw new Error(
@@ -139,20 +147,31 @@ export async function deleteStaff(uid) {
 // =========================
 
 export async function getShopByInviteCode(inviteCode) {
-  const q = query(
-    collection(db, "shops"),
-    where("inviteCode", "==", inviteCode)
-  );
+  const code = inviteCode.trim().toUpperCase();
 
-  const snap = await getDocs(q);
+  if (!code) {
+    return null;
+  }
 
-  if (snap.empty) {
+  const inviteRef = doc(db, "shopInvites", code);
+  const snap = await getDoc(inviteRef);
+
+  if (!snap.exists()) {
+    return null;
+  }
+
+  const data = snap.data();
+
+  if (data.active !== true) {
     return null;
   }
 
   return {
-    id: snap.docs[0].id,
-    ...snap.docs[0].data()
+    id: data.shopId,
+    shopId: data.shopId,
+    shopName: data.shopName || "",
+    inviteCode: data.inviteCode || code,
+    active: data.active
   };
 }
 
