@@ -39,6 +39,10 @@ export function registerSecondary(email, password) {
   );
 }
 
+export function logoutSecondary() {
+  return signOut(secondaryAuth);
+}
+
 export function logout() {
   return signOut(auth);
 }

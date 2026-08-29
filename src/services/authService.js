@@ -2,11 +2,12 @@ import {
   login,
   register,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  registerSecondary,
+  logoutSecondary
 } from "../firebase/auth.js";
 
 import { getUserProfile, createUserProfile, getShopByInviteCode } from "../firebase/firestore.js";
-import { registerSecondary } from "../firebase/auth.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -85,6 +86,10 @@ export async function createStaffAccount(data) {
     "STAFF STEP 3 OK:",
     credential.user.uid
   );
+
+      await logoutSecondary();
+
+    console.log("STAFF STEP 3B: Secondary account signed out");
 
   console.log("STAFF STEP 4: Creating staff profile");
 
