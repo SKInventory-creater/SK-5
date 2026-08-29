@@ -57,25 +57,51 @@ export async function createStaffAccount(data) {
     throw new Error("Name ထည့်ပါ");
   }
 
+  console.log("STAFF STEP 1: Checking invite code");
+
   const shop = await getShopByInviteCode(data.inviteCode);
 
+  console.log("STAFF STEP 2: Invite result:", shop);
+
   if (!shop) {
-    throw new Error("Invitation Code မှားနေပါသည်");
+    throw new Error("Invitation Code မတွေ့ပါ");
   }
 
+  console.log("STAFF STEP 3: Creating secondary account");
 
-  const credential = await registerSecondary(
-    data.email,
-    data.password
+  let credential;
+
+  try {
+    credential = await registerSecondary(
+      data.email,
+      data.password
+    );
+  } catch (err) {
+    console.error("STAFF STEP 3 ERROR:", err);
+    throw err;
+  }
+
+  console.log(
+    "STAFF STEP 3 OK:",
+    credential.user.uid
   );
 
-  await createUserProfile(credential.user.uid, {
-    shopId: shop.id,
-    role: "staff",
-    name: data.name,
-    phone: data.phone,
-    email: data.email
-  });
+  console.log("STAFF STEP 4: Creating staff profile");
+
+  try {
+    await createUserProfile(credential.user.uid, {
+      shopId: shop.shopId,
+      role: "staff",
+      name: data.name,
+      phone: data.phone,
+      email: data.email
+    });
+  } catch (err) {
+    console.error("STAFF STEP 4 ERROR:", err);
+    throw err;
+  }
+
+  console.log("STAFF STEP 4 OK");
 
   return credential.user;
 }
