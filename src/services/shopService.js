@@ -112,32 +112,6 @@ export async function getShopInformation(uid) {
   };
 }
 
-export async function createStaffAccount(data) {
-  const credential = await registerSecondary(
-  data.email,
-  data.password
-);
-
-  try {
-  console.log("Before createUserProfile");
-
-  await createUserProfile(credential.user.uid, {
-    shopId: data.shopId,
-    role: "staff",
-    name: data.name,
-    phone: data.phone,
-    email: data.email
-  });
-
-  console.log("After createUserProfile");
-
-} catch (err) {
-  console.error("createUserProfile Error:", err);
-  alert(JSON.stringify(err));
-}
-
-  return credential.user;
-}
 
 export async function loadStaffList(shopId) {
   return await getStaffList(shopId);

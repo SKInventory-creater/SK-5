@@ -63,21 +63,19 @@ export async function createStaffAccount(data) {
     throw new Error("Invitation Code မှားနေပါသည်");
   }
 
+
   const credential = await registerSecondary(
     data.email,
     data.password
   );
 
-  await createUserProfile(
-    credential.user.uid,
-    {
-      shopId: shop.id,
-      role: "staff",
-      name: data.name,
-      phone: data.phone,
-      email: data.email
-    }
-  );
+  await createUserProfile(credential.user.uid, {
+    shopId: shop.id,
+    role: "staff",
+    name: data.name,
+    phone: data.phone,
+    email: data.email
+  });
 
   return credential.user;
 }
