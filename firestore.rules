@@ -68,6 +68,15 @@ service cloud.firestore {
         && request.resource.data.role == "staff"
         && request.resource.data.shopId == myShopId();
 
+      // Staff Register - Invite Code နဲ့ ကိုယ်ပိုင် profile create
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.role == "staff"
+        && request.resource.data.shopId is string
+        && request.resource.data.name is string
+        && request.resource.data.email is string;
+
       // ကိုယ့် profile update
       // role / shopId / uid မပြောင်းနိုင်
       allow update: if signedIn()
