@@ -16,16 +16,18 @@ export default function ItemEditPage(item) {
       <div class="edit-photo">
 
   <img
-    id="photoPreview"
-    src="${item.photo || ""}"
-    class="item-photo-img"
-    style="
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:${item.photo ? "block" : "none"};
-    "
-  >
+  id="photoPreview"
+  src="${item.photo || ""}"
+  class="item-photo-img"
+  style="
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:${item.photo ? "block" : "none"};
+    cursor:pointer;
+  "
+  title="ပုံအပြည့်ကြည့်ရန်"
+>
 
   <div
     id="photoEmpty"
