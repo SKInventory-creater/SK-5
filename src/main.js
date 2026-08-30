@@ -423,6 +423,15 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
   showItems(bundle);
 };
 
+  const preview =
+  document.getElementById("photoPreview");
+
+if (preview && item.photo) {
+  preview.onclick = () => {
+    showPhotoFullscreen(item.photo);
+  };
+}
+
   let selectedPhoto = null;
 
   const pickPhotoBtn =
@@ -445,40 +454,16 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
         if (preview) {
           preview.src = photo.webPath;
           preview.style.display = "block";
-        }
+
+	  preview.onclick = () => {
+    showPhotoFullscreen(photo.webPath);
+  };
+}
 
         if (photoEmpty) {
           photoEmpty.style.display = "none";
         }
 
-	if (preview) {
-  preview.onclick = () => {
-    if (!preview.src) return;
-
-    const viewer = document.createElement("div");
-
-    viewer.id = "fullPhotoViewer";
-
-    viewer.innerHTML = `
-      <div class="full-photo-backdrop">
-        <img src="${preview.src}" class="full-photo-image">
-        <button class="full-photo-close">✕</button>
-      </div>
-    `;
-
-    document.body.appendChild(viewer);
-
-    viewer.querySelector(".full-photo-close").onclick = () => {
-      viewer.remove();
-    };
-
-    viewer.querySelector(".full-photo-backdrop").onclick = (e) => {
-      if (e.target === e.currentTarget) {
-        viewer.remove();
-      }
-    };
-  };
-}
       } catch (err) {
 
         console.error(err);
