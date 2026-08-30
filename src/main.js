@@ -401,6 +401,34 @@ async function showItemEdit(bundle, item, itemIndex = -1) {
           photoEmpty.style.display = "none";
         }
 
+	if (preview) {
+  preview.onclick = () => {
+    if (!preview.src) return;
+
+    const viewer = document.createElement("div");
+
+    viewer.id = "fullPhotoViewer";
+
+    viewer.innerHTML = `
+      <div class="full-photo-backdrop">
+        <img src="${preview.src}" class="full-photo-image">
+        <button class="full-photo-close">✕</button>
+      </div>
+    `;
+
+    document.body.appendChild(viewer);
+
+    viewer.querySelector(".full-photo-close").onclick = () => {
+      viewer.remove();
+    };
+
+    viewer.querySelector(".full-photo-backdrop").onclick = (e) => {
+      if (e.target === e.currentTarget) {
+        viewer.remove();
+      }
+    };
+  };
+}
       } catch (err) {
 
         console.error(err);
