@@ -321,9 +321,28 @@ document.getElementById("addItemBtn").onclick = () => {
 };
 
 document.querySelectorAll(".item-card").forEach((card, index) => {
-  card.onclick = () => {
-    showItemEdit(bundle, items[index], index);
+
+  card.onclick = (event) => {
+
+    const photo = event.target.closest("[data-fullscreen-photo]");
+
+    if (photo) {
+      event.stopPropagation();
+
+      showPhotoFullscreen(
+        photo.dataset.fullscreenPhoto
+      );
+
+      return;
+    }
+
+    showItemEdit(
+      bundle,
+      items[index],
+      index
+    );
   };
+
 });
 
   const searchInput = document.getElementById("searchItem");
@@ -358,6 +377,37 @@ statusFilter.onchange = filterItems;
 
 filterItems();
 
+}
+
+function showPhotoFullscreen(photoUrl) {
+  const overlay = document.createElement("div");
+
+  overlay.className = "photo-fullscreen-overlay";
+
+  overlay.innerHTML = `
+    <button class="photo-fullscreen-close" type="button">×</button>
+
+    <img
+      src="${photoUrl}"
+      class="photo-fullscreen-img"
+      alt="အထည်ပုံ အပြည့်"
+    >
+  `;
+
+  document.body.appendChild(overlay);
+
+  const closeBtn =
+    overlay.querySelector(".photo-fullscreen-close");
+
+  closeBtn.onclick = () => {
+    overlay.remove();
+  };
+
+  overlay.onclick = (event) => {
+    if (event.target === overlay) {
+      overlay.remove();
+    }
+  };
 }
 
 async function showItemEdit(bundle, item, itemIndex = -1) {

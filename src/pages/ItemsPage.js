@@ -170,7 +170,8 @@ export default function ItemsPage(bundle, items) {
                                   src="${item.photo}"
                                   class="item-photo-img"
                                   alt="${item.itemId || "Item"}"
-                                >
+                                data-fullscreen-photo="${item.photo}"
+				>
                               `
                               : "📦"
                           }
