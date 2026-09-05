@@ -10,7 +10,7 @@ import {
   deleteDoc
 } from "firebase/firestore";
 
-import { app } from "./config.js";
+import { app, secondaryDb } from "./config.js";
 
 export const db = getFirestore(app);
 
@@ -98,6 +98,38 @@ export async function createUserProfile(uid, data) {
 
   console.log(
     "USER PROFILE CREATED:",
+    snap.data()
+  );
+
+  return snap.data();
+}
+
+// Staff Register - Secondary Firebase App
+export async function createStaffUserProfile(uid, data) {
+  const userRef = doc(secondaryDb, "users", uid);
+
+  await setDoc(userRef, {
+    uid,
+    shopId: data.shopId,
+    role: "staff",
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    active: true,
+    createdAt: Date.now()
+  });
+
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    throw new Error(
+      "Staff User Profile create ပြီးသော်လည်း မတွေ့ပါ\\n\\n" +
+      "Path: users/" + uid
+    );
+  }
+
+  console.log(
+    "STAFF USER PROFILE CREATED:",
     snap.data()
   );
 

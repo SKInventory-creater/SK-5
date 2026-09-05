@@ -7,7 +7,7 @@ import {
   logoutSecondary
 } from "../firebase/auth.js";
 
-import { getUserProfile, createUserProfile, getShopByInviteCode } from "../firebase/firestore.js";
+import { getUserProfile, createStaffUserProfile, getShopByInviteCode } from "../firebase/firestore.js";
 
 export async function loginUser(email, password) {
   if (!email || !password) {
@@ -87,14 +87,12 @@ export async function createStaffAccount(data) {
     credential.user.uid
   );
 
-      await logoutSecondary();
-
-    console.log("STAFF STEP 3B: Secondary account signed out");
-
-  console.log("STAFF STEP 4: Creating staff profile");
+  console.log(
+    "STAFF STEP 4: Creating staff profile with secondary Firestore"
+  );
 
   try {
-    await createUserProfile(credential.user.uid, {
+    await createStaffUserProfile(credential.user.uid, {
       shopId: shop.shopId,
       role: "staff",
       name: data.name,
@@ -103,10 +101,22 @@ export async function createStaffAccount(data) {
     });
   } catch (err) {
     console.error("STAFF STEP 4 ERROR:", err);
+
+    // Keep secondary account signed in only until profile creation finishes.
+    try {
+      await logoutSecondary();
+    } catch (logoutErr) {
+      console.error("SECONDARY LOGOUT ERROR:", logoutErr);
+    }
+
     throw err;
   }
 
   console.log("STAFF STEP 4 OK");
+
+  await logoutSecondary();
+
+  console.log("STAFF STEP 5: Secondary account signed out");
 
   return credential.user;
 }
