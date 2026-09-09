@@ -231,8 +231,46 @@ export async function getItems(bundleId) {
           ? String(cloudItem.bundleId)
           : "";
 
+      const cloudDocumentId =
+        String(cloudItem.id || "").trim();
+
+      let resolvedItemId =
+        String(cloudItem.itemId || "").trim();
+
+      // Recover item code from Firestore document ID.
+      // Example:
+      // shopId_MK001 -> MK001
+      if (cloudDocumentId && bundleCode) {
+        const prefix =
+          profile.shopId + "_";
+
+        if (
+          cloudDocumentId
+            .toUpperCase()
+            .startsWith(prefix.toUpperCase())
+        ) {
+          const suffix =
+            cloudDocumentId.slice(prefix.length);
+
+          const itemCodePattern =
+            new RegExp(
+              "^" +
+              bundleCode.replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+              ) +
+              "\\d{3}$",
+              "i"
+            );
+
+          if (itemCodePattern.test(suffix)) {
+            resolvedItemId = suffix;
+          }
+        }
+      }
+
       const cloudItemId =
-        String(cloudItem.itemId || "").toUpperCase();
+        String(resolvedItemId || "").toUpperCase();
 
       // New format:
       // Firestore item.bundleId = stable cloudBundleId
