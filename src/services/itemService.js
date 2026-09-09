@@ -336,7 +336,7 @@ export async function getItems(bundleId) {
         `,
         [
           profile.shopId,
-          cloudItem.itemId
+          resolvedItemId
         ]
       );
 
@@ -354,6 +354,7 @@ export async function getItems(bundleId) {
           UPDATE items
           SET
             bundleId = ?,
+            itemId = ?,
             photo = ?,
             cost = ?,
             price = ?,
@@ -366,6 +367,7 @@ export async function getItems(bundleId) {
           `,
           [
             bundle.id,
+            resolvedItemId,
             cloudItem.photo || "",
             Number(cloudItem.cost || 0),
             Number(cloudItem.price || 0),
@@ -405,7 +407,7 @@ export async function getItems(bundleId) {
           [
             profile.shopId,
             bundle.id,
-            cloudItem.itemId,
+            resolvedItemId,
             cloudItem.photo || "",
             Number(cloudItem.cost || 0),
             Number(cloudItem.price || 0),
