@@ -11,6 +11,17 @@ export async function initDatabase() {
   await db.execute(CREATE_ITEMS_TABLE);
 
   // Existing database migration
+
+  // Add cloudBundleId to existing bundles table
+  try {
+    await db.execute(`
+      ALTER TABLE bundles
+      ADD COLUMN cloudBundleId TEXT
+    `);
+  } catch (e) {
+    // cloudBundleId already exists
+  }
+
   try {
     await db.execute(`
       ALTER TABLE items

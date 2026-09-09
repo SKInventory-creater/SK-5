@@ -27,6 +27,9 @@ export async function addBundle(bundle) {
   const cost = Number(bundle.cost || 0);
   const createdAt = Date.now();
 
+  const cloudBundleId =
+  `${profile.shopId}_${bundle.bundleCode}`;
+
   if (qty <= 0) {
     throw new Error("အရေအတွက် မှန်ကန်စွာထည့်ပါ");
   }
@@ -40,16 +43,18 @@ export async function addBundle(bundle) {
     INSERT INTO bundles
     (
       shopId,
+      cloudBundleId,
       bundleCode,
       bundleName,
       qty,
       cost,
       createdAt
     )
-    VALUES (?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     `,
     [
       profile.shopId,
+      cloudBundleId,
       bundle.bundleCode,
       bundle.bundleName,
       qty,
@@ -63,9 +68,6 @@ export async function addBundle(bundle) {
   // =========================================
   // 2. FIRESTORE
   // =========================================
-
-  const cloudBundleId =
-    `${profile.shopId}_${bundle.bundleCode}`;
 
   try {
     await createBundle(cloudBundleId, {
@@ -104,116 +106,6 @@ export async function addBundle(bundle) {
 
 
 // =========================================
-// GET BUNDLES
-// =========================================
-
-export async function getBundles() {
-  const db = await initDatabase();
-
-  const user = getCurrentUser();
-
-  if (!user) {
-    return [];
-  }
-
-  const profile = await getUserProfile(user.uid);
-
-  if (!profile?.shopId) {
-    return [];
-  }
-
-  // Cloud → Local
-  try {
-    const cloudBundles =
-      await getBundlesByShop(profile.shopId);
-
-    for (const cloudBundle of cloudBundles) {
-
-      const existing = await db.query(
-        `
-        SELECT id
-        FROM bundles
-        WHERE shopId = ?
-          AND bundleCode = ?
-        LIMIT 1
-        `,
-        [
-          profile.shopId,
-          cloudBundle.bundleCode
-        ]
-      );
-
-      if (existing.values?.length) {
-
-        await db.run(
-          `
-          UPDATE bundles
-          SET
-            bundleName = ?,
-            qty = ?,
-            cost = ?,
-            createdAt = ?
-          WHERE id = ?
-          `,
-          [
-            cloudBundle.bundleName,
-            Number(cloudBundle.qty || 0),
-            Number(cloudBundle.cost || 0),
-            cloudBundle.createdAt || Date.now(),
-            existing.values[0].id
-          ]
-        );
-
-      } else {
-
-        await db.run(
-          `
-          INSERT INTO bundles
-          (
-            shopId,
-            bundleCode,
-            bundleName,
-            qty,
-            cost,
-            createdAt
-          )
-          VALUES (?, ?, ?, ?, ?, ?)
-          `,
-          [
-            profile.shopId,
-            cloudBundle.bundleCode,
-            cloudBundle.bundleName,
-            Number(cloudBundle.qty || 0),
-            Number(cloudBundle.cost || 0),
-            cloudBundle.createdAt || Date.now()
-          ]
-        );
-      }
-    }
-
-  } catch (err) {
-    console.warn(
-      "Cloud bundle sync skipped:",
-      err
-    );
-  }
-
-  // Local data ပြန်ယူ
-  const result = await db.query(
-    `
-    SELECT *
-    FROM bundles
-    WHERE shopId = ?
-    ORDER BY createdAt DESC
-    `,
-    [profile.shopId]
-  );
-
-  return result.values ?? [];
-}
-
-
-// =========================================
 // BUNDLE CODE EXISTS
 // =========================================
 
@@ -227,6 +119,10 @@ export async function bundleCodeExists(code) {
   );
 }
 
+
+// =========================================
+// GET BUNDLES
+// =========================================
 
 // =========================================
 // DELETE BUNDLE
@@ -265,13 +161,13 @@ export async function deleteBundle(bundleId) {
     throw new Error("Bundle မတွေ့ပါ");
   }
 
-  // Local items
+  // Local items အရင်ဖျက်
   await db.run(
     `DELETE FROM items WHERE bundleId = ?`,
     [bundleId]
   );
 
-  // Local bundle
+  // Local bundle ဖျက်
   await db.run(
     `
     DELETE FROM bundles
@@ -281,10 +177,12 @@ export async function deleteBundle(bundleId) {
     [bundleId, profile.shopId]
   );
 
-  // Cloud bundle
+  // Firestore Bundle ID
   const cloudBundleId =
+    bundle.cloudBundleId ||
     `${profile.shopId}_${bundle.bundleCode}`;
 
+  // Cloud bundle ဖျက်
   try {
     await deleteBundleCloud(cloudBundleId);
 
@@ -299,4 +197,121 @@ export async function deleteBundle(bundleId) {
       err
     );
   }
+}
+
+
+export async function getBundles() {
+  const db = await initDatabase();
+
+  const user = getCurrentUser();
+
+  if (!user) {
+    return [];
+  }
+
+  const profile = await getUserProfile(user.uid);
+
+  if (!profile?.shopId) {
+    return [];
+  }
+
+  // =========================
+  // Cloud → Local
+  // =========================
+
+  try {
+    const cloudBundles =
+      await getBundlesByShop(profile.shopId);
+
+    for (const cloudBundle of cloudBundles) {
+
+      const existing = await db.query(
+        `
+        SELECT id
+        FROM bundles
+        WHERE shopId = ?
+          AND bundleCode = ?
+        LIMIT 1
+        `,
+        [
+          profile.shopId,
+          cloudBundle.bundleCode
+        ]
+      );
+
+      if (existing.values?.length) {
+
+        await db.run(
+          `
+          UPDATE bundles
+          SET
+            cloudBundleId = ?,
+            bundleName = ?,
+            qty = ?,
+            cost = ?,
+            createdAt = ?
+          WHERE id = ?
+          `,
+          [
+            cloudBundle.id || "",
+            cloudBundle.bundleName,
+            Number(cloudBundle.qty || 0),
+            Number(cloudBundle.cost || 0),
+            cloudBundle.createdAt || Date.now(),
+            existing.values[0].id
+          ]
+        );
+
+      } else {
+
+        await db.run(
+          `
+          INSERT INTO bundles
+          (
+            shopId,
+            cloudBundleId,
+            bundleCode,
+            bundleName,
+            qty,
+            cost,
+            createdAt
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+          `,
+          [
+            profile.shopId,
+            cloudBundle.id || "",
+            cloudBundle.bundleCode,
+            cloudBundle.bundleName,
+            Number(cloudBundle.qty || 0),
+            Number(cloudBundle.cost || 0),
+            cloudBundle.createdAt || Date.now()
+          ]
+        );
+      }
+    }
+
+  } catch (err) {
+
+    console.warn(
+      "Cloud bundle sync skipped:",
+      err
+    );
+  }
+
+  // =========================
+  // Local data ပြန်ယူ
+  // =========================
+
+  const result = await db.query(
+    `
+    SELECT *
+    FROM bundles
+    WHERE shopId = ?
+    ORDER BY createdAt DESC
+    `,
+    [profile.shopId]
+  );
+
+  return result.values ?? [];
 }

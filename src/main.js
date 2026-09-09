@@ -387,17 +387,28 @@ function showPhotoFullscreen(photoUrl) {
   overlay.innerHTML = `
     <button class="photo-fullscreen-close" type="button">×</button>
 
-    <img
-      src="${photoUrl}"
-      class="photo-fullscreen-img"
-      alt="အထည်ပုံ အပြည့်"
-    >
+    <div class="photo-fullscreen-stage">
+      <img
+        src="${photoUrl}"
+        class="photo-fullscreen-img"
+        alt="အထည်ပုံ အပြည့်"
+      >
+    </div>
+
+    <div class="photo-fullscreen-hint">
+      ပုံကိုနှိပ်၍ Zoom / Reset
+    </div>
   `;
 
   document.body.appendChild(overlay);
 
   const closeBtn =
     overlay.querySelector(".photo-fullscreen-close");
+
+  const image =
+    overlay.querySelector(".photo-fullscreen-img");
+
+  let zoomed = false;
 
   closeBtn.onclick = () => {
     overlay.remove();
@@ -406,6 +417,18 @@ function showPhotoFullscreen(photoUrl) {
   overlay.onclick = (event) => {
     if (event.target === overlay) {
       overlay.remove();
+    }
+  };
+
+  image.onclick = (event) => {
+    event.stopPropagation();
+
+    zoomed = !zoomed;
+
+    if (zoomed) {
+      image.classList.add("zoomed");
+    } else {
+      image.classList.remove("zoomed");
     }
   };
 }
