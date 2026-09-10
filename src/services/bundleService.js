@@ -299,6 +299,82 @@ export async function getBundles() {
     );
   }
 
+    // =========================
+    // Remove deleted Cloud bundles
+    // =========================
+
+    try {
+      const cloudBundles =
+        await getBundlesByShop(profile.shopId);
+
+      const cloudBundleCodes =
+        new Set(
+          cloudBundles.map(
+            b =>
+              String(b.bundleCode || "")
+                .trim()
+                .toUpperCase()
+          )
+        );
+
+      const localBundles =
+        await db.query(
+          `
+          SELECT id, bundleCode
+          FROM bundles
+          WHERE shopId = ?
+          `,
+          [profile.shopId]
+        );
+
+      for (const localBundle of localBundles.values || []) {
+        const localCode =
+          String(localBundle.bundleCode || "")
+            .trim()
+            .toUpperCase();
+
+        if (
+          localCode &&
+          !cloudBundleCodes.has(localCode)
+        ) {
+          await db.run(
+            `
+            DELETE FROM items
+            WHERE shopId = ?
+              AND bundleId = ?
+            `,
+            [
+              profile.shopId,
+              localBundle.id
+            ]
+          );
+
+          await db.run(
+            `
+            DELETE FROM bundles
+            WHERE id = ?
+              AND shopId = ?
+            `,
+            [
+              localBundle.id,
+              profile.shopId
+            ]
+          );
+
+          console.log(
+            "CLOUD DELETED BUNDLE REMOVED:",
+            localCode
+          );
+        }
+      }
+
+    } catch (err) {
+      console.warn(
+        "Deleted cloud bundle cleanup skipped:",
+        err
+      );
+    }
+
   // =========================
   // Local data ပြန်ယူ
   // =========================
